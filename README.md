@@ -4,6 +4,23 @@ Source for `https://pytorch.dazu.xyz/`: an extensible Material for MkDocs knowle
 
 The public site contains only courses with useful content. It does not expose course status, progress, completion state, accounts, analytics, or personal learning history.
 
+## Manual update workflow
+
+Work from this repository directory:
+
+```powershell
+Set-Location "C:\Users\Daniel Zurita\OneDrive\Escritorio\DaZu\pytorch-learning-hub"
+```
+
+Write or update original Markdown in `docs/`. Use `templates/course.md` for a
+new course, add its chapters and local assets, then add it to `nav` in
+`mkdocs.yml` only when the course contains useful public material.
+
+Keep shared explanations in `docs/concepts/` or `docs/reference/`, add
+associated work to `docs/projects/`, and include `last_reviewed` in page
+metadata. Do not publish Coursera assessment prompts, protected notebooks, quiz
+answers, or graded solutions.
+
 ## Local preview
 
 ```bash
@@ -12,6 +29,12 @@ python -m mkdocs serve
 ```
 
 Open `http://127.0.0.1:8000/`.
+
+Or use the helper:
+
+```powershell
+.\scripts\preview.ps1
+```
 
 ## Validation
 
@@ -22,6 +45,8 @@ python tests/smoke_examples.py
 ```
 
 The example tests use synthetic, deterministic fixtures. Dataset downloads and full training runs are deliberately separate so documentation validation stays fast.
+The smoke test requires PyTorch in the active Python environment; check it with
+`python -c "import torch; print(torch.__version__)"` before publishing.
 
 ## Add a course
 
@@ -33,9 +58,41 @@ The example tests use synthetic, deterministic fixtures. Dataset downloads and f
 6. Run all validation commands before publishing.
 7. Add a neutral link from `dazu.xyz/learn/pytorch/`; never add progress or status labels.
 
-## Publishing model
+## Manual publishing
 
-This repository is intended to be connected to its own Netlify site. Netlify builds the Markdown with `mkdocs build --strict` and publishes `site/`. Assign `pytorch.dazu.xyz` after the temporary Netlify URL has been verified.
+Run the release helper only after the validation commands pass:
+
+```powershell
+.\scripts\publish.ps1 -Message "Describe the update"
+```
+
+It rebuilds the site, runs every validation command, and deploys the generated
+`site/` folder to the PyTorch Netlify project. The helper always passes the
+project ID explicitly (`f58cc486-94eb-4664-ba33-ae59491a53bc`) because this
+nested repository can otherwise inherit the DaZu Netlify link.
+
+To run the final deploy command yourself after a successful build:
+
+```powershell
+netlify deploy --prod `
+  --site f58cc486-94eb-4664-ba33-ae59491a53bc `
+  --dir=site `
+  --no-build `
+  --message "Describe the update"
+```
+
+Verify `https://pytorch.dazu.xyz/`, the changed page, mobile navigation,
+search, affected images, code-copy controls, and affected interactive elements.
+
+Commit the documentation change separately:
+
+```powershell
+git add .
+git commit -m "Describe the PyTorch documentation update"
+```
+
+If a new course becomes public, add one neutral link to the DaZu quick hub and
+release DaZu through its own validation, commit, push, and deployment process.
 
 The main DaZu repository remains separate and manually deployed.
 
@@ -46,4 +103,3 @@ The main DaZu repository remains separate and manually deployed.
 - Label conceptual charts as illustrative.
 - Publish measured results only when the corresponding reproducible run is retained.
 - Include a `last_reviewed` value in page metadata.
-
