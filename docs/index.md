@@ -12,9 +12,9 @@ last_reviewed: 2026-08-05
 
 # Understand the workflow.<br>Return when you need it.
 
-A visual, practical PyTorch reference built from original explanations, executable examples, and projects. Use it to understand a mechanism, refresh an idea you have already seen, or connect code to a concrete decision.
+A visual, practical PyTorch reference built from original explanations, executable examples, and complete projects. Use it to understand a mechanism, refresh an idea you have already seen, or connect code to a real dataset, model, and result.
 
-[Open the Fundamentals guide](courses/fundamentals/index.md){ .md-button .md-button--primary }
+[Browse the knowledge collections](collections/foundations.md){ .md-button .md-button--primary }
 [Open the quick reference](courses/fundamentals/quick-review.md){ .md-button }
 
 </section>
@@ -39,11 +39,11 @@ Every training project is a variation of this loop. The model changes, the data 
 
 <article class="feature-card" markdown>
 
-### Guides
+### Collections
 
-Browse connected topics when you want the larger mental model, from tensor shapes to reliable model evaluation.
+Four connected collections gather the important ideas from first tensors to reliable CNNs—without a required order or progress system.
 
-[Open the Fundamentals guide →](courses/fundamentals/index.md)
+[Browse collections →](collections/foundations.md)
 
 </article>
 
@@ -59,9 +59,9 @@ Return to one focused explanation: tensor shapes, the training loop, convolution
 
 <article class="feature-card" markdown>
 
-### Projects
+### Complete projects
 
-See how the pieces connect in regression, handwriting recognition, robust data loading, and nature classification.
+Run real, downloadable data projects that save predictions, curves, metrics, confusion matrices, and checkpoints locally.
 
 [Explore projects →](projects/index.md)
 
@@ -87,14 +87,14 @@ Use the cheatsheet, error guide, and glossary while writing or debugging code.
 | Project | Core question | What it demonstrates |
 | --- | --- | --- |
 | [Nonlinear regression](projects/regression.md) | When does a linear model stop being enough? | Tensors, autograd, loss, optimization |
-| [EMNIST letter classifier](projects/emnist.md) | Why does image structure matter? | Dense baseline, CNN, distribution shift |
-| [Robust image pipeline](projects/robust-image-pipeline.md) | How do we stop data problems from breaking training? | Custom Dataset, transforms, validation |
-| [Nature CNN](projects/nature-cnn.md) | How do we recognize and reduce overfitting? | CNN blocks, regularization, diagnostics |
+| [EMNIST letter classifier](projects/emnist.md) | Why does image structure matter? | Download, train, predictions, confusion matrix |
+| [Robust image pipeline](projects/robust-image-pipeline.md) | How do we stop data problems from breaking training? | Real folder data, diagnostics, training artifacts |
+| [Nature CNN](projects/nature-cnn.md) | How do we recognize and reduce overfitting? | CIFAR-100 download, CNN, validation artifacts |
 
 ## How to use this hub
 
 1. Read the [quick reference](courses/fundamentals/quick-review.md) before an exercise or interview.
-2. Browse the [Fundamentals topic map](courses/fundamentals/index.md) when you want the whole connection.
+2. Browse the [collections](collections/foundations.md) when you want the whole connection.
 3. Open a [concept](concepts/index.md) when one mechanism is unclear.
 4. Use the [common errors guide](reference/common-errors.md) when code fails.
 5. Study a [project](projects/index.md) to connect the individual pieces.

@@ -35,7 +35,7 @@ Sorting protects the class-to-index contract. `verify()` checks readability duri
 
 ## Evidence and visual
 
-This is a verified validation flow. The retained fixture test creates two valid images and one corrupt JPEG; it confirms that the corrupt path is recorded instead of becoming a silent training sample.
+The full project downloads public CIFAR-10 images through TorchVision, writes a deterministic five-class folder dataset, deliberately includes one corrupt JPEG, and then trains only on the validated samples. It saves a validation report, prediction grid, confusion matrix, curves, checkpoint, and JSON metrics.
 
 ```mermaid
 flowchart LR
@@ -67,7 +67,13 @@ flowchart LR
 python examples/robust_dataset.py
 ```
 
-It creates temporary fixtures, checks the output tensor contract, and reports the number of valid and invalid samples.
+The default CPU-first run builds 400 real image files and trains for five epochs. For a longer GPU run with a larger materialized dataset:
+
+```bash
+python examples/robust_dataset.py --full --device cuda
+```
+
+Use `--smoke-test` to verify corrupt-file handling without downloading data.
 
 ## Complete source
 

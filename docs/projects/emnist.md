@@ -35,7 +35,17 @@ The convolution blocks preserve the two-dimensional view while pooling reduces s
 
 ## Evidence and visual
 
-This is a verified architecture and shape map, not a trained-accuracy claim. The retained smoke test confirms that both the dense and CNN variants return `[batch, 26]` logits for `[batch, 1, 28, 28]` input.
+The included full project downloads the public EMNIST Letters split through TorchVision, trains this CNN, and saves its own predictions, confusion matrix, curves, checkpoint, and JSON metrics. The shape map remains useful before any dataset is downloaded.
+
+### Reproduced CPU-first run
+
+The images below come from the retained default run on CPU: seed `42`, 4,000 training examples, 1,000 test examples, and three epochs. It reached `24.4%` test accuracy. This intentionally small configuration demonstrates the full workflow and its artifacts; it is not presented as a strong handwriting benchmark.
+
+![Letter predictions from the retained CPU-first EMNIST run; green titles are correct and red titles are incorrect](../assets/images/emnist-cpu-predictions.png)
+
+![Training and test loss plus accuracy curves from the retained CPU-first EMNIST run](../assets/images/emnist-cpu-training-curves.png)
+
+![Confusion matrix from the retained CPU-first EMNIST run](../assets/images/emnist-cpu-confusion-matrix.png)
 
 ```mermaid
 flowchart LR
@@ -62,7 +72,13 @@ flowchart LR
 python examples/emnist_model.py
 ```
 
-It runs deterministic shape checks and prints parameter counts. A full EMNIST training run remains separate so the documentation workflow does not download data or imply a benchmark result.
+The default CPU-first run downloads data when needed, trains on 4,000 training images for three epochs, and writes artifacts to `artifacts/emnist/`. For a longer GPU run:
+
+```bash
+python examples/emnist_model.py --full --device cuda
+```
+
+Use `--smoke-test` to verify model shapes without downloading data.
 
 ## Complete source
 

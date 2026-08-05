@@ -48,11 +48,35 @@ The example tests use synthetic, deterministic fixtures. Dataset downloads and f
 The smoke test requires PyTorch in the active Python environment; check it with
 `python -c "import torch; print(torch.__version__)"` before publishing.
 
-## Add a course
+## Run the complete projects
 
-1. Copy `templates/course.md` into `docs/courses/<course-slug>/index.md`.
-2. Add original Markdown chapters and local assets.
-3. Add the course to `nav` in `mkdocs.yml` only when it contains useful material.
+Install the project dependencies once. This is intentionally separate from the
+lightweight MkDocs build requirements:
+
+```bash
+python -m pip install -r requirements-projects.txt
+```
+
+Every project uses a small deterministic CPU-first default and downloads its
+public data through TorchVision when needed. Use `--full --device cuda` for the
+longer GPU configuration, or `--smoke-test` when you only want to validate the
+code without a dataset download.
+
+```bash
+python examples/regression_demo.py
+python examples/emnist_model.py
+python examples/robust_dataset.py
+python examples/nature_cnn.py
+```
+
+Artifacts such as predictions, confusion matrices, curves, metrics, and model
+checkpoints are written below `artifacts/` and are deliberately ignored by Git.
+
+## Add a guide collection
+
+1. Copy `templates/course.md` into `docs/courses/<guide-slug>/index.md`.
+2. Add original Markdown topics and local assets.
+3. Add the guide to `nav` in `mkdocs.yml` only when it contains useful material.
 4. Link shared explanations from `docs/concepts/` and `docs/reference/` rather than duplicating them.
 5. Add related projects under `docs/projects/`.
 6. Run all validation commands before publishing.

@@ -34,7 +34,7 @@ The reusable block makes each transformation explicit: learn local patterns, nor
 
 ## Evidence and visual
 
-The architecture map below is verified by the retained shape test: both models accept CIFAR-sized `[batch, 3, 32, 32]` input and return `[batch, 15]` logits. It is not a trained-performance result.
+The full project downloads public CIFAR-100 through TorchVision, filters 15 nature classes, trains this CNN, and writes its own prediction grid, confusion matrix, curves, checkpoint, and JSON metrics. The architecture map explains the shape contract before a run is started.
 
 ```mermaid
 flowchart LR
@@ -60,7 +60,13 @@ flowchart LR
 python examples/nature_cnn.py
 ```
 
-It verifies model input/output shapes and parameter counts. Retain full experiment artifacts before adding any accuracy, confusion matrix, or prediction image to this page.
+The default CPU-first run uses 120 images per selected class for four epochs and writes artifacts to `artifacts/nature-cnn/`. For a longer GPU run over the complete selected dataset:
+
+```bash
+python examples/nature_cnn.py --full --device cuda
+```
+
+Use `--smoke-test` to verify the model shape without downloading data.
 
 ## Complete source
 

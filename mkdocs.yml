@@ -83,6 +83,11 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Collections:
+      - First models and tensors: collections/foundations.md
+      - Build a training workflow: collections/training-workflow.md
+      - Reliable image data: collections/reliable-data.md
+      - CNNs and model inspection: collections/cnn-vision.md
   - Guides:
       - PyTorch Fundamentals Guide:
           - Overview: courses/fundamentals/index.md

@@ -10,6 +10,8 @@ last_reviewed: 2026-08-05
 
 This guide connects the PyTorch ideas that recur across small experiments and image models. It is designed for understanding and recall, not as a sequence you must complete.
 
+For a broad starting point, the four [collections](../../collections/foundations.md) group the same ideas by practical work: first models, a complete training workflow, reliable image data, and CNN inspection. They can be read in any order.
+
 ## What this helps you remember
 
 - Read and debug tensor shapes.

@@ -1,0 +1,6 @@
+# Install this separately from requirements.txt when running the downloadable projects.
+# For a CUDA-specific PyTorch build, use the selector at https://pytorch.org/get-started/locally/
+matplotlib>=3.8,<4
+pillow>=10,<12
+torch>=2.2,<3
+torchvision>=0.17,<1
