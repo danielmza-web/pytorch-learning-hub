@@ -7,7 +7,7 @@ last_reviewed: 2026-08-05
 
 # Concept library
 
-Focused explanations that can be reused across current and future PyTorch courses.
+Focused explanations that can be reused across current and future PyTorch guides.
 
 <div class="feature-grid" markdown>
 
@@ -52,4 +52,3 @@ Connect validation curves, data quality, regularization, and failure analysis.
 </article>
 
 </div>
-

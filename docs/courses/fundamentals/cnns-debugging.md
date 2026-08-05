@@ -1,7 +1,7 @@
 ---
 title: CNNs and debugging
-course: PyTorch Fundamentals
-module: 6
+study_context: PyTorch Fundamentals
+topic_order: 6
 tags:
   - cnn
   - debugging
@@ -78,4 +78,3 @@ handle = model.features.register_forward_hook(show_shape("features"))
 ```
 
 Remove temporary hooks after debugging with `handle.remove()`.
-

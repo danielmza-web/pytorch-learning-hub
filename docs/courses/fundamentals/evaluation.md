@@ -1,7 +1,7 @@
 ---
 title: Evaluation and metrics
-course: PyTorch Fundamentals
-module: 4
+study_context: PyTorch Fundamentals
+topic_order: 4
 tags:
   - evaluation
   - metrics
@@ -59,4 +59,3 @@ epoch_loss = running_loss / len(loader.dataset)
 ```
 
 Simply averaging batch averages gives the final small batch the same weight as a full batch.
-

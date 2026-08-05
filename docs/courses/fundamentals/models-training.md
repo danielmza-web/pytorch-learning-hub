@@ -1,7 +1,7 @@
 ---
 title: Models and training
-course: PyTorch Fundamentals
-module: 3
+study_context: PyTorch Fundamentals
+topic_order: 3
 tags:
   - nn-module
   - training
@@ -86,4 +86,3 @@ The optimizer owns references to trainable parameters and applies updates using 
 ## Verify learning with one batch
 
 Before a full run, repeatedly train on one small batch. A sufficiently expressive model should drive its loss down. If it cannot, inspect the pipeline, labels, loss choice, and optimizer before scaling up.
-

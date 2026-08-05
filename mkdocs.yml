@@ -67,7 +67,10 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.keys
-  - pymdownx.snippets
+  - pymdownx.snippets:
+      base_path:
+        - .
+      check_paths: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -80,10 +83,10 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Courses:
-      - PyTorch Fundamentals:
+  - Guides:
+      - PyTorch Fundamentals Guide:
           - Overview: courses/fundamentals/index.md
-          - Quick review: courses/fundamentals/quick-review.md
+          - Quick reference: courses/fundamentals/quick-review.md
           - Tensors and autograd: courses/fundamentals/tensors-autograd.md
           - Data pipeline: courses/fundamentals/data-pipeline.md
           - Models and training: courses/fundamentals/models-training.md

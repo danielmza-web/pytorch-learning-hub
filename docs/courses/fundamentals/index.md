@@ -1,16 +1,16 @@
 ---
-title: PyTorch Fundamentals
-course: PyTorch Fundamentals
+title: PyTorch Fundamentals Guide
+study_context: PyTorch Fundamentals
 tags:
   - fundamentals
 last_reviewed: 2026-08-05
 ---
 
-# PyTorch Fundamentals
+# PyTorch Fundamentals Guide
 
-This collection explains the complete PyTorch workflow from tensors to convolutional neural networks. It is organized around transferable mental models rather than around protected course assessments.
+This guide connects the PyTorch ideas that recur across small experiments and image models. It is designed for understanding and recall, not as a sequence you must complete.
 
-## What you will be able to do
+## What this helps you remember
 
 - Read and debug tensor shapes.
 - Build reliable Dataset and DataLoader pipelines.
@@ -20,11 +20,11 @@ This collection explains the complete PyTorch workflow from tensors to convoluti
 - Diagnose overfitting and shape mismatches.
 - Save model parameters and restore them safely.
 
-## Module map
+## Topic map
 
 ```mermaid
 flowchart TD
-    A["1 · Tensors and autograd"] --> B["2 · Data pipeline"]
+    A["Tensors and autograd"] --> B["Data pipeline"]
     B --> C["3 · Models and training"]
     C --> D["4 · Evaluation"]
     D --> E["5 · Robust pipelines"]
@@ -33,7 +33,7 @@ flowchart TD
     G --> H["8 · Saving models"]
 ```
 
-## Chapters
+## Topics
 
 1. [Tensors and autograd](tensors-autograd.md)
 2. [Dataset, DataLoader, and transforms](data-pipeline.md)
@@ -44,9 +44,9 @@ flowchart TD
 7. [Overfitting and regularization](overfitting.md)
 8. [Saving and loading models](saving-models.md)
 
-## Short path
+## Short path for recall
 
-Need the essentials now? Open the [10-minute quick review](quick-review.md).
+Need the essentials now? Open the [quick reference](quick-review.md).
 
 ## Original projects
 
@@ -57,5 +57,4 @@ Need the essentials now? Open the [10-minute quick review](quick-review.md).
 
 ## Source boundary
 
-This is an independent learning reference. It may describe publicly listed topics from the DeepLearning.AI course, but all explanations, examples, diagrams, and project structures here are original. See [Sources and attribution](../../about/sources.md).
-
+This is an independent learning reference. The study context is documented in [Sources and attribution](../../about/sources.md); every explanation, example, diagram, and project structure here is original.

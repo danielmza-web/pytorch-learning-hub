@@ -1,7 +1,7 @@
 ---
 title: Saving and loading models
-course: PyTorch Fundamentals
-module: 8
+study_context: PyTorch Fundamentals
+topic_order: 8
 tags:
   - serialization
   - reproducibility
@@ -53,4 +53,3 @@ A useful checkpoint retains enough context to resume training or interpret outpu
 ## `weights_only`
 
 For compatible PyTorch versions, prefer safer loading modes intended for weight tensors when you do not need arbitrary serialized Python objects. Treat checkpoint files as executable-risk artifacts unless their origin is trusted.
-

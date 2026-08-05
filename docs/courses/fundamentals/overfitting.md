@@ -1,7 +1,7 @@
 ---
 title: Overfitting and regularization
-course: PyTorch Fundamentals
-module: 7
+study_context: PyTorch Fundamentals
+topic_order: 7
 tags:
   - overfitting
   - regularization
@@ -59,4 +59,3 @@ Keep the state associated with the best validation metric rather than automatica
 
 !!! tip "Change one hypothesis at a time"
     Compare experiments with the same split, seed, metrics, and evaluation procedure. Otherwise an apparent improvement may come from a changed test rather than a better model.
-

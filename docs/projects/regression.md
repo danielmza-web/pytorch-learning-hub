@@ -1,6 +1,6 @@
 ---
 title: Nonlinear regression
-course: PyTorch Fundamentals
+study_context: PyTorch Fundamentals
 tags:
   - project
   - regression
@@ -9,60 +9,60 @@ last_reviewed: 2026-08-05
 
 # Project: nonlinear regression
 
-## Problem
+## The question
 
-Predict a curved one-dimensional function and show why a purely linear model cannot represent it.
+When does a linear layer stop being expressive enough for the pattern in the data?
 
-```text
-y = 0.45x³ − 0.35x + 0.2sin(4x) + noise
-```
+## What to remember
 
-## Experiment
+Several linear layers still describe one linear transformation unless an activation sits between them. `Tanh` lets this small network bend its prediction around a curved target.
 
-Compare:
+## Key code
 
 ```python
 linear = nn.Linear(1, 1)
 
 nonlinear = nn.Sequential(
-    nn.Linear(1, 32),
-    nn.Tanh(),
-    nn.Linear(32, 32),
-    nn.Tanh(),
+    nn.Linear(1, 32), nn.Tanh(),
+    nn.Linear(32, 32), nn.Tanh(),
     nn.Linear(32, 1),
 )
 ```
 
-Both models use the same deterministic split, mean-squared error, optimizer family, and evaluation procedure.
+`nn.Linear(1, 1)` can only fit a line. The hidden layers create intermediate features; each `Tanh` makes the final mapping nonlinear.
 
-## Why this matters
+## Evidence and visual
 
-Stacking linear layers without nonlinear activations still produces a linear transformation. The `Tanh` activations let the second model approximate curvature.
-
-## Run it
-
-```bash
-python examples/regression_demo.py
-```
-
-The script prints measured validation loss for both models and writes a retained comparison chart. Those values are generated locally; this page does not hard-code an accuracy claim.
-
-## Verified local run
-
-With seed `42` and the retained script configuration:
+This is a reproduced result from the retained script, using its synthetic dataset, seed `42`, split, architecture, and training configuration. It is a capacity demonstration, not a general benchmark.
 
 | Model | Validation MSE |
 | --- | ---: |
 | Linear | 0.40296 |
 | Nonlinear network | 0.00755 |
 
-![Scatter plot of the same nonlinear data with a linear fit and a nonlinear neural-network fit](../assets/images/regression-comparison.png)
+![Reproduced chart of the same curved samples with a poor linear fit on the left and a flexible nonlinear-network fit on the right](../assets/images/regression-comparison.png)
 
-The comparison is specific to this synthetic dataset, split, seed, architecture, and training configuration. It demonstrates representational capacity; it is not a general benchmark.
+## Interactive check
 
-## Transferable lessons
+<div class="interactive-panel" data-regression-lab>
+  <div class="interactive-heading">Capacity reminder</div>
+  <label>Hidden width <input type="range" min="1" max="64" value="32" data-regression-width></label>
+  <output data-regression-output aria-live="polite"></output>
+</div>
 
-- Visualize predictions, not only scalar loss.
-- Keep the split and seed fixed during comparison.
-- Match model capacity to the pattern rather than automatically adding depth.
-- A successful tiny experiment can validate the complete training pipeline.
+Changing width changes the number of learned hidden features. The important switch is still the activation: width without a nonlinear activation does not make a curved function possible.
+
+## Run it yourself
+
+```bash
+python examples/regression_demo.py
+```
+
+It prints the two validation losses and refreshes `docs/assets/images/regression-comparison.png`.
+
+## Complete source
+
+??? note "Open the maintained runnable script"
+    ```python
+    --8<-- "examples/regression_demo.py"
+    ```

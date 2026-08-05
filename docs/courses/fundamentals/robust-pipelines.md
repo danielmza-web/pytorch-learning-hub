@@ -1,7 +1,7 @@
 ---
 title: Robust pipelines
-course: PyTorch Fundamentals
-module: 5
+study_context: PyTorch Fundamentals
+topic_order: 5
 tags:
   - data-quality
   - robustness
@@ -66,4 +66,3 @@ Useful measurements include:
 - Label min/max and dtype.
 
 See the [robust image-pipeline project](../../projects/robust-image-pipeline.md) for a reusable implementation pattern.
-

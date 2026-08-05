@@ -10,12 +10,12 @@ last_reviewed: 2026-08-05
 
 <span class="eyebrow">DANIEL ZURITA · LEARNING REFERENCE</span>
 
-# Understand the workflow.<br>Build the model.
+# Understand the workflow.<br>Return when you need it.
 
-A visual, practical PyTorch reference built from original explanations, executable examples, and projects. Start with the complete Fundamentals collection, then use the concept and project libraries whenever you need a focused answer.
+A visual, practical PyTorch reference built from original explanations, executable examples, and projects. Use it to understand a mechanism, refresh an idea you have already seen, or connect code to a concrete decision.
 
-[Start PyTorch Fundamentals](courses/fundamentals/index.md){ .md-button .md-button--primary }
-[Open the 10-minute review](courses/fundamentals/quick-review.md){ .md-button }
+[Open the Fundamentals guide](courses/fundamentals/index.md){ .md-button .md-button--primary }
+[Open the quick reference](courses/fundamentals/quick-review.md){ .md-button }
 
 </section>
 
@@ -39,11 +39,11 @@ Every training project is a variation of this loop. The model changes, the data 
 
 <article class="feature-card" markdown>
 
-### Courses
+### Guides
 
-Read a structured collection in learning order, beginning with tensors and ending with reliable model evaluation.
+Browse connected topics when you want the larger mental model, from tensor shapes to reliable model evaluation.
 
-[Open Fundamentals →](courses/fundamentals/index.md)
+[Open the Fundamentals guide →](courses/fundamentals/index.md)
 
 </article>
 
@@ -79,8 +79,8 @@ Use the cheatsheet, error guide, and glossary while writing or debugging code.
 
 </div>
 
-!!! info "A library, not a tracker"
-    This site stores no course progress, completion state, accounts, analytics, or personal learning history. New material is added only when it is useful enough to publish.
+!!! info "A reference, not a course platform"
+    This site stores no progress, completion state, accounts, analytics, or personal learning history. Open the topic that answers your question; there is no required sequence.
 
 ## Featured original projects
 
@@ -93,9 +93,8 @@ Use the cheatsheet, error guide, and glossary while writing or debugging code.
 
 ## How to use this hub
 
-1. Read the [quick review](courses/fundamentals/quick-review.md) before an exercise or interview.
-2. Follow the full [Fundamentals course map](courses/fundamentals/index.md) when learning in depth.
+1. Read the [quick reference](courses/fundamentals/quick-review.md) before an exercise or interview.
+2. Browse the [Fundamentals topic map](courses/fundamentals/index.md) when you want the whole connection.
 3. Open a [concept](concepts/index.md) when one mechanism is unclear.
 4. Use the [common errors guide](reference/common-errors.md) when code fails.
 5. Study a [project](projects/index.md) to connect the individual pieces.
-

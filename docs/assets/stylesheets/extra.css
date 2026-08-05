@@ -300,6 +300,15 @@
   text-align: center;
 }
 
+.md-typeset details.note {
+  margin-top: 0.85rem;
+  border-color: var(--hub-border);
+}
+
+.md-typeset details.note > summary {
+  font-weight: 700;
+}
+
 @media (max-width: 760px) {
   .feature-grid,
   .kernel-stage {
@@ -338,4 +347,3 @@
     animation-iteration-count: 1 !important;
   }
 }
-

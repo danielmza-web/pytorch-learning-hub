@@ -1,7 +1,7 @@
 ---
 title: Tensors and autograd
-course: PyTorch Fundamentals
-module: 1
+study_context: PyTorch Fundamentals
+topic_order: 1
 tags:
   - tensors
   - autograd
@@ -85,4 +85,3 @@ Operations require participating tensors to be on the same device. The [common e
 
 ??? question "Can `[8, 1, 10]` broadcast with `[7, 10]`?"
     No. From the right, `10` matches `10`, but `1` can expand to `7`; the remaining `8` has no matching leading dimension only if the second shape is treated as `[1, 7, 10]`, so it actually can broadcast to `[8, 7, 10]`. Writing the implicit leading `1` makes the rule easier to see.
-

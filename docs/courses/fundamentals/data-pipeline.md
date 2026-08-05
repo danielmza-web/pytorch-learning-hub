@@ -1,7 +1,7 @@
 ---
 title: Dataset, DataLoader, and transforms
-course: PyTorch Fundamentals
-module: 2
+study_context: PyTorch Fundamentals
+topic_order: 2
 tags:
   - dataset
   - dataloader
@@ -99,4 +99,3 @@ print(labels.min(), labels.max())
 ```
 
 Inspect one batch before defining a model. It catches incorrect shapes, label types, and ranges early.
-

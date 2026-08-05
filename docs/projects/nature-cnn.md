@@ -1,6 +1,6 @@
 ---
 title: Nature CNN
-course: PyTorch Fundamentals
+study_context: PyTorch Fundamentals
 tags:
   - project
   - cifar100
@@ -8,43 +8,63 @@ tags:
 last_reviewed: 2026-08-05
 ---
 
-# Project: nature CNN and overfitting
+# Project: Nature CNN and overfitting
 
-## Problem
+## The question
 
-Classify a curated CIFAR-100 subset containing flowers, mammals, and insects, then diagnose the gap between training and validation performance.
+How do reusable CNN blocks and validation curves help you separate genuine learning from memorization?
 
-## Baseline architecture
+## What to remember
 
-```text
-3×32×32
-→ Conv 32 → ReLU → Pool
-→ Conv 64 → ReLU → Pool
-→ Conv 128 → ReLU → Pool
-→ Flatten 2048 → Linear 512 → Dropout → class logits
+Regularization is not one setting. It is the combination of a stable data split, training-only augmentation, model capacity, weight decay, dropout, and selecting a checkpoint by validation behavior.
+
+## Key code
+
+```python
+class CNNBlock(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.block = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, 3, padding=1),
+            nn.BatchNorm2d(out_channels), nn.ReLU(), nn.MaxPool2d(2),
+        )
 ```
 
-## Regularized comparison
+The reusable block makes each transformation explicit: learn local patterns, normalize activation statistics, add nonlinearity, then reduce spatial size. Reuse makes shape debugging and comparisons easier.
 
-- Training-only augmentation.
-- Batch normalization inside reusable convolution blocks.
-- Stronger but realistic dropout.
-- AdamW weight decay.
-- Best-validation checkpoint selection.
-- Per-class evaluation rather than accuracy alone.
+## Evidence and visual
 
-## Experiment rules
+The architecture map below is verified by the retained shape test: both models accept CIFAR-sized `[batch, 3, 32, 32]` input and return `[batch, 15]` logits. It is not a trained-performance result.
 
-1. Keep the same class subset and split.
-2. Compare curves over the same epoch budget.
-3. Record parameter count and inference time as well as accuracy.
-4. Inspect confusion between visually related classes.
-5. Reject augmentations that do not preserve the semantic label.
+```mermaid
+flowchart LR
+    A["Image\n3 × 32 × 32"] --> B["CNNBlock\n32 × 16 × 16"]
+    B --> C["CNNBlock\n64 × 8 × 8"]
+    C --> D["CNNBlock\n128 × 4 × 4"]
+    D --> E["Classifier\n15 logits"]
+```
 
-## Reproducibility
+## Interactive check
 
-`examples/nature_cnn.py` verifies tensor shapes and parameter counts for baseline and modular architectures. Full CIFAR-100 training is kept out of the documentation build so updates remain fast and do not trigger hidden downloads.
+<div class="interactive-panel curve-lab" data-curve-lab>
+  <div class="interactive-heading">Illustrative train–validation gap</div>
+  <label>Illustrative regularization strength <input type="range" min="0" max="100" value="35" data-regularization></label>
+  <canvas width="560" height="240" data-curve-canvas aria-label="Illustrative training and validation loss curves, not measured Nature CNN data"></canvas>
+  <output data-curve-output aria-live="polite"></output>
+  <small>This visual explains a pattern to look for; it is not measured CIFAR-100 performance.</small>
+</div>
 
-!!! important
-    A shape smoke test proves that the model executes; it does not prove predictive quality. Measured accuracy belongs in a retained experiment artifact, not in documentation written from memory.
+## Run it yourself
 
+```bash
+python examples/nature_cnn.py
+```
+
+It verifies model input/output shapes and parameter counts. Retain full experiment artifacts before adding any accuracy, confusion matrix, or prediction image to this page.
+
+## Complete source
+
+??? note "Open the maintained runnable script"
+    ```python
+    --8<-- "examples/nature_cnn.py"
+    ```

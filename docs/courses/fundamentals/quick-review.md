@@ -1,12 +1,14 @@
 ---
-title: Fundamentals quick review
-course: PyTorch Fundamentals
+title: Fundamentals quick reference
+study_context: PyTorch Fundamentals
 tags:
   - quick-review
 last_reviewed: 2026-08-05
 ---
 
-# Fundamentals quick review
+# Fundamentals quick reference
+
+Use this page when you need the important idea and a reliable code pattern quickly. Follow links only when you want more context.
 
 ## 1. Shapes are part of the program
 
@@ -112,4 +114,3 @@ model.eval()
 6. Inspect learning curves.
 
 [Open the complete cheatsheet](../../reference/cheatsheet.md){ .md-button .md-button--primary }
-

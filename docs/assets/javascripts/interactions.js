@@ -169,6 +169,31 @@
     update();
   }
 
+  function initRegressionLab(root) {
+    const width = by(root, "[data-regression-width]");
+    const output = by(root, "[data-regression-output]");
+    const update = () => {
+      const units = Math.max(1, Number(width.value) || 1);
+      const hiddenFeatures = units * 2;
+      output.textContent = `${units} hidden units can learn ${hiddenFeatures} affine parameters before the next layer. Tanh—not extra linear layers—is what allows the model to bend.`;
+    };
+    width.addEventListener("input", update);
+    update();
+  }
+
+  function initPipelineLab(root) {
+    const file = by(root, "[data-pipeline-file]");
+    const output = by(root, "[data-pipeline-output]");
+    const outcomes = {
+      valid: "Accepted: a readable PNG with a known class becomes a stable path + class-id sample.",
+      corrupt: "Recorded as invalid: the unreadable JPEG is kept in diagnostics with a decoder reason and never enters a batch.",
+      unsupported: "Skipped by policy: the extension is outside the declared image set, so it is not interpreted as training data."
+    };
+    const update = () => { output.textContent = outcomes[file.value]; };
+    file.addEventListener("change", update);
+    update();
+  }
+
   const kernels = {
     edge: [[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]],
     horizontal: [[-1, -1, -1], [0, 0, 0], [1, 1, 1]],
@@ -235,6 +260,8 @@
     document.querySelectorAll("[data-shape-tracer]").forEach(initShapeTracer);
     document.querySelectorAll("[data-tensor-lab]").forEach(initTensorLab);
     document.querySelectorAll("[data-curve-lab]").forEach(initCurveLab);
+    document.querySelectorAll("[data-regression-lab]").forEach(initRegressionLab);
+    document.querySelectorAll("[data-pipeline-lab]").forEach(initPipelineLab);
     document.querySelectorAll("[data-kernel-lab]").forEach(initKernelLab);
     if (window.mermaid) {
       window.mermaid.initialize({ startOnLoad: true, securityLevel: "strict", theme: "dark" });
@@ -244,4 +271,3 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initAll);
   else initAll();
 })();
-

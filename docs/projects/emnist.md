@@ -1,6 +1,6 @@
 ---
 title: EMNIST letter classifier
-course: PyTorch Fundamentals
+study_context: PyTorch Fundamentals
 tags:
   - project
   - emnist
@@ -10,54 +10,63 @@ last_reviewed: 2026-08-05
 
 # Project: EMNIST letter classifier
 
-## Problem
+## The question
 
-Classify 28 × 28 grayscale handwritten letters and compare a dense baseline with a convolutional model.
+Why does keeping an image as a grid usually give a model more useful structure than flattening it immediately?
 
-## Data contract
+## What to remember
 
-```text
-input:  [batch, 1, 28, 28]
-output: [batch, 26]
-labels: integer class ids 0–25
-```
+A dense baseline can classify pixels, but it loses the explicit neighbor relationship between strokes. A convolutional model reuses small local detectors across the image before turning the result into 26 logits.
 
-Some EMNIST splits expose letter labels as `1–26`; the pipeline must remap them to the zero-based class indices expected by `CrossEntropyLoss`.
-
-## Baseline
+## Key code
 
 ```python
-nn.Sequential(
-    nn.Flatten(),
-    nn.Linear(28 * 28, 256),
-    nn.ReLU(),
-    nn.Linear(256, 26),
+self.features = nn.Sequential(
+    nn.Conv2d(1, 32, 3, padding=1),
+    nn.BatchNorm2d(32), nn.ReLU(), nn.MaxPool2d(2),
+    nn.Conv2d(32, 64, 3, padding=1),
+    nn.BatchNorm2d(64), nn.ReLU(), nn.MaxPool2d(2),
+    nn.AdaptiveAvgPool2d((1, 1)),
 )
+self.classifier = nn.Linear(64, classes)
 ```
 
-Flattening discards explicit two-dimensional structure.
+The convolution blocks preserve the two-dimensional view while pooling reduces spatial size. `AdaptiveAvgPool2d((1, 1))` creates a stable 64-feature boundary before classification.
 
-## CNN
+## Evidence and visual
 
-```text
-1×28×28 → Conv(32) → Pool → 32×14×14
-          → Conv(64) → Pool → 64×7×7
-          → Adaptive pool → 64
-          → Linear → 26 logits
+This is a verified architecture and shape map, not a trained-accuracy claim. The retained smoke test confirms that both the dense and CNN variants return `[batch, 26]` logits for `[batch, 1, 28, 28]` input.
+
+```mermaid
+flowchart LR
+    A["Letter batch\n[8, 1, 28, 28]"] --> B["Conv + BN + ReLU\n[8, 32, 28, 28]"]
+    B --> C["Pool\n[8, 32, 14, 14]"]
+    C --> D["Conv + BN + ReLU\n[8, 64, 14, 14]"]
+    D --> E["Pool + adaptive average\n[8, 64, 1, 1]"]
+    E --> F["Linear\n[8, 26] logits"]
 ```
 
-The CNN can reuse local detectors for strokes, curves, corners, and loops.
+## Interactive check
 
-## Evaluation design
+<div class="interactive-panel" data-shape-tracer>
+  <div class="interactive-heading">EMNIST spatial-size tracer</div>
+  <label>Input width and height <input type="number" min="8" value="28" data-spatial-size></label>
+  <label>2× pooling blocks <input type="range" min="0" max="5" value="2" data-pool-blocks></label>
+  <button type="button" data-trace-shape>Trace shape</button>
+  <output data-shape-output aria-live="polite"></output>
+</div>
 
-- Overall test accuracy.
-- Per-letter recall.
-- Confusion matrix for visually similar pairs.
-- A separately reported external-handwriting sample.
+## Run it yourself
 
-An improvement on the EMNIST test split does not guarantee improvement on one person's handwriting. That external gap is a useful example of [distribution shift](../concepts/generalization.md#distribution-shift).
+```bash
+python examples/emnist_model.py
+```
 
-## Reproducibility
+It runs deterministic shape checks and prints parameter counts. A full EMNIST training run remains separate so the documentation workflow does not download data or imply a benchmark result.
 
-`examples/emnist_model.py` defines both architectures and verifies their input/output shapes without downloading data. A full dataset training run is intentionally separate from the fast documentation test.
+## Complete source
 
+??? note "Open the maintained runnable script"
+    ```python
+    --8<-- "examples/emnist_model.py"
+    ```
