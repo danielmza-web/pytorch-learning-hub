@@ -1,8 +1,8 @@
 # PyTorch Learning Hub
 
-Source for `https://pytorch.dazu.xyz/`: an extensible Material for MkDocs knowledge library containing original PyTorch explanations and projects.
+Source for `https://pytorch.dazu.xyz/`: an extensible Material for MkDocs reference library containing original PyTorch explanations, interactions, and runnable projects.
 
-The public site contains only courses with useful content. It does not expose course status, progress, completion state, accounts, analytics, or personal learning history.
+The public site is for understanding, revising, and returning to PyTorch ideas—not for tracking a course. It publishes useful guides and topic collections only, with no progress, completion state, accounts, analytics, or personal learning history. The first guide preserves the stable `/courses/fundamentals/` URL while visible navigation uses reference-first language.
 
 ## Manual update workflow
 
@@ -12,14 +12,14 @@ Work from this repository directory:
 Set-Location "C:\Users\Daniel Zurita\OneDrive\Escritorio\DaZu\pytorch-learning-hub"
 ```
 
-Write or update original Markdown in `docs/`. Use `templates/course.md` for a
-new course, add its chapters and local assets, then add it to `nav` in
-`mkdocs.yml` only when the course contains useful public material.
+Write or update original Markdown in `docs/`. Use `templates/course.md` as the
+reusable guide template, add focused topics and local assets, then add it to
+`nav` in `mkdocs.yml` only when the guide contains useful public material.
 
-Keep shared explanations in `docs/concepts/` or `docs/reference/`, add
-associated work to `docs/projects/`, and include `last_reviewed` in page
-metadata. Do not publish Coursera assessment prompts, protected notebooks, quiz
-answers, or graded solutions.
+Keep broad starting points in `docs/collections/`; keep shared explanations in
+`docs/concepts/` or `docs/reference/`; add associated work to `docs/projects/`;
+and include `last_reviewed` in page metadata. Do not publish Coursera assessment
+prompts, protected notebooks, quiz answers, or graded solutions.
 
 ## Local preview
 
@@ -57,10 +57,12 @@ lightweight MkDocs build requirements:
 python -m pip install -r requirements-projects.txt
 ```
 
-Every project uses a small deterministic CPU-first default and downloads its
-public data through TorchVision when needed. Use `--full --device cuda` for the
-longer GPU configuration, or `--smoke-test` when you only want to validate the
-code without a dataset download.
+Every project uses a small deterministic CPU-first default. The regression
+example generates its own data; the EMNIST, robust-pipeline, and Nature CNN
+examples download public EMNIST, CIFAR-10, and CIFAR-100 data through TorchVision
+when needed. Use `--full --device cuda` for the longer GPU configuration on a
+computer with a compatible CUDA PyTorch installation, or `--smoke-test` when you
+only want to validate code shapes and data-handling logic without a download.
 
 ```bash
 python examples/regression_demo.py
@@ -70,7 +72,8 @@ python examples/nature_cnn.py
 ```
 
 Artifacts such as predictions, confusion matrices, curves, metrics, and model
-checkpoints are written below `artifacts/` and are deliberately ignored by Git.
+checkpoints are written below `artifacts/`; downloaded data stays below `data/`.
+Both directories are deliberately ignored by Git.
 
 ## Add a guide collection
 
@@ -115,7 +118,7 @@ git add .
 git commit -m "Describe the PyTorch documentation update"
 ```
 
-If a new course becomes public, add one neutral link to the DaZu quick hub and
+If a new guide becomes public, add one neutral link to the DaZu quick hub and
 release DaZu through its own validation, commit, push, and deployment process.
 
 The main DaZu repository remains separate and manually deployed.
