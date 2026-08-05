@@ -1,0 +1,124 @@
+site_name: PyTorch Learning Hub
+site_description: Practical PyTorch notes, visual explanations, and original projects by Daniel Zurita.
+site_url: https://pytorch.dazu.xyz/
+repo_name: danielmza-web/pytorch-learning-hub
+
+theme:
+  name: material
+  language: en
+  logo: assets/images/dz-pytorch-mark.png
+  favicon: assets/images/dz-pytorch-mark.png
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Use dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Use light mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+extra_javascript:
+  - assets/javascripts/mermaid.min.js
+  - assets/javascripts/interactions.js
+
+plugins:
+  - search
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Home: index.md
+  - Courses:
+      - PyTorch Fundamentals:
+          - Overview: courses/fundamentals/index.md
+          - Quick review: courses/fundamentals/quick-review.md
+          - Tensors and autograd: courses/fundamentals/tensors-autograd.md
+          - Data pipeline: courses/fundamentals/data-pipeline.md
+          - Models and training: courses/fundamentals/models-training.md
+          - Evaluation: courses/fundamentals/evaluation.md
+          - Robust pipelines: courses/fundamentals/robust-pipelines.md
+          - CNNs and debugging: courses/fundamentals/cnns-debugging.md
+          - Overfitting: courses/fundamentals/overfitting.md
+          - Saving models: courses/fundamentals/saving-models.md
+  - Concepts:
+      - Concept library: concepts/index.md
+      - Tensor shapes: concepts/tensor-shapes.md
+      - Training loop: concepts/training-loop.md
+      - Convolution explorer: concepts/convolution.md
+      - Generalization: concepts/generalization.md
+  - Projects:
+      - Project gallery: projects/index.md
+      - Nonlinear regression: projects/regression.md
+      - EMNIST letter classifier: projects/emnist.md
+      - Robust image pipeline: projects/robust-image-pipeline.md
+      - Nature CNN: projects/nature-cnn.md
+  - Reference:
+      - Reference index: reference/index.md
+      - Cheatsheet: reference/cheatsheet.md
+      - Common errors: reference/common-errors.md
+      - Glossary: reference/glossary.md
+  - About:
+      - About this hub: about/index.md
+      - Sources and attribution: about/sources.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/danielmza-web
+    - icon: fontawesome/solid/globe
+      link: https://dazu.xyz/
+  generator: false
+
+copyright: Built as an original learning reference · <a href="https://dazu.xyz/learn/pytorch/">Quick summary</a> · <a href="https://dazu.xyz/">DaZu</a>
