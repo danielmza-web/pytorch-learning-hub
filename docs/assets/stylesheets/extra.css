@@ -15,6 +15,7 @@
   --md-default-fg-color: #dbeaf4;
   --md-default-fg-color--light: #aac2d3;
   --md-code-bg-color: #0b1d2f;
+  --md-typeset-a-color: #64d2ff;
   --hub-panel: rgba(79, 195, 247, 0.055);
   --hub-border: rgba(84, 207, 255, 0.22);
 }
@@ -326,7 +327,7 @@
 .md-typeset .topic-card strong {
   display: block;
   margin-bottom: 0.45rem;
-  color: var(--md-primary-fg-color);
+  color: var(--md-default-fg-color);
   font-size: 1.02rem;
 }
 

@@ -1,4 +1,4 @@
-"""Validate public Markdown metadata, links, and the no-tracking content boundary."""
+"""Validate metadata, links, guide shape, and the no-tracking boundary."""
 
 from __future__ import annotations
 
@@ -51,13 +51,36 @@ def main() -> None:
         text = path.read_text(encoding="utf-8")
         errors.extend(check_metadata(path, text))
         errors.extend(check_links(path, text))
-    forbidden_course_dirs = [
-        DOCS / "courses" / "techniques-ecosystem",
-        DOCS / "courses" / "advanced-architectures-deployment",
-    ]
-    for directory in forbidden_course_dirs:
+    expected_primary_pages = {
+        DOCS / "index.md",
+        DOCS / "guides" / "fundamentals" / "core-workflow.md",
+        DOCS / "guides" / "fundamentals" / "vision-real-data.md",
+        DOCS / "projects" / "index.md",
+        DOCS / "reference" / "index.md",
+        DOCS / "about" / "index.md",
+    }
+    for path in expected_primary_pages:
+        if not path.exists():
+            errors.append(f"{path}: required primary page is missing")
+
+    retired_directories = ["start", "collections", "concepts", "courses"]
+    for name in retired_directories:
+        directory = DOCS / name
         if directory.exists() and any(directory.rglob("*.md")):
-            errors.append(f"{directory}: unpublished future-course placeholders are not allowed")
+            errors.append(f"{directory}: retired small-page collection still contains Markdown")
+
+    guides_root = DOCS / "guides"
+    for guide_directory in sorted(path for path in guides_root.iterdir() if path.is_dir()):
+        pages = sorted(guide_directory.glob("*.md"))
+        if len(pages) != 2:
+            errors.append(
+                f"{guide_directory}: published guides require exactly two substantial pages, found {len(pages)}"
+            )
+
+    if len(markdown_files) != 10:
+        errors.append(
+            f"{DOCS}: expected 10 public Markdown pages (6 primary + 4 project details), found {len(markdown_files)}"
+        )
     if errors:
         raise SystemExit("\n".join(errors))
     print(f"Validated {len(markdown_files)} Markdown files")
@@ -65,4 +88,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -83,48 +83,18 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Start here:
-      - Your first pass: start/index.md
-      - 1. Tensors and a first model: start/first-model.md
-      - 2. Build a complete classifier: start/first-classifier.md
-      - 3. CNNs for images: start/cnn.md
-  - Core ideas:
-      - Tensors, shapes, and autograd: courses/fundamentals/tensors-autograd.md
-      - Data, batches, and transforms: courses/fundamentals/data-pipeline.md
-      - Models, activations, logits, and loss: courses/fundamentals/models-training.md
-      - The training loop: concepts/training-loop.md
-      - Evaluation and metrics: courses/fundamentals/evaluation.md
-  - Image models:
-      - Convolution explorer: concepts/convolution.md
-      - CNNs and shape debugging: courses/fundamentals/cnns-debugging.md
-      - Reliable image data: courses/fundamentals/robust-pipelines.md
-      - Overfitting and regularization: courses/fundamentals/overfitting.md
-      - Save and load models: courses/fundamentals/saving-models.md
-  - More detail:
-      - Fundamentals reference map: courses/fundamentals/index.md
-      - Quick reminder: courses/fundamentals/quick-review.md
-      - First models and tensors: collections/foundations.md
-      - Build a training workflow: collections/training-workflow.md
-      - Reliable image data: collections/reliable-data.md
-      - CNNs and model inspection: collections/cnn-vision.md
-  - Explore concepts:
-      - Concept library: concepts/index.md
-      - Tensor shapes: concepts/tensor-shapes.md
-      - Generalization: concepts/generalization.md
+  - Guides:
+      - PyTorch Fundamentals:
+          - Core workflow: guides/fundamentals/core-workflow.md
+          - Vision and real data: guides/fundamentals/vision-real-data.md
   - Projects:
-      - Project gallery: projects/index.md
+      - Complete projects: projects/index.md
       - Nonlinear regression: projects/regression.md
       - EMNIST letter classifier: projects/emnist.md
       - Robust image pipeline: projects/robust-image-pipeline.md
       - Nature CNN: projects/nature-cnn.md
-  - Reference:
-      - Reference index: reference/index.md
-      - Cheatsheet: reference/cheatsheet.md
-      - Common errors: reference/common-errors.md
-      - Glossary: reference/glossary.md
-  - About:
-      - About this hub: about/index.md
-      - Sources and attribution: about/sources.md
+  - Reference: reference/index.md
+  - About: about/index.md
 
 extra:
   social:

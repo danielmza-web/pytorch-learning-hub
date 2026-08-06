@@ -1,149 +1,114 @@
 # PyTorch Learning Hub
 
-Source for `https://pytorch.dazu.xyz/`: an extensible Material for MkDocs reference library containing original PyTorch explanations, interactions, and runnable projects.
+Source for `https://pytorch.dazu.xyz/`: an extensible Material for MkDocs library of original PyTorch explanations, visual interactions, and runnable projects.
 
-The public site is for understanding, revising, and returning to PyTorch ideas—not for tracking a course. It publishes useful guides and topic collections only, with no progress, completion state, accounts, analytics, or personal learning history. Begin with `docs/start/`: tensors and a first model, a complete classifier, then CNNs for images. The first guide preserves the stable `/courses/fundamentals/` URL while visible navigation uses reference-first language.
+The site helps people learn, review, and debug PyTorch. It does not track courses, progress, completion, accounts, analytics, or personal learning history.
 
-## Manual update workflow
+## Content structure
 
-Work from this repository directory:
+The public navigation stays small:
+
+- `docs/index.md`: orientation and recommended starting point.
+- `docs/guides/<guide>/`: exactly two substantial pages per published guide.
+- `docs/projects/`: project gallery and one complete page per runnable project.
+- `docs/reference/index.md`: reminder, cheatsheet, troubleshooting, and glossary.
+- `docs/about/index.md`: purpose, sources, attribution, and results policy.
+
+PyTorch Fundamentals currently uses:
+
+1. `docs/guides/fundamentals/core-workflow.md`
+2. `docs/guides/fundamentals/vision-real-data.md`
+
+Do not create future-guide placeholders. Add a guide to `mkdocs.yml` only after both pages contain useful material.
+
+## Update locally
 
 ```powershell
 Set-Location "C:\Users\Daniel Zurita\OneDrive\Escritorio\DaZu\pytorch-learning-hub"
-```
-
-Write or update original Markdown in `docs/`. Use `templates/course.md` as the
-reusable guide template, add focused topics and local assets, then add it to
-`nav` in `mkdocs.yml` only when the guide contains useful public material.
-
-Keep the recommended first pass in `docs/start/`; keep broad topical groupings in
-`docs/collections/`; keep shared explanations in `docs/concepts/` or
-`docs/reference/`; add associated work to `docs/projects/`; and include
-`last_reviewed` in page metadata. Use local conceptual visuals when they make a
-shape or operation easier to see, and label them as illustrative. Do not publish
-Coursera assessment prompts, protected notebooks, quiz answers, or graded solutions.
-
-## Conceptual visuals
-
-The reproducible diagrams for the data path, training update cycle, convolution,
-and CNN shape trace are generated locally:
-
-```bash
-python scripts/generate_concept_visuals.py
-```
-
-The command writes to `docs/assets/images/`. The same diagrams used by the DaZu
-quick reference are intentionally copied into `../site/learn/pytorch/assets/` so
-both independently deployed static sites keep local assets. After changing a
-diagram, inspect it, update the matching DaZu copy, and label it illustrative
-unless it comes from a retained experiment.
-
-## Local preview
-
-```bash
 python -m pip install -r requirements.txt
 python -m mkdocs serve
 ```
 
-Open `http://127.0.0.1:8000/`.
-
-Or use the helper:
+Open `http://127.0.0.1:8000/`. The existing helper performs the same preview setup:
 
 ```powershell
 .\scripts\preview.ps1
 ```
 
-## Validation
+Write educational content in Markdown, include `last_reviewed` metadata, store local images under `docs/assets/images/`, and keep interactions in the shared JavaScript and stylesheet.
 
-```bash
-python -m mkdocs build --strict
-python tests/validate_content.py
-python tests/smoke_examples.py
-```
+## Validate
 
-The example tests use synthetic, deterministic fixtures. Dataset downloads and full training runs are deliberately separate so documentation validation stays fast.
-The smoke test requires PyTorch in the active Python environment; check it with
-`python -c "import torch; print(torch.__version__)"` before publishing.
+Install the project dependencies once when running smoke tests or complete examples:
 
-## Run the complete projects
-
-Install the project dependencies once. This is intentionally separate from the
-lightweight MkDocs build requirements:
-
-```bash
+```powershell
 python -m pip install -r requirements-projects.txt
 ```
 
-Every project uses a small deterministic CPU-first default. The regression
-example generates its own data; the EMNIST, robust-pipeline, and Nature CNN
-examples download public EMNIST, CIFAR-10, and CIFAR-100 data through TorchVision
-when needed. Use `--full --device cuda` for the longer GPU configuration on a
-computer with a compatible CUDA PyTorch installation, or `--smoke-test` when you
-only want to validate code shapes and data-handling logic without a download.
+Run every check before pushing:
 
-```bash
+```powershell
+python -m mkdocs build --strict
+python tests/validate_content.py
+python tests/validate_built_site.py
+python tests/smoke_examples.py
+python -m py_compile scripts/generate_concept_visuals.py examples/regression_demo.py examples/emnist_model.py examples/robust_dataset.py examples/nature_cnn.py
+node --check docs/assets/javascripts/interactions.js
+```
+
+The GitHub Pages workflow repeats these checks and publishes only when they all pass.
+
+## Publish with GitHub Pages
+
+The public repository is `danielmza-web/pytorch-learning-hub`. Publishing is automatic after a successful push to `main`:
+
+```powershell
+git add .
+git commit -m "Describe the PyTorch documentation update"
+git push origin main
+```
+
+`.github/workflows/pages.yml` builds and deploys the `site/` artifact. `docs/CNAME` preserves the custom domain `pytorch.dazu.xyz`.
+
+This documentation repository no longer deploys to Netlify. Detailed-library edits therefore use no Netlify production-deploy credits. DaZu remains a separate build-free repository and is published only when its own quick-guide pages change.
+
+After a successful workflow, verify the changed page, direct anchors, search, mobile navigation, images, code-copy controls, and affected interactions.
+
+## Add a future PyTorch guide
+
+1. Create `docs/guides/<guide-slug>/`.
+2. Copy `templates/guide-core.md` and `templates/guide-applied.md` into that folder with meaningful filenames.
+3. Replace the prompts with original explanations, examples, visuals, and relevant project links.
+4. Add both pages as one guide group under `Guides` in `mkdocs.yml`.
+5. Add a short DaZu page at `/learn/pytorch/<guide-slug>/` and list it on `/learn/pytorch/` only when ready.
+6. Validate, commit, and push.
+
+OpenCV, YOLO, and other non-PyTorch topics do not belong in this repository.
+
+## Complete projects
+
+```powershell
 python examples/regression_demo.py
 python examples/emnist_model.py
 python examples/robust_dataset.py
 python examples/nature_cnn.py
 ```
 
-Artifacts such as predictions, confusion matrices, curves, metrics, and model
-checkpoints are written below `artifacts/`; downloaded data stays below `data/`.
-Both directories are deliberately ignored by Git.
+Default configurations are small, reproducible, and CPU-first. The image projects download reputable public datasets through TorchVision. Use `--full --device cuda` for the optional longer GPU configuration or `--smoke-test` to validate code paths without a dataset download.
 
-## Add a guide collection
+Generated artifacts are stored under `artifacts/`; downloaded data stays under `data/`. Both are ignored by Git.
 
-1. Copy `templates/course.md` into `docs/courses/<guide-slug>/index.md`.
-2. Add original Markdown topics and local assets.
-3. Add the guide to `nav` in `mkdocs.yml` only when it contains useful material.
-4. Link shared explanations from `docs/concepts/` and `docs/reference/` rather than duplicating them.
-5. Add related projects under `docs/projects/`.
-6. Run all validation commands before publishing.
-7. Add a neutral link from `dazu.xyz/learn/pytorch/`; never add progress or status labels.
-
-## Manual publishing
-
-Run the release helper only after the validation commands pass:
+## Conceptual visuals
 
 ```powershell
-.\scripts\publish.ps1 -Message "Describe the update"
+python scripts/generate_concept_visuals.py
 ```
 
-It rebuilds the site, runs every validation command, and deploys the generated
-`site/` folder to the PyTorch Netlify project. The helper always passes the
-project ID explicitly (`f58cc486-94eb-4664-ba33-ae59491a53bc`) because this
-nested repository can otherwise inherit the DaZu Netlify link.
-
-To run the final deploy command yourself after a successful build:
-
-```powershell
-netlify deploy --prod `
-  --site f58cc486-94eb-4664-ba33-ae59491a53bc `
-  --dir=site `
-  --no-build `
-  --message "Describe the update"
-```
-
-Verify `https://pytorch.dazu.xyz/`, the changed page, mobile navigation,
-search, affected images, code-copy controls, and affected interactive elements.
-
-Commit the documentation change separately:
-
-```powershell
-git add .
-git commit -m "Describe the PyTorch documentation update"
-```
-
-If a new guide becomes public, add one neutral link to the DaZu quick hub and
-release DaZu through its own validation, commit, push, and deployment process.
-
-The main DaZu repository remains separate and manually deployed.
+The script regenerates diagrams in `docs/assets/images/`. Visuals shared with DaZu also have local copies under `../site/learn/pytorch/assets/` so the two sites work independently. Inspect regenerated files and label them illustrative unless they come from a retained experiment.
 
 ## Content policy
 
 - Publish original explanations, examples, diagrams, and independently structured projects.
-- Do not publish Coursera assessment prompts, protected notebooks, quiz answers, or graded solutions.
-- Label conceptual charts as illustrative.
-- Publish measured results only when the corresponding reproducible run is retained.
-- Include a `last_reviewed` value in page metadata.
+- Do not publish Coursera assessments, protected notebooks, quizzes, or graded solutions.
+- Clearly distinguish illustrative visuals, smoke-test output, and reproduced measurements.
+- Publish model-quality results only when the retained run can reproduce them.
