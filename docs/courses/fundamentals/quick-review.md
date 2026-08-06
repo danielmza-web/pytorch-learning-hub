@@ -1,14 +1,14 @@
 ---
-title: Fundamentals quick reference
+title: PyTorch: the short reminder
 study_context: PyTorch Fundamentals
 tags:
   - quick-review
 last_reviewed: 2026-08-05
 ---
 
-# Fundamentals quick reference
+# PyTorch: the short reminder
 
-Use this page when you need the important idea and a reliable code pattern quickly. Follow links only when you want more context.
+Use this page when you need the important idea and a reliable code pattern quickly. If you are starting from zero, use [Start here](../../start/index.md) instead.
 
 ## 1. Shapes are part of the program
 
@@ -55,7 +55,7 @@ predictions = logits.argmax(dim=1)
 
 Do not apply softmax before `CrossEntropyLoss`.
 
-## 5. Memorize the update order
+## 5. Keep the update order visible
 
 ```python
 optimizer.zero_grad()

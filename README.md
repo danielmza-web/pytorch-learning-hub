@@ -2,7 +2,7 @@
 
 Source for `https://pytorch.dazu.xyz/`: an extensible Material for MkDocs reference library containing original PyTorch explanations, interactions, and runnable projects.
 
-The public site is for understanding, revising, and returning to PyTorch ideas—not for tracking a course. It publishes useful guides and topic collections only, with no progress, completion state, accounts, analytics, or personal learning history. The first guide preserves the stable `/courses/fundamentals/` URL while visible navigation uses reference-first language.
+The public site is for understanding, revising, and returning to PyTorch ideas—not for tracking a course. It publishes useful guides and topic collections only, with no progress, completion state, accounts, analytics, or personal learning history. Begin with `docs/start/`: tensors and a first model, a complete classifier, then CNNs for images. The first guide preserves the stable `/courses/fundamentals/` URL while visible navigation uses reference-first language.
 
 ## Manual update workflow
 
@@ -16,10 +16,12 @@ Write or update original Markdown in `docs/`. Use `templates/course.md` as the
 reusable guide template, add focused topics and local assets, then add it to
 `nav` in `mkdocs.yml` only when the guide contains useful public material.
 
-Keep broad starting points in `docs/collections/`; keep shared explanations in
-`docs/concepts/` or `docs/reference/`; add associated work to `docs/projects/`;
-and include `last_reviewed` in page metadata. Do not publish Coursera assessment
-prompts, protected notebooks, quiz answers, or graded solutions.
+Keep the recommended first pass in `docs/start/`; keep broad topical groupings in
+`docs/collections/`; keep shared explanations in `docs/concepts/` or
+`docs/reference/`; add associated work to `docs/projects/`; and include
+`last_reviewed` in page metadata. Use local conceptual visuals when they make a
+shape or operation easier to see, and label them as illustrative. Do not publish
+Coursera assessment prompts, protected notebooks, quiz answers, or graded solutions.
 
 ## Local preview
 

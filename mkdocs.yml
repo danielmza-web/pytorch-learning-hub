@@ -83,28 +83,33 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Collections:
+  - Start here:
+      - Your first pass: start/index.md
+      - 1. Tensors and a first model: start/first-model.md
+      - 2. Build a complete classifier: start/first-classifier.md
+      - 3. CNNs for images: start/cnn.md
+  - Core ideas:
+      - Tensors, shapes, and autograd: courses/fundamentals/tensors-autograd.md
+      - Data, batches, and transforms: courses/fundamentals/data-pipeline.md
+      - Models, activations, logits, and loss: courses/fundamentals/models-training.md
+      - The training loop: concepts/training-loop.md
+      - Evaluation and metrics: courses/fundamentals/evaluation.md
+  - Image models:
+      - Convolution explorer: concepts/convolution.md
+      - CNNs and shape debugging: courses/fundamentals/cnns-debugging.md
+      - Reliable image data: courses/fundamentals/robust-pipelines.md
+      - Overfitting and regularization: courses/fundamentals/overfitting.md
+      - Save and load models: courses/fundamentals/saving-models.md
+  - More detail:
+      - Fundamentals reference map: courses/fundamentals/index.md
+      - Quick reminder: courses/fundamentals/quick-review.md
       - First models and tensors: collections/foundations.md
       - Build a training workflow: collections/training-workflow.md
       - Reliable image data: collections/reliable-data.md
       - CNNs and model inspection: collections/cnn-vision.md
-  - Guides:
-      - PyTorch Fundamentals Guide:
-          - Overview: courses/fundamentals/index.md
-          - Quick reference: courses/fundamentals/quick-review.md
-          - Tensors and autograd: courses/fundamentals/tensors-autograd.md
-          - Data pipeline: courses/fundamentals/data-pipeline.md
-          - Models and training: courses/fundamentals/models-training.md
-          - Evaluation: courses/fundamentals/evaluation.md
-          - Robust pipelines: courses/fundamentals/robust-pipelines.md
-          - CNNs and debugging: courses/fundamentals/cnns-debugging.md
-          - Overfitting: courses/fundamentals/overfitting.md
-          - Saving models: courses/fundamentals/saving-models.md
-  - Concepts:
+  - Explore concepts:
       - Concept library: concepts/index.md
       - Tensor shapes: concepts/tensor-shapes.md
-      - Training loop: concepts/training-loop.md
-      - Convolution explorer: concepts/convolution.md
       - Generalization: concepts/generalization.md
   - Projects:
       - Project gallery: projects/index.md

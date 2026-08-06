@@ -1,100 +1,84 @@
 ---
-title: PyTorch Learning Hub
+title: PyTorch: start, build, inspect
 tags:
-  - pytorch
-  - deep-learning
-last_reviewed: 2026-08-05
+  - home
+last_reviewed: 2026-08-06
 ---
 
-<section class="hub-hero" markdown>
+# PyTorch: start, build, inspect
 
-<span class="eyebrow">DANIEL ZURITA · LEARNING REFERENCE</span>
+This is a visual reference for the things you need to recognise in a PyTorch project. Use it to learn the fundamentals for the first time, review a concept before writing code, or trace a problem in a model you already have.
 
-# Understand the workflow.<br>Return when you need it.
+[Start with the three-part path](start/index.md){ .md-button .md-button--primary }
+[Open a short reminder](courses/fundamentals/quick-review.md){ .md-button }
 
-A visual, practical PyTorch reference built from original explanations, executable examples, and complete projects. Use it to understand a mechanism, refresh an idea you have already seen, or connect code to a real dataset, model, and result.
+## Begin with a concrete question
 
-[Browse the knowledge collections](collections/foundations.md){ .md-button .md-button--primary }
-[Open the quick reference](courses/fundamentals/quick-review.md){ .md-button }
+| If you want to… | Start here | What you will see |
+| --- | --- | --- |
+| Understand a tensor and a simple neural network | [Tensors and a first model](start/first-model.md) | shapes, `nn.Linear`, activations, and a measured linear-vs-nonlinear example |
+| Make an image classifier actually learn | [Build a complete classifier](start/first-classifier.md) | `Dataset`, `DataLoader`, logits, loss, gradients, and evaluation |
+| Understand why CNNs work for images | [CNNs for images](start/cnn.md) | filters, feature maps, pooling, and changing tensor shapes |
+| Find why a run is not behaving | [Common errors](reference/common-errors.md) | shapes, labels, devices, modes, loss, and memory checks |
 
-</section>
+## The classification loop in one picture
 
-## The complete mental model
+![Conceptual diagram showing a batch moving through model, logits, loss, gradients, and an optimizer update](assets/images/training-cycle-visual.png)
 
-```mermaid
-flowchart LR
-    A["Data"] --> B["Dataset"]
-    B --> C["DataLoader"]
-    C --> D["Model"]
-    D --> E["Logits"]
-    E --> F["Loss"]
-    F --> G["Gradients"]
-    G --> H["Optimizer"]
-    H --> D
-```
+The loop is always the same: **batch → model → logits → loss → gradients → update**. Evaluation uses the same model but does not update its weights.
 
-Every training project is a variation of this loop. The model changes, the data changes, and the evaluation becomes more sophisticated—but the core flow remains recognizable.
+## What each part is responsible for
 
-<div class="feature-grid" markdown>
+<div class="topic-grid" markdown>
 
-<article class="feature-card" markdown>
+<div class="topic-card">
+<strong>Data and shapes</strong>
 
-### Collections
+An image becomes a tensor such as `[batch, channels, height, width]`. Read the shape before changing layers.
 
-Four connected collections gather the important ideas from first tensors to reliable CNNs—without a required order or progress system.
+[Tensors and shapes →](concepts/tensor-shapes.md)
+</div>
 
-[Browse collections →](collections/foundations.md)
+<div class="topic-card">
+<strong>Models and logits</strong>
 
-</article>
+`nn.Module` transforms a batch into raw class scores. Activations give a model nonlinear capacity.
 
-<article class="feature-card" markdown>
+[Models and training →](courses/fundamentals/models-training.md)
+</div>
 
-### Concepts
+<div class="topic-card">
+<strong>Learning and evaluation</strong>
 
-Return to one focused explanation: tensor shapes, the training loop, convolution, or generalization.
+Loss measures error; gradients tell the optimizer how to change weights. Validation checks whether that change generalizes.
 
-[Browse concepts →](concepts/index.md)
+[Evaluation and metrics →](courses/fundamentals/evaluation.md)
+</div>
 
-</article>
+<div class="topic-card">
+<strong>Image models</strong>
 
-<article class="feature-card" markdown>
+Convolution learns local patterns. Pooling trades some spatial detail for smaller, richer feature maps.
 
-### Complete projects
-
-Run real, downloadable data projects that save predictions, curves, metrics, confusion matrices, and checkpoints locally.
-
-[Explore projects →](projects/index.md)
-
-</article>
-
-<article class="feature-card" markdown>
-
-### Reference
-
-Use the cheatsheet, error guide, and glossary while writing or debugging code.
-
-[Open reference →](reference/index.md)
-
-</article>
+[Convolution explorer →](concepts/convolution.md)
+</div>
 
 </div>
 
-!!! info "A reference, not a course platform"
-    This site stores no progress, completion state, accounts, analytics, or personal learning history. Open the topic that answers your question; there is no required sequence.
+## Learn from complete, runnable examples
 
-## Featured original projects
+Every project page shows the question it answers, selected code, visuals, a small interactive check, run instructions, and the maintained full script. The default configuration is deliberately small and reproducible on CPU; use `--full --device cuda` for a longer GPU run.
 
-| Project | Core question | What it demonstrates |
-| --- | --- | --- |
-| [Nonlinear regression](projects/regression.md) | When does a linear model stop being enough? | Tensors, autograd, loss, optimization |
-| [EMNIST letter classifier](projects/emnist.md) | Why does image structure matter? | Download, train, predictions, confusion matrix |
-| [Robust image pipeline](projects/robust-image-pipeline.md) | How do we stop data problems from breaking training? | Real folder data, diagnostics, training artifacts |
-| [Nature CNN](projects/nature-cnn.md) | How do we recognize and reduce overfitting? | CIFAR-100 download, CNN, validation artifacts |
+| Project | Start it when you need to see… |
+| --- | --- |
+| [Linear vs nonlinear regression](projects/regression.md) | why an activation changes what a model can represent |
+| [EMNIST letter classifier](projects/emnist.md) | the full data-to-evaluation classification workflow |
+| [Robust image pipeline](projects/robust-image-pipeline.md) | transforms, files, corrupt-image handling, and a validation manifest |
+| [Nature CNN](projects/nature-cnn.md) | a CNN, regularization, learning curves, and overfitting decisions |
 
-## How to use this hub
+## Keep these nearby
 
-1. Read the [quick reference](courses/fundamentals/quick-review.md) before an exercise or interview.
-2. Browse the [collections](collections/foundations.md) when you want the whole connection.
-3. Open a [concept](concepts/index.md) when one mechanism is unclear.
-4. Use the [common errors guide](reference/common-errors.md) when code fails.
-5. Study a [project](projects/index.md) to connect the individual pieces.
+- [Short PyTorch reminder](courses/fundamentals/quick-review.md)
+- [Cheatsheet](reference/cheatsheet.md)
+- [Common errors](reference/common-errors.md)
+- [Fundamentals reference map](courses/fundamentals/index.md)

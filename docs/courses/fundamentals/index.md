@@ -1,16 +1,16 @@
 ---
-title: PyTorch Fundamentals Guide
+title: PyTorch fundamentals reference map
 study_context: PyTorch Fundamentals
 tags:
   - fundamentals
 last_reviewed: 2026-08-05
 ---
 
-# PyTorch Fundamentals Guide
+# PyTorch fundamentals: reference map
 
-This guide connects the PyTorch ideas that recur across small experiments and image models. It is designed for understanding and recall, not as a sequence you must complete.
+This map connects the PyTorch ideas that recur across small experiments and image models. It is designed for understanding and recall, not as a course sequence you must complete.
 
-For a broad starting point, the four [collections](../../collections/foundations.md) group the same ideas by practical work: first models, a complete training workflow, reliable image data, and CNN inspection. They can be read in any order.
+New to PyTorch or returning after a break? Start with the [three-part practical path](../../start/index.md): tensors and a first model, a complete classifier, then CNNs for images. The detailed topics below are the pages to open when you need more than the short explanation.
 
 ## What this helps you remember
 
@@ -22,20 +22,20 @@ For a broad starting point, the four [collections](../../collections/foundations
 - Diagnose overfitting and shape mismatches.
 - Save model parameters and restore them safely.
 
-## Topic map
+## How the topics fit together
 
 ```mermaid
 flowchart TD
-    A["Tensors and autograd"] --> B["Data pipeline"]
-    B --> C["3 · Models and training"]
-    C --> D["4 · Evaluation"]
-    D --> E["5 · Robust pipelines"]
-    E --> F["6 · CNNs and debugging"]
-    F --> G["7 · Overfitting"]
-    G --> H["8 · Saving models"]
+    A["Tensors and shapes"] --> B["Data and batches"]
+    B --> C["Model and logits"]
+    C --> D["Loss and updates"]
+    D --> E["Evaluation"]
+    E --> F["CNNs and images"]
+    F --> G["Generalization"]
+    G --> H["Save and inspect"]
 ```
 
-## Topics
+## Detailed topics
 
 1. [Tensors and autograd](tensors-autograd.md)
 2. [Dataset, DataLoader, and transforms](data-pipeline.md)
@@ -46,7 +46,7 @@ flowchart TD
 7. [Overfitting and regularization](overfitting.md)
 8. [Saving and loading models](saving-models.md)
 
-## Short path for recall
+## Short reminder
 
 Need the essentials now? Open the [quick reference](quick-review.md).
 

@@ -11,6 +11,10 @@ last_reviewed: 2026-08-05
 
 # Dataset, DataLoader, and transforms
 
+![Conceptual path from image file through transforms and Dataset to a DataLoader batch tensor](../../assets/images/data-pipeline-visual.png)
+
+The image above is a structural explanation, not a measured experiment. It is useful for locating where a file becomes a tensor and where single samples become batches.
+
 The data pipeline has a deliberate separation of responsibilities:
 
 ```mermaid

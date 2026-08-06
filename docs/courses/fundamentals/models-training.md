@@ -11,6 +11,10 @@ last_reviewed: 2026-08-05
 
 # Models, loss, optimizers, and training
 
+![Conceptual update cycle from batch to model, logits, loss, gradients, and optimizer step](../../assets/images/training-cycle-visual.png)
+
+This diagram is a structural explanation: it shows the order in which the parts interact during training, not a measured run.
+
 ## Define a model
 
 ```python

@@ -10,6 +10,10 @@ last_reviewed: 2026-08-05
 
 # CNNs, modular architectures, and debugging
 
+![Conceptual CNN path showing how image shapes change after convolution, pooling, and classification](../../assets/images/cnn-shape-visual.png)
+
+The values in this diagram are an illustrative shape trace. Check the actual shape of your own batch and model when debugging.
+
 ## The convolutional pattern
 
 ```python

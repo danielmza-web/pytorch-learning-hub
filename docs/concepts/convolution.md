@@ -10,6 +10,10 @@ last_reviewed: 2026-08-05
 
 A convolution applies the same small kernel at many spatial positions. Reusing weights is what makes it efficient and location-aware.
 
+![Conceptual example of a vertical-edge kernel sliding over an image and producing a feature map](../assets/images/convolution-visual.png)
+
+This is a hand-designed filter so the response is visible. A trained CNN learns the kernel values from its own data.
+
 <div class="kernel-lab interactive-panel" data-kernel-lab>
   <div class="interactive-heading">3 × 3 kernel explorer</div>
   <div class="kernel-controls">
@@ -47,4 +51,3 @@ nn.Conv2d(
 ```
 
 Each of the 32 output filters spans all three RGB input channels. The result is 32 learned feature maps, not 32 colors.
-
