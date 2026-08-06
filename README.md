@@ -23,6 +23,21 @@ Keep the recommended first pass in `docs/start/`; keep broad topical groupings i
 shape or operation easier to see, and label them as illustrative. Do not publish
 Coursera assessment prompts, protected notebooks, quiz answers, or graded solutions.
 
+## Conceptual visuals
+
+The reproducible diagrams for the data path, training update cycle, convolution,
+and CNN shape trace are generated locally:
+
+```bash
+python scripts/generate_concept_visuals.py
+```
+
+The command writes to `docs/assets/images/`. The same diagrams used by the DaZu
+quick reference are intentionally copied into `../site/learn/pytorch/assets/` so
+both independently deployed static sites keep local assets. After changing a
+diagram, inspect it, update the matching DaZu copy, and label it illustrative
+unless it comes from a retained experiment.
+
 ## Local preview
 
 ```bash
