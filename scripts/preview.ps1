@@ -14,5 +14,11 @@ function Invoke-CheckedCommand {
 }
 
 Set-Location $repositoryRoot
-Invoke-CheckedCommand { python -m pip install -r requirements.txt }
-Invoke-CheckedCommand { python -m mkdocs serve }
+$localPython = Join-Path $repositoryRoot '.venv/Scripts/python.exe'
+if (Test-Path -LiteralPath $localPython) {
+    Invoke-CheckedCommand { & $localPython -m mkdocs serve }
+} elseif (Get-Command py -ErrorAction SilentlyContinue) {
+    Invoke-CheckedCommand { py -3.14 -m mkdocs serve }
+} else {
+    Invoke-CheckedCommand { python -m mkdocs serve }
+}

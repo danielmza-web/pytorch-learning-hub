@@ -4,6 +4,26 @@ Source for `https://pytorch.dazu.xyz/`: an extensible Material for MkDocs librar
 
 The site helps people learn, review, and debug PyTorch. It does not track courses, progress, completion, accounts, analytics, or personal learning history.
 
+Read [CONTEXT.md](CONTEXT.md) before changing the information architecture, routes, project behavior, publishing workflow, or content policy.
+
+Use [CHANGELOG.md](CHANGELOG.md) for verifiable history and [AGENTS.md](AGENTS.md) for Codex continuity. When checked out inside DaZu, the [parent README](../README.md) is the workspace index. That relative link is only available in the combined local workspace; this library can also run as a standalone repository.
+
+## Recorded hosting state
+
+The previous handoff records the GitHub Pages migration as verified on 7 August 2026. The 2026-09-03 review confirmed local source configuration, not live DNS, HTTPS, account access, workflow runs or rollback availability.
+
+| Item | Recorded configuration |
+| --- | --- |
+| Repository | `https://github.com/danielmza-web/pytorch-learning-hub` |
+| Production branch | `main` |
+| Public site | `https://pytorch.dazu.xyz/` |
+| DNS | CNAME to `danielmza-web.github.io` |
+| Publishing | GitHub Actions workflow `.github/workflows/pages.yml` |
+| HTTPS | Certificate active; **Enforce HTTPS** enabled |
+| Rollback snapshot | `https://dazu-pytorch.netlify.app/` |
+
+The rollback snapshot is intentionally detached from `pytorch.dazu.xyz`. Do not deploy new versions to it. Historical local `.netlify/` metadata was removed in the 2026-09-03 cleanup; it must not be recreated as a release mechanism.
+
 ## Content structure
 
 The public navigation stays small:
@@ -23,19 +43,29 @@ Do not create future-guide placeholders. Add a guide to `mkdocs.yml` only after 
 
 ## Update locally
 
+Requirements: Python 3.14 to match `.github/workflows/pages.yml`, Git for source synchronization, and a browser. Node.js is needed for the JavaScript syntax check; the workflow uses the runner's available Node version. Documentation dependencies are pinned to MkDocs `1.6.1` and Material `9.7.7`. Project dependencies have version ranges, not a complete lockfile: Matplotlib `>=3.8,<4`, Pillow `>=12,<13`, Torch `>=2.2,<3`, and TorchVision `>=0.17,<1`.
+
+On this PC, Python 3.14.7 and all declared dependencies are installed globally. Use `py -3.14` instead of `python` in the commands below; no installation is needed for the verified environment. The moved, broken `.venv` was removed. To preview from this repository, run `py -3.14 -m mkdocs serve`.
+
+On another PC, clone this repository separately (the parent DaZu clone omits it), then run these commands from this repository root. The Python 3.14 Windows launcher must already be available; elsewhere use a Python 3.14 executable in place of `py -3.14`.
+
 ```powershell
-Set-Location "C:\Users\Daniel Zurita\OneDrive\Escritorio\DaZu\pytorch-learning-hub"
-python -m pip install -r requirements.txt
-python -m mkdocs serve
+py -3.14 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m mkdocs serve
 ```
 
-Open `http://127.0.0.1:8000/`. The existing helper performs the same preview setup:
+Open `http://127.0.0.1:8000/`. Stop with Ctrl+C. Recreate `.venv/` locally; do not copy the old environment, whose configuration contains machine-specific paths. The commands below use `python` to mean this environment's executable: use `.\.venv\Scripts\python.exe` on Windows without changing execution policy, or `.venv/bin/python` on Unix.
+
+The helper below uses `.venv/Scripts/python.exe` when present, otherwise `py -3.14` on Windows or `python` on other setups. It starts preview without installing or upgrading dependencies:
 
 ```powershell
 .\scripts\preview.ps1
 ```
 
 Write educational content in Markdown, include `last_reviewed` metadata, store local images under `docs/assets/images/`, and keep interactions in the shared JavaScript and stylesheet.
+
+A local compatibility check on 2026-09-03 used Python 3.14.7, Pillow 12.3.0, Torch 2.14.0+cu130, TorchVision 0.29.0+cu130 and Material 9.7.7. The strict build, content/link validators and all four existing smoke examples passed on a disposable copy. This does not validate complete dataset training or a GitHub Actions run. The local workflow target is now 3.14. Check the Actions run for the current commit separately; local validation does not establish deployment success.
 
 ## Validate
 
@@ -56,23 +86,30 @@ python -m py_compile scripts/generate_concept_visuals.py examples/regression_dem
 node --check docs/assets/javascripts/interactions.js
 ```
 
-The GitHub Pages workflow repeats these checks and publishes only when they all pass.
+The GitHub Pages workflow repeats these checks and publishes only when they all pass. The smoke suite calls regression training, writes `artifacts/regression_metrics.json`, and regenerates the tracked `docs/assets/images/regression-comparison.png`; inspect `git diff` afterward. Building replaces generated `site/`, and Python compilation creates caches. These are not read-only checks.
+
+For a review that must preserve non-documentation files, use `python -B tests/validate_content.py`, `python -B tests/validate_built_site.py` (only after confirming a built `site/` exists), and the JavaScript syntax check. The built-site validator can report zero files successfully if `site/` is missing; that is not a valid build verification. A complete maintenance verification can run the build and smoke suite on a disposable source copy to preserve the checked-in visuals and retained experiment results.
+
+When nested inside DaZu, build here first, then run `python -B tests/validate_pytorch_hub.py` from the parent root to verify quick-guide links against the generated library. Both validators encode the current one-guide / ten-Markdown-page scope; adjust them deliberately when adding guides.
 
 ## Publish with GitHub Pages
 
 The public repository is `danielmza-web/pytorch-learning-hub`. Publishing is automatic after a successful push to `main`:
 
 ```powershell
-git add .
+git status --short
+git add <reviewed-files>
 git commit -m "Describe the PyTorch documentation update"
 git push origin main
 ```
 
 `.github/workflows/pages.yml` builds and deploys the `site/` artifact. `docs/CNAME` preserves the custom domain `pytorch.dazu.xyz`.
 
+Replace `<reviewed-files>` with the intended file paths. A push to `main`, including a documentation-only push, starts publication; do it only when release is intended. GitHub write access and an enabled Pages/Actions configuration are required; the workflow uses GitHub-managed token/OIDC permissions (`pages: write`, `id-token: write`). No project API keys are needed for local use. Reauthenticate separately on another PC and do not copy credentials or historical `.netlify/` state.
+
 This documentation repository no longer deploys to Netlify. Detailed-library edits therefore use no Netlify production-deploy credits. DaZu remains a separate build-free repository and is published only when its own quick-guide pages change.
 
-After a successful workflow, verify the changed page, direct anchors, search, mobile navigation, images, code-copy controls, and affected interactions.
+After a successful workflow, verify the changed page, direct anchors, search, mobile navigation, images, code-copy controls, and affected interactions. Check the run at `https://github.com/danielmza-web/pytorch-learning-hub/actions`; do not change DNS or use Netlify for an ordinary content release.
 
 ## Add a future PyTorch guide
 
@@ -94,9 +131,17 @@ python examples/robust_dataset.py
 python examples/nature_cnn.py
 ```
 
-Default configurations are small, reproducible, and CPU-first. The image projects download reputable public datasets through TorchVision. Use `--full --device cuda` for the optional longer GPU configuration or `--smoke-test` to validate code paths without a dataset download.
+Regression runs on CPU with seeded synthetic data and has no command-line flags. The three image projects use small seeded configurations and default to `--device auto`, selecting CUDA if available; pass `--device cpu` to require CPU. They support `--full --device cuda` for longer runs and `--smoke-test` for checks without dataset downloads. CUDA requires compatible hardware, drivers and a compatible Torch/TorchVision installation; it is optional. Do not assume identical numerical results across devices or dependency versions.
 
-Generated artifacts are stored under `artifacts/`; downloaded data stays under `data/`. Both are ignored by Git.
+EMNIST downloads EMNIST Letters; the robust pipeline downloads CIFAR-10; Nature CNN downloads CIFAR-100 through TorchVision. Network access and disk space are needed on first use. Outputs go under ignored `artifacts/` and downloads under ignored `data/`, except regression also writes the maintained comparison image under `docs/assets/images/`. Preserve selected metrics/checkpoints separately when transferring reproducibility evidence; they are not included in a clone. Restore caches or allow the examples to download them again.
+
+Local website preview needs no login. Package installation and dataset downloads need external access; Material's font configuration requests Google Fonts. Images, Mermaid and interactions are stored locally. The installed dependency combination was checked locally. Current DNS/HTTPS settings, dataset download availability and full training require separate verification when needed.
+
+## Local data and cleanup
+
+The 2026-09-03 cleanup removed the broken `.venv`, historical `.netlify` metadata, bytecode caches, empty CIFAR-10 download and unused EMNIST variants plus the original archive. The maintained example uses `split="letters"`; its four train/test image/label files remain under `data/emnist/EMNIST/raw/` (about 109 MiB) and load without downloading. Other EMNIST variants are not currently used and would require a download if requested. CIFAR-10/CIFAR-100 examples download their inputs on first complete use.
+
+Keep `artifacts/`: the retained `demo/emnist` run supports the published 24.4% CPU result and its three images match the maintained documentation images. Keep `site/` for immediate local reference and cross-site anchor checks; it is generated and can be rebuilt. Empty retired content directories were removed. Active content, templates, examples and shared images remain intentional inputs, even where images are duplicated in the independent DaZu site.
 
 ## Conceptual visuals
 
