@@ -35,6 +35,8 @@ class CNNBlock(nn.Module):
 
 The reusable block makes each transformation explicit: learn local patterns, normalize activation statistics, add nonlinearity, then reduce spatial size. Reuse makes shape debugging and comparisons easier.
 
+**Check yourself:** if training loss falls while validation loss rises, which change comes first? Inspect the split, class mistakes, and augmentation before making the CNN deeper. A deeper model can fit training data even more closely without improving unseen images.
+
 ## Evidence and visual
 
 The full project downloads public CIFAR-100 through TorchVision, filters 15 nature classes, trains this CNN, and writes its own prediction grid, confusion matrix, curves, checkpoint, and JSON metrics. The architecture map explains the shape contract before a run is started.

@@ -36,7 +36,36 @@ The course's later image-model work adds choices to the same training loop. Use 
 | reuse an image model | use the weights' recommended preprocessing and replace the classifier head | class order, input shape, and which parameters are trainable |
 | choose between models | compare quality with latency, memory, and parameter count | measurements on the intended device |
 
-These topics correspond to the tuning, efficiency, TorchVision, and transfer-learning labs in the second course of the [PyTorch for Deep Learning certificate](https://www.coursera.org/professional-certificates/pytorch-for-deep-learning). Detailed original explanations can become a guide when the material is complete.
+These topics correspond to the tuning, efficiency, TorchVision, and transfer-learning labs already organized in the second course of the [PyTorch for Deep Learning certificate](https://www.coursera.org/specializations/pytorch-for-deep-learning). The notes below are a compact reminder while that course is still in progress.
+
+### Course 2: what changes in practice
+
+**Metrics:** accuracy counts all correct predictions, but can hide a weak minority class. Read the confusion matrix first, then choose precision when false alarms matter or recall when missed positives matter. Keep the final test set outside tuning.
+
+**Learning rate:** the optimizer changes weights; a scheduler changes the optimizer's learning rate over time. For an epoch-based `StepLR`, call `scheduler.step()` after that epoch's training updates:
+
+```python
+optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+for epoch in range(epochs):
+    train_one_epoch(model, train_loader, optimizer)  # your training function
+    scheduler.step()  # after five calls, multiply the learning rate by 0.1
+```
+
+**Transfer learning:** reuse learned visual features and train a new final classifier first. The replacement layer must have one output per class; the optimizer should receive only parameters you intend to train:
+
+```python
+from torchvision.models import resnet18, ResNet18_Weights
+weights = ResNet18_Weights.DEFAULT
+model = resnet18(weights=weights)
+for parameter in model.parameters():
+    parameter.requires_grad = False
+model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
+optimizer = torch.optim.Adam(model.fc.parameters(), lr=1e-3)
+preprocess = weights.transforms()  # use for the model's expected input format
+```
+
+The frozen backbone still participates in the forward pass; `requires_grad=False` prevents its weights from being updated. Decide on fine-tuning only after checking validation behavior. If you change which layers are trainable, rebuild the optimizer for the new parameter set.
 
 ## Cheatsheet
 

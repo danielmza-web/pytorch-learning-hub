@@ -36,7 +36,7 @@ The maintained source pages are:
 - `docs/reference/index.md`: reminder, cheatsheet, troubleshooting, and glossary.
 - `docs/about/index.md`: purpose, sources, attribution, and results policy.
 
-The reference includes a short decision table for topics appearing in the second certificate course (metrics, tuning, efficiency, TorchVision, and transfer learning). It is a reminder, not a second published guide or a copy of course labs.
+The reference includes a decision table and compact code reminders for topics already studied in the second certificate course (metrics, learning-rate schedules, and transfer learning). It is not a second published guide or a copy of course labs. The Fundamentals pages include annotated microexamples and self-check questions; each project adds one targeted learning check.
 
 PyTorch Fundamentals currently uses:
 

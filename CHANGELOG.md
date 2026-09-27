@@ -2,6 +2,12 @@
 
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
+## 2026-09-27 — learning-detail pass (local)
+
+- Added runnable microexamples and explicit learning checks for tensor flattening, ReLU and nonlinear capacity, CNN shapes, data leakage, and validation. Added one check to each of the four project pages and clearer study paths on Home.
+- Expanded the compact Course 2 reference with metrics, a scheduler placement example, and a frozen-backbone transfer-learning example based on the labs reviewed so far. Kept the two-page Fundamentals structure and existing routes.
+- Local strict build, content validation (10 Markdown pages), generated-link/anchor validation (11 HTML pages), shared JavaScript syntax, DaZu cross-site link validation, and tensor/ReLU/CNN microexamples passed. No new full training or smoke run was needed for documentation-only edits. Check the matching GitHub Actions run for publication status.
+
 ## 2026-09-27 — local hub review
 
 - Revised all ten public pages for clearer learning paths, consistent introductions, and easier project selection. Simplified the MkDocs navigation by removing the top tab layer and naming the two Fundamentals pages in reading order. Kept existing routes and DaZu-linked anchors.

@@ -36,6 +36,8 @@ self.classifier = nn.Linear(64, classes)
 
 The convolution blocks preserve the two-dimensional view while pooling reduces spatial size. `AdaptiveAvgPool2d((1, 1))` creates a stable 64-feature boundary before classification.
 
+**Trace it:** an EMNIST batch enters as `[N, 1, 28, 28]`. The two convolutions grow channels to 32 and then 64; the two pools shrink 28 → 14 → 7. Adaptive pooling gives `[N, 64, 1, 1]`, flattening gives `[N, 64]`, and the classifier returns `[N, 26]`. Explain each change before running the full script.
+
 ## Evidence and visual
 
 The included full project downloads the public EMNIST Letters split through TorchVision, trains this CNN, and saves its own predictions, confusion matrix, curves, checkpoint, and JSON metrics. The shape map remains useful before any dataset is downloaded.

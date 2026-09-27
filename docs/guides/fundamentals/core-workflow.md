@@ -25,6 +25,8 @@ tensor → Dataset → DataLoader → model → output → loss
 
 By the end, you should be able to locate where a batch is created, explain the model's input and output shapes, identify where parameters change, and separate training from evaluation. In classification, the output is often logits; regression usually produces predicted values.
 
+**How to study this page:** for each section, run the tiny example, predict the output shape or value, then check it. The goal is to explain *why* each line exists before memorizing its spelling.
+
 | Section | Main question | Useful next example |
 | --- | --- | --- |
 | [Tensors, shapes, dtype, and device](#tensors-shapes-dtype-and-device) | What does the data mean before it enters a model? | [Nonlinear regression](../../projects/regression.md) |
@@ -79,6 +81,18 @@ torch.flatten(x, 1).shape   # preserves dimension 0 when x is batched
 ```
 
 `reshape` changes how compatible values are viewed; it does not add or remove them. `torch.flatten(x, start_dim=1)` preserves the batch boundary.
+
+For a batch of 16 grayscale 28 × 28 images, a dense classifier needs 784 features per image:
+
+```python
+from torch import nn
+
+images = torch.zeros(16, 1, 28, 28)   # [batch, channels, height, width]
+features = torch.flatten(images, 1)    # [16, 784]; keep the batch axis
+scores = nn.Linear(784, 10)(features)   # [16, 10]; one score per class
+```
+
+**Check yourself:** why would `torch.flatten(images)` be wrong here? It would merge all 16 images into one vector and lose which sample each label belongs to.
 
 `nn.Linear(in_features, out_features)` expects the last input dimension to equal `in_features`:
 
@@ -177,6 +191,8 @@ validation_transform = transforms.Compose([
 
 Random, label-preserving augmentation belongs in training only. Validation must be stable between epochs. `ToTensor()` changes layout to `[C, H, W]` and normally scales byte pixels to `0–1`; normalization is a separate operation.
 
+`mean` and `std` above must come from training data (or a documented pretrained model's expected preprocessing). Use the **same** fixed normalization for validation; fitting it on validation would leak information into training decisions. A horizontal flip is safe only when it preserves the label for your task: it can change the meaning of some symbols or medical images.
+
 ### DataLoader: samples become batches
 
 ```python
@@ -248,7 +264,24 @@ nonlinear = nn.Sequential(
 )
 ```
 
-Stacking only linear layers remains a linear transformation. An activation such as `ReLU` or `Tanh` lets the network represent bends and nonlinear decision boundaries.
+Try the activation by itself:
+
+```python
+values = torch.tensor([-2.0, 0.0, 3.0])
+print(nn.ReLU()(values))  # tensor([0., 0., 3.])
+```
+
+`ReLU(x) = max(0, x)`: it replaces a **negative intermediate input** with zero and leaves a positive input unchanged. It does *not* make values negative. A later linear output layer can still produce a negative prediction. Its zero side and sloped side let different hidden units switch on in different regions.
+
+```python
+model = nn.Sequential(
+    nn.Linear(1, 3),  # one distance → three learned hidden values
+    nn.ReLU(),        # zero negative hidden values; create a bend
+    nn.Linear(3, 1),  # combine them into one prediction
+)
+```
+
+In the course's delivery-time lab, a single line could not follow a curved relationship; adding hidden units and an activation let the model express bends. If you remove `ReLU`, consecutive `Linear` layers collapse to one affine map, however many you stack. `Tanh` is another nonlinear choice, with a smooth output between −1 and 1. **Check yourself:** in this model, which layer can make the final prediction negative? The last `Linear` layer.
 
 ![Measured comparison from the retained regression script: a line misses a curved pattern while the nonlinear network follows it](../../assets/images/regression-comparison.png)
 
@@ -364,6 +397,8 @@ def evaluate(model, loader, device):
 ```
 
 `model.eval()` changes dropout and batch-normalization behavior. `torch.no_grad()` disables gradient tracking and reduces memory use. Use both; neither computes a metric by itself.
+
+Notice what evaluation leaves out: there is no `zero_grad()`, `backward()`, or `step()`. Validation measures the current weights; it must not train on the answers it is supposed to check.
 
 ### Choose evidence for the question
 

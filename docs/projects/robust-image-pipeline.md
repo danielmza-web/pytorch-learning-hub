@@ -36,6 +36,8 @@ except Exception as error:
 
 Sorting protects the class-to-index contract. `verify()` checks readability during indexing, so a corrupt file is reported before a batch reaches the model.
 
+**Check yourself:** if class ids come from filesystem iteration order, two runs can disagree about what output index `0` means. Sorting once and saving that mapping makes predictions interpretable after training.
+
 ## Evidence and visual
 
 The full project downloads public CIFAR-10 images through TorchVision, writes a deterministic five-class folder dataset, deliberately includes one corrupt JPEG, and then trains only on the validated samples. It saves a validation report, prediction grid, confusion matrix, curves, checkpoint, and JSON metrics.

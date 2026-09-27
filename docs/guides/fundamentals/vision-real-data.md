@@ -29,6 +29,8 @@ image files → validated samples → augmented training batches
 
 Read [Fundamentals — core workflow](core-workflow.md) first if Dataset, logits, loss, or the training update order are unfamiliar.
 
+**Study target:** after each section, name the input, output, and reason for the operation. A CNN is the same training loop as before; the important new questions are spatial shape, file quality, and generalization.
+
 | Section | Main question | Useful next example |
 | --- | --- | --- |
 | [Convolution and feature maps](#convolution-and-feature-maps) | How does a CNN look for local patterns? | [EMNIST](../../projects/emnist.md) |
@@ -79,6 +81,18 @@ nn.Conv2d(
 
 Each of the 32 learned filters spans all three RGB input channels. The result is 32 feature maps—not 32 colours. Early filters may respond to edges, colour transitions, or texture; deeper layers combine those maps into patterns useful for the task.
 
+Try one layer with a small batch:
+
+```python
+from torch import nn
+images = torch.zeros(4, 3, 32, 32)      # four RGB images
+conv = nn.Conv2d(3, 8, 3, padding=1)    # learn eight 3 × 3 filters
+maps = conv(images)
+print(maps.shape)                       # [4, 8, 32, 32]
+```
+
+The batch count stays 4; the filter count sets output channels to 8. Padding keeps 32 × 32 here. **Check yourself:** what changes if `padding=0`? The spatial output becomes 30 × 30.
+
 ### Kernel size, stride, and padding
 
 - **Kernel size** controls the local window inspected at once.
@@ -125,6 +139,8 @@ class CNNBlock(nn.Module):
 ```
 
 Convolution learns local features, ReLU adds nonlinearity, normalization stabilizes intermediate distributions, and pooling reduces spatial resolution.
+
+Trace this block on `[4, 3, 32, 32]`: convolution gives `[4, 8, 32, 32]`; batch normalization and ReLU keep that shape; `MaxPool2d(2)` gives `[4, 8, 16, 16]`. Pooling keeps the strongest value in each 2 × 2 window. It reduces detail and compute, so excessive pooling can discard information. Batch normalization tracks statistics during training and uses stored statistics in evaluation; that is one reason `model.eval()` matters.
 
 <div class="shape-tracer interactive-panel" data-shape-tracer>
   <div class="interactive-heading">CNN shape tracer</div>
@@ -224,6 +240,8 @@ train_set, validation_set = random_split(
 
 Record the split seed and per-class distribution. For multiple images of the same person, object, location, or capture burst, split by entity rather than individual image. `random_split` by itself does not prevent that kind of leakage.
 
+**Check yourself:** if two crops of the same photo land in different splits, validation can reward recognition of that photo rather than a pattern that works on new photos. Group them before splitting.
+
 ### Monitor data, not only the model
 
 - Samples and rejected files per class.
@@ -290,6 +308,8 @@ It is active in `model.train()` and disabled in `model.eval()`.
 **Early stopping** keeps the checkpoint associated with the best validation behavior instead of assuming the final epoch is best.
 
 Change one hypothesis at a time. Use the same split, seed, metrics, and evaluation procedure so an apparent gain does not come from changing the test.
+
+If training loss falls while validation loss rises, first inspect the split and the mistakes. Then try one change, such as realistic augmentation, weight decay, or a smaller model. Dropout is a training-time source of noise; it is not a repair for incorrect labels or leakage.
 
 ## Saving and restoring
 

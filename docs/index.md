@@ -13,6 +13,8 @@ last_reviewed: 2026-09-27
 
 Follow a model from its first tensor to a trustworthy result. Use the short explanations when learning and return to a specific question when coding.
 
+Start with Course 1's working path. For each step, predict the output, run the small code example, and answer the check question. Notes on the Course 2 labs studied so far are in the reference.
+
 [Start with the training path](guides/fundamentals/core-workflow.md){ .md-button .md-button--primary }
 [Choose a runnable project](projects/index.md){ .md-button }
 
@@ -86,10 +88,12 @@ Each page starts with a map and has direct section links for return visits.
 | What `[32, 3, 224, 224]` means | [Tensors and shapes](guides/fundamentals/core-workflow.md#tensors-shapes-dtype-and-device) |
 | How files become shuffled batches | [Dataset, transforms, and DataLoader](guides/fundamentals/core-workflow.md#dataset-transforms-and-dataloader) |
 | When a classifier returns logits | [Models, activations, and logits](guides/fundamentals/core-workflow.md#models-activations-and-logits) |
+| Why ReLU makes a hidden layer nonlinear | [Why activations matter](guides/fundamentals/core-workflow.md#why-activations-matter) |
 | Where weights actually change | [Loss, autograd, and optimizers](guides/fundamentals/core-workflow.md#loss-autograd-and-optimizers) |
 | Why a CNN preserves image structure | [Convolution and feature maps](guides/fundamentals/vision-real-data.md#convolution-and-feature-maps) |
 | Why training improves while validation worsens | [Generalization and regularization](guides/fundamentals/vision-real-data.md#generalization-and-regularization) |
 | What to inspect when a run fails | [Reference and troubleshooting](reference/index.md#common-errors) |
+| How metrics, schedules, and transfer learning fit Course 2 | [Course 2 notes](reference/index.md#course-2-what-changes-in-practice) |
 
 ## Learn from complete examples
 
@@ -104,6 +108,6 @@ The four projects are maintained programs, not isolated fragments. Each page con
 
 ## How this library grows
 
-The next useful topics in the [PyTorch for Deep Learning certificate](https://www.coursera.org/professional-certificates/pytorch-for-deep-learning) are model tuning, TorchVision, and transfer learning. This library will add original explanations when they form a coherent guide, without reproducing course exercises. Shared projects and the reference remain available without duplicating explanations.
+The second course in the [PyTorch for Deep Learning certificate](https://www.coursera.org/specializations/pytorch-for-deep-learning) includes model tuning, TorchVision, and transfer learning. The [reference notes](reference/index.md#course-2-what-changes-in-practice) cover the labs studied so far; a full new guide can follow when the material is complete. This library uses original explanations rather than reproducing course exercises.
 
 For a short review outside the documentation site, open [DaZu's PyTorch guides](https://dazu.xyz/learn/pytorch/).

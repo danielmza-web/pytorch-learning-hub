@@ -34,6 +34,8 @@ nonlinear = nn.Sequential(
 
 `nn.Linear(1, 1)` can only fit a line. The hidden layers create intermediate features; each `Tanh` makes the final mapping nonlinear.
 
+**Check yourself:** remove both `Tanh` calls. The network has more parameters, but can it follow the curve? No: its layers still combine into one affine mapping. Compare this with the [ReLU mini experiment](../guides/fundamentals/core-workflow.md#why-activations-matter): the exact activation differs, but the need for nonlinearity is the same.
+
 ## Evidence and visual
 
 This is a reproduced result from the retained script, using its synthetic dataset, seed `42`, split, architecture, and training configuration. It is a capacity demonstration, not a general benchmark.
