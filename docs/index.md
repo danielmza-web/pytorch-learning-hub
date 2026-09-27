@@ -64,7 +64,7 @@ Use a short checklist to inspect shapes, labels, devices, and evaluation.
 
 </div>
 
-## Start here
+## The workflow at a glance
 
 One mental model connects the pages:
 

@@ -10,16 +10,6 @@ last_reviewed: 2026-09-27
 Choose the behavior you want to understand. Each project connects one idea to a maintained script, visible output, and the guide section that explains it.
 { .page-lead }
 
-## How every project page works
-
-1. **The question** identifies the transferable idea.
-2. **What to remember** explains the mental model.
-3. **Key code** annotates the important implementation decisions.
-4. **Evidence and visual** separates reproduced output from illustrative diagrams.
-5. **Interactive check** lets you change one relevant input.
-6. **Run it yourself** gives a small default run, a CPU override for image projects, and an optional longer GPU mode.
-7. **Complete source** includes the maintained script directly from `examples/`.
-
 ## Choose a project
 
 <div class="topic-grid" markdown="1">
@@ -65,6 +55,10 @@ How can validation reveal overfitting? Compare reusable blocks, regularization, 
 </div>
 
 </div>
+
+## What each project includes
+
+Every project starts with a question and a short explanation, then shows the key code, evidence or a clearly labelled illustration, an interactive check, run instructions, and the maintained complete source.
 
 ## Small by default, longer when requested
 
