@@ -1,7 +1,8 @@
 """Train a reproducible EMNIST letter classifier with public TorchVision data.
 
-The default run is deliberately CPU-first: it downloads EMNIST Letters when
-needed, trains on a fixed small subset, and saves figures under artifacts/.
+The default run is deliberately small: it downloads EMNIST Letters when
+needed, trains on a fixed subset, and saves figures under artifacts/. Device
+selection is automatic; pass --device cpu to require CPU.
 Use --full --device cuda for a longer run on a compatible GPU.
 """
 

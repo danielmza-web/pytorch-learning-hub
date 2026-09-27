@@ -5,12 +5,13 @@ tags:
   - fundamentals
   - cnn
   - data-quality
-last_reviewed: 2026-08-06
+last_reviewed: 2026-09-27
 ---
 
 # Fundamentals — vision and real data
 
-This guide applies the core PyTorch workflow to image data. It connects convolution, changing tensor shapes, reliable input pipelines, generalization, and model saving into one practical sequence.
+Apply the core workflow to images: trace shapes through a CNN, check the files before training, then decide whether validation evidence supports the model.
+{ .page-lead }
 
 ## What this guide connects
 
@@ -221,7 +222,7 @@ train_set, validation_set = random_split(
 )
 ```
 
-Record the split seed and per-class distribution. For multiple images of the same person, object, location, or capture burst, split by entity rather than individual image.
+Record the split seed and per-class distribution. For multiple images of the same person, object, location, or capture burst, split by entity rather than individual image. `random_split` by itself does not prevent that kind of leakage.
 
 ### Monitor data, not only the model
 

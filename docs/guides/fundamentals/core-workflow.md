@@ -5,24 +5,25 @@ tags:
   - fundamentals
   - tensors
   - training
-last_reviewed: 2026-08-06
+last_reviewed: 2026-09-27
 ---
 
 # Fundamentals — core workflow
 
-This guide follows one complete path from values in memory to a model you can evaluate. Read it in order the first time; later, use the table of contents to return directly to a concept.
+Follow one path from values in memory to a model you can evaluate. Read it in order once; later, jump straight to the step you need to debug.
+{ .page-lead }
 
 ## What this guide connects
 
 ```text
-tensor → Dataset → DataLoader → model → logits → loss
+tensor → Dataset → DataLoader → model → output → loss
                                       ↓
                          gradients → optimizer update
                                       ↓
                               validation evidence
 ```
 
-By the end, you should be able to locate where a batch is created, explain the model's input and output shapes, identify where parameters change, and separate training from evaluation.
+By the end, you should be able to locate where a batch is created, explain the model's input and output shapes, identify where parameters change, and separate training from evaluation. In classification, the output is often logits; regression usually produces predicted values.
 
 | Section | Main question | Useful next example |
 | --- | --- | --- |
@@ -306,6 +307,7 @@ Gradients accumulate by default. That is why each independent update clears old 
 def train_epoch(model, loader, loss_fn, optimizer, device):
     model.train()
     total_loss = 0.0
+    samples_seen = 0
 
     for inputs, labels in loader:
         inputs = inputs.to(device)
@@ -318,8 +320,9 @@ def train_epoch(model, loader, loss_fn, optimizer, device):
         optimizer.step()
 
         total_loss += loss.item() * inputs.size(0)
+        samples_seen += inputs.size(0)
 
-    return total_loss / len(loader.dataset)
+    return total_loss / samples_seen
 ```
 
 | Step | Reads | Changes |
@@ -372,11 +375,11 @@ def evaluate(model, loader, device):
 | F1 | precision and recall both matter | averages can hide class-specific failure |
 | Confusion matrix | you need the structure of mistakes | requires inspection, not one scalar |
 
-Weight epoch loss by sample count so a smaller final batch does not count like a full batch:
+Weight epoch loss by sample count so a smaller final batch does not count like a full batch. Divide by the number of samples actually processed if `drop_last=True` or a custom sampler skips examples:
 
 ```python
 running_loss += loss.item() * inputs.size(0)
-epoch_loss = running_loss / len(loader.dataset)
+epoch_loss = running_loss / samples_seen
 ```
 
 ### Prevent leakage

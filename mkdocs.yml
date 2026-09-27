@@ -9,9 +9,7 @@ theme:
   logo: assets/images/dz-pytorch-mark.png
   favicon: assets/images/dz-pytorch-mark.png
   features:
-    - navigation.tabs
     - navigation.sections
-    - navigation.indexes
     - navigation.top
     - navigation.footer
     - toc.follow
@@ -82,19 +80,18 @@ markdown_extensions:
       custom_checkbox: true
 
 nav:
-  - Home: index.md
-  - Guides:
-      - PyTorch Fundamentals:
-          - Core workflow: guides/fundamentals/core-workflow.md
-          - Vision and real data: guides/fundamentals/vision-real-data.md
-  - Projects:
-      - Complete projects: projects/index.md
+  - Start here: index.md
+  - Learn the fundamentals:
+      - 1 · Build and train: guides/fundamentals/core-workflow.md
+      - 2 · Images and CNNs: guides/fundamentals/vision-real-data.md
+  - Practice with projects:
+      - Choose a project: projects/index.md
       - Nonlinear regression: projects/regression.md
-      - EMNIST letter classifier: projects/emnist.md
+      - EMNIST letters: projects/emnist.md
       - Robust image pipeline: projects/robust-image-pipeline.md
       - Nature CNN: projects/nature-cnn.md
-  - Reference: reference/index.md
-  - About: about/index.md
+  - Quick reference: reference/index.md
+  - About this library: about/index.md
 
 extra:
   social:

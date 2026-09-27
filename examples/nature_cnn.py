@@ -1,6 +1,7 @@
 """Train a small, reproducible CIFAR-100 nature classifier with real images.
 
-Default settings are intentionally small and CPU-first. The script downloads
+Default settings are intentionally small and work on CPU; automatic device
+selection uses CUDA when available. The script downloads
 CIFAR-100 through TorchVision, filters 15 nature classes, trains a CNN, and
 saves a sample grid, predictions, curves, confusion matrix, checkpoint, and
 JSON metrics. Use --full --device cuda for a longer run.

@@ -5,10 +5,13 @@ tags:
   - project
   - cifar100
   - overfitting
-last_reviewed: 2026-08-05
+last_reviewed: 2026-09-27
 ---
 
 # Project: Nature CNN and overfitting
+
+Use one image model to connect reusable blocks, learning curves, and the difference between fitting and generalizing.
+{ .page-lead }
 
 ## The question
 
@@ -60,7 +63,7 @@ flowchart LR
 python examples/nature_cnn.py
 ```
 
-The default CPU-first run uses 120 images per selected class for four epochs and writes artifacts to `artifacts/nature-cnn/`. For a longer GPU run over the complete selected dataset:
+The default small run uses 120 images per selected class for four epochs and writes artifacts to `artifacts/nature-cnn/`. It uses CUDA if available; add `--device cpu` to force CPU. For a longer GPU run over the complete selected dataset:
 
 ```bash
 python examples/nature_cnn.py --full --device cuda

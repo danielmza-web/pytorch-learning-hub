@@ -2,6 +2,12 @@
 
 Read this before changing the detailed library. It records the current architecture and release decisions without reproducing development history.
 
+## Local review — 2026-09-27
+
+The ten maintained pages were revised for clearer orientation, shorter page introductions, and consistent section, table, card, and focus styling. The top tab bar was removed; the sidebar now leads from Start here through two numbered Fundamentals pages, a project chooser, a quick reference, and About. Stable page routes and DaZu-linked anchors remain unchanged. The reference now has a brief decision table connecting second-course topics without publishing an incomplete second guide or course exercises. Project copy distinguishes the small default run from its automatic CPU/CUDA device selection. Two interactive inputs now show errors for invalid numbers instead of silently substituting `1`.
+
+The strict local build, ten-page content validation, eleven-page generated link/anchor validation, JavaScript syntax check, and DaZu cross-site link check passed. Browser visual and keyboard checks of this revision were not completed during the local review because the browser tool rejected opening the generated file under its URL policy. Commit, push, GitHub Pages deployment, and live-site verification must be checked separately for the release commit. The separate `Pytorch` course archive was read only and remains unchanged.
+
 ## Latest verified point — 2026-09-03
 
 The library is an independent repository on `main`. GitHub authentication and the remote branch were checked before the authorized cleanup. Use current Git status and the matching Actions run for synchronization/deployment state; the parent repository cannot save this library.
@@ -19,7 +25,7 @@ The final cleanup verification passed a fresh strict MkDocs build, content valid
 3. Content validation expects ten Markdown pages. The generated-site validator can accept zero HTML pages; verify a real build exists. The current output has eleven HTML pages.
 4. Smoke tests regenerate a maintained regression image and local results. Use a disposable copy when preserving existing website assets and evidence is required.
 5. Full dataset training, fresh dataset downloads and comprehensive browser/mobile/accessibility checks remain separate tasks. The retained Letters dataset works without the removed EMNIST variants/archive.
-6. Preserve `artifacts/`: the retained CPU experiment supports the published result. The current request selects maintenance, not a new feature.
+6. Preserve `artifacts/`: the retained CPU experiment supports the published result. Before a release, inspect the revised pages in a local browser at desktop and phone widths and exercise the interactive controls.
 
 See README for commands, CHANGELOG for verified milestones and AGENTS for working rules.
 
@@ -33,11 +39,11 @@ The content is original. The Coursera course *PyTorch: Fundamentals* may appear 
 
 Markdown under `docs/` is the source of truth. `mkdocs.yml` owns the explicit public navigation:
 
-- Home
-- Guides
-- Projects
-- Reference
-- About
+- Start here
+- Learn the fundamentals (two numbered pages)
+- Practice with projects (chooser and four examples)
+- Quick reference
+- About this library
 
 Each published PyTorch guide uses two substantial pages rather than many small pages. Fundamentals currently consists of:
 

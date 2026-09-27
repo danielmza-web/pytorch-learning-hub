@@ -3,12 +3,13 @@ title: About and sources
 tags:
   - about
   - sources
-last_reviewed: 2026-08-06
+last_reviewed: 2026-09-27
 ---
 
 # About and sources
 
-This is Daniel Zurita's public, update-friendly PyTorch library. It connects detailed Markdown guides, visual explanations, lightweight browser interactions, and complete projects without tracking progress or presenting itself as an official course.
+Daniel Zurita's public PyTorch learning reference connects explanations, visual checks, and runnable projects. It is an independent companion for understanding concepts, not an official course site.
+{ .page-lead }
 
 ## Design principles
 

@@ -5,10 +5,13 @@ tags:
   - project
   - emnist
   - cnn
-last_reviewed: 2026-08-05
+last_reviewed: 2026-09-27
 ---
 
 # Project: EMNIST letter classifier
+
+Follow a letter from a one-channel image through convolution to 26 class scores, then inspect the model's mistakes.
+{ .page-lead }
 
 ## The question
 
@@ -37,7 +40,7 @@ The convolution blocks preserve the two-dimensional view while pooling reduces s
 
 The included full project downloads the public EMNIST Letters split through TorchVision, trains this CNN, and saves its own predictions, confusion matrix, curves, checkpoint, and JSON metrics. The shape map remains useful before any dataset is downloaded.
 
-### Reproduced CPU-first run
+### Reproduced CPU run
 
 The images below come from the retained default run on CPU: seed `42`, 4,000 training examples, 1,000 test examples, and three epochs. It reached `24.4%` test accuracy. This intentionally small configuration demonstrates the full workflow and its artifacts; it is not presented as a strong handwriting benchmark.
 
@@ -72,7 +75,7 @@ flowchart LR
 python examples/emnist_model.py
 ```
 
-The default CPU-first run downloads data when needed, trains on 4,000 training images for three epochs, and writes artifacts to `artifacts/emnist/`. For a longer GPU run:
+The default small run downloads data when needed, trains on 4,000 training images for three epochs, and writes artifacts to `artifacts/emnist/`. It uses CUDA if available; add `--device cpu` to force CPU. For a longer GPU run:
 
 ```bash
 python examples/emnist_model.py --full --device cuda

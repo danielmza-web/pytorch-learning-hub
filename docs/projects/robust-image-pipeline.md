@@ -4,10 +4,13 @@ study_context: PyTorch Fundamentals
 tags:
   - project
   - data-pipeline
-last_reviewed: 2026-08-05
+last_reviewed: 2026-09-27
 ---
 
 # Project: robust image pipeline
+
+Make the input contract visible before training: class order, readable files, rejected samples, and stable validation data.
+{ .page-lead }
 
 ## The question
 
@@ -67,7 +70,7 @@ flowchart LR
 python examples/robust_dataset.py
 ```
 
-The default CPU-first run builds 400 real image files and trains for five epochs. For a longer GPU run with a larger materialized dataset:
+The default small run builds 400 real image files and trains for five epochs. It uses CUDA if available; add `--device cpu` to force CPU. For a longer GPU run with a larger materialized dataset:
 
 ```bash
 python examples/robust_dataset.py --full --device cuda

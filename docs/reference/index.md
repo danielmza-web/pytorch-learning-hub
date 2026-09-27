@@ -4,12 +4,13 @@ tags:
   - reference
   - cheatsheet
   - debugging
-last_reviewed: 2026-08-06
+last_reviewed: 2026-09-27
 ---
 
 # PyTorch reference and troubleshooting
 
-Use this page when you remember the workflow but need a dependable pattern, a debugging order, or a definition. For connected explanations, return to [Fundamentals — core workflow](../guides/fundamentals/core-workflow.md) or [vision and real data](../guides/fundamentals/vision-real-data.md).
+Use this page when you know the goal but need the next command or check. For the full reasoning, return to the [core workflow](../guides/fundamentals/core-workflow.md) or [vision guide](../guides/fundamentals/vision-real-data.md).
+{ .page-lead }
 
 ## Short reminder
 
@@ -22,6 +23,20 @@ Use this page when you remember the workflow but need a dependable pattern, a de
 7. Convolution grows useful feature channels; pooling or stride reduces spatial size.
 8. Training behavior matters only when compared with validation and real-use data.
 9. Save weights together with the context needed to interpret them.
+
+## Choosing the next tool
+
+The course's later image-model work adds choices to the same training loop. Use this as a prompt to investigate, not as a replacement for a controlled experiment.
+
+| When you need to… | First choice to consider | Check before trusting it |
+| --- | --- | --- |
+| compare classifiers with uneven classes | precision, recall, F1, and a confusion matrix alongside accuracy | per-class results and the cost of each error type |
+| change how fast a model learns | tune the optimizer's learning rate, then consider a scheduler | validation behavior at the same data split and run budget |
+| search several settings | record trials and their validation objective, whether manual or automated | that the test set stays outside the search |
+| reuse an image model | use the weights' recommended preprocessing and replace the classifier head | class order, input shape, and which parameters are trainable |
+| choose between models | compare quality with latency, memory, and parameter count | measurements on the intended device |
+
+These topics correspond to the tuning, efficiency, TorchVision, and transfer-learning labs in the second course of the [PyTorch for Deep Learning certificate](https://www.coursera.org/professional-certificates/pytorch-for-deep-learning). Detailed original explanations can become a guide when the material is complete.
 
 ## Cheatsheet
 

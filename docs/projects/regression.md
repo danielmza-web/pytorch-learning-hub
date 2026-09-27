@@ -4,10 +4,13 @@ study_context: PyTorch Fundamentals
 tags:
   - project
   - regression
-last_reviewed: 2026-08-05
+last_reviewed: 2026-09-27
 ---
 
 # Project: nonlinear regression
+
+One small experiment shows exactly what the activation changes: the shape of the function the model can learn.
+{ .page-lead }
 
 ## The question
 

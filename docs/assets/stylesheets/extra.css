@@ -38,6 +38,57 @@
 
 .md-typeset h1 {
   color: var(--md-default-fg-color);
+  line-height: 1.1;
+}
+
+.md-content__inner {
+  padding-bottom: 3rem;
+}
+
+.md-typeset > h1,
+.md-typeset > .page-lead {
+  max-width: 48rem;
+}
+
+.md-typeset > h1 {
+  margin-bottom: 0.6rem;
+  font-size: clamp(2rem, 3.6vw, 2.8rem);
+}
+
+.md-typeset .page-lead {
+  margin-top: 0.4rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.md-typeset h2 {
+  margin-top: 2.6rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--hub-border);
+}
+
+.md-typeset h3 {
+  margin-top: 1.8rem;
+}
+
+.md-typeset table:not([class]) {
+  border: 1px solid var(--hub-border);
+  border-radius: 0.45rem;
+}
+
+.md-typeset table:not([class]) th {
+  background: var(--hub-panel);
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset pre > code {
+  border-radius: 0.4rem;
+}
+
+.md-typeset :is(a, button, input, select):focus-visible {
+  outline: 3px solid var(--hub-orange);
+  outline-offset: 3px;
 }
 
 .md-typeset a:not(.md-button) {
@@ -93,6 +144,10 @@
   color: #f5fbff;
   font-size: clamp(2.1rem, 5vw, 4.25rem);
   line-height: 0.98;
+}
+
+.hub-hero + h2 {
+  border-top: 0;
 }
 
 .hub-hero p {
@@ -322,6 +377,20 @@
   border: 1px solid var(--hub-border);
   border-radius: 0.55rem;
   background: linear-gradient(145deg, rgba(69, 200, 255, 0.07), transparent 70%);
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.md-typeset .topic-card:hover {
+  border-color: var(--hub-orange);
+  transform: translateY(-2px);
+}
+
+.md-typeset .topic-card p:last-child {
+  margin-bottom: 0;
+}
+
+.md-typeset .topic-card a {
+  font-weight: 700;
 }
 
 .md-typeset .topic-card strong {

@@ -26,13 +26,17 @@ The rollback snapshot is intentionally detached from `pytorch.dazu.xyz`. Do not 
 
 ## Content structure
 
-The public navigation stays small:
+The public navigation stays small and follows a clear route: Start here, two Fundamentals pages in order, a project chooser with four projects, Quick reference, and About. The home page also offers direct paths for learning the workflow, working with images, finding an example, or debugging.
+
+The maintained source pages are:
 
 - `docs/index.md`: orientation and recommended starting point.
 - `docs/guides/<guide>/`: exactly two substantial pages per published guide.
 - `docs/projects/`: project gallery and one complete page per runnable project.
 - `docs/reference/index.md`: reminder, cheatsheet, troubleshooting, and glossary.
 - `docs/about/index.md`: purpose, sources, attribution, and results policy.
+
+The reference includes a short decision table for topics appearing in the second certificate course (metrics, tuning, efficiency, TorchVision, and transfer learning). It is a reminder, not a second published guide or a copy of course labs.
 
 PyTorch Fundamentals currently uses:
 

@@ -49,8 +49,12 @@
     const drop = by(root, "[data-drop-last]");
     const output = by(root, "[data-batch-output]");
     const update = () => {
-      const total = Math.max(1, Number(samples.value) || 1);
-      const batch = Math.max(1, Number(size.value) || 1);
+      const total = Number(samples.value);
+      const batch = Number(size.value);
+      if (!Number.isSafeInteger(total) || total < 1 || !Number.isSafeInteger(batch) || batch < 1) {
+        output.textContent = "Enter positive whole numbers for samples and batch size.";
+        return;
+      }
       const full = Math.floor(total / batch);
       const remainder = total % batch;
       const batches = drop.checked ? full : Math.ceil(total / batch);
@@ -112,7 +116,11 @@
     const inputs = [...root.querySelectorAll("[data-dim]")];
     const output = by(root, "[data-tensor-output]");
     const update = () => {
-      const values = Object.fromEntries(inputs.map((input) => [input.dataset.dim, Math.max(1, Number(input.value) || 1)]));
+      const values = Object.fromEntries(inputs.map((input) => [input.dataset.dim, Number(input.value)]));
+      if (Object.values(values).some((value) => !Number.isSafeInteger(value) || value < 1)) {
+        output.textContent = "Enter positive whole numbers for all four dimensions.";
+        return;
+      }
       const elements = values.batch * values.channels * values.height * values.width;
       const megabytes = elements * 4 / (1024 * 1024);
       output.textContent = `[${values.batch}, ${values.channels}, ${values.height}, ${values.width}] · ${elements.toLocaleString()} float32 values · ${megabytes.toFixed(2)} MiB`;

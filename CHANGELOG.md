@@ -1,6 +1,12 @@
 # Changelog
 
-Selected changes supported by this repository's local Git history. Dates are commit dates, not inferred production dates. DaZu has a separate history and deployment process.
+Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
+
+## 2026-09-27 — local hub review
+
+- Revised all ten public pages for clearer learning paths, consistent introductions, and easier project selection. Simplified the MkDocs navigation by removing the top tab layer and naming the two Fundamentals pages in reading order. Kept existing routes and DaZu-linked anchors.
+- Corrected default-device descriptions on image projects and two scripts included in the public pages, clarified classifier logits versus regression output, made sample-count loss averaging robust to skipped batches, and added a compact second-course decision reminder to the reference. Invalid numeric inputs in the batch and tensor tools now show a prompt instead of silently becoming `1`.
+- Local strict build, content validation (10 Markdown pages), generated-link validation (11 HTML pages), JavaScript syntax, and DaZu cross-site link check passed. All four smoke examples passed on a disposable copy. Browser visual inspection of the generated local file was blocked by the browser tool's URL policy; release and live verification must be checked separately.
 
 ## 2026-09-03 — workspace maintenance
 
