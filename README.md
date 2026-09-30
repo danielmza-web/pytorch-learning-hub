@@ -10,7 +10,7 @@ Use [CHANGELOG.md](CHANGELOG.md) for verifiable history and [AGENTS.md](AGENTS.m
 
 ## Latest verified release — 2026-09-30
 
-Content commit `10cff36` was pushed to `main`; [Pages run 36770490711](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36770490711) completed successfully. All sixteen public pages returned HTTPS 200, and the live noise comparison responded to mode/severity changes without logged browser errors. DaZu quick guides were released separately to Netlify. This verifies publication, not full model training or every optional ecosystem snippet. Documentation-only follow-ups also trigger Pages; consult the current commit/run for their status.
+Orientation/example source `8670ca5` was pushed to `main`; [Pages run 36777275109](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36777275109) completed successfully, including the new offline workflow checks. All nineteen public pages returned HTTPS 200. Live mobile navigation reached the new comparison project; accumulation, noise and padding controls responded without logged errors. A follow-up replaces home tables with paragraphs/cards for phone readability. DaZu quick guides were released separately to Netlify. This verifies publication, not full model training or every optional ecosystem snippet. Documentation-only follow-ups also trigger Pages; consult the current commit/run for their status.
 
 ## Recorded hosting state
 

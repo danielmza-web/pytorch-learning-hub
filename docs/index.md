@@ -12,22 +12,59 @@ A library of explanations, visual checks and runnable examples for learning PyTo
 
 ## What you will find here
 
-| Part of the library | Use it when… | What it contains |
-| --- | --- | --- |
-| **Guides** | You need to understand a concept or connect several steps. | Four topics, two connected pages each: explanations, shapes, functions, parameters and common mistakes. |
-| [**Projects**](projects/index.md) | You want to run the code and inspect what happens. | Seven original scripts with important excerpts, run commands, output explanations and complete source. |
-| [**Quick reference**](reference/index.md) | You remember a name or error and need a direct answer. | A function finder, training cheatsheet, shape reminders and troubleshooting. |
+**Guides:** understand a concept and connect its steps. Four topics, two pages each, with shapes, functions, parameters and common mistakes.
+
+[**Projects**](projects/index.md): run the code and inspect the result. Seven original scripts with important excerpts, run commands, output explanations and complete source.
+
+[**Quick reference**](reference/index.md): look up a function or error. Use the function finder, training cheatsheet, shape reminders and troubleshooting.
 
 ## Choose a guide
 
 Each topic has a first page for the main ideas and a second page for applying them. The sidebar keeps this order throughout the library.
 
-| Topic | First page | Continue with |
-| --- | --- | --- |
-| **1 · Fundamentals** | [Tensors, models and the training loop](guides/fundamentals/core-workflow.md) | [Image data, CNNs and validation](guides/fundamentals/vision-real-data.md) |
-| **2 · Training** | [Metrics, schedules and tuning](guides/training/training-quality.md) | [Data loading, profiling and memory](guides/training/efficient-training.md) |
-| **3 · Vision** | [Transforms, augmentation and noise](guides/vision/augmentation.md) | [Pretrained models and transfer learning](guides/vision/pretrained-models.md) |
-| **4 · Text** | [Tokens, padding and embeddings](guides/text/tokens-embeddings.md) | [Pooled classifiers and fine-tuning](guides/text/text-classifiers.md) |
+<div class="topic-grid" markdown="1">
+
+<div class="topic-card" markdown="1">
+
+**1 · Fundamentals**
+
+Tensors, models, the learning loop and image classification.
+
+[Build and train](guides/fundamentals/core-workflow.md) · [Images and CNNs](guides/fundamentals/vision-real-data.md)
+
+</div>
+
+<div class="topic-card" markdown="1">
+
+**2 · Training**
+
+Validation metrics, tuning, data loading and memory use.
+
+[Metrics and tuning](guides/training/training-quality.md) · [Efficient pipelines](guides/training/efficient-training.md)
+
+</div>
+
+<div class="topic-card" markdown="1">
+
+**3 · Vision**
+
+Image variation, noise, pretrained outputs and adapting models.
+
+[Transforms and noise](guides/vision/augmentation.md) · [Pretrained models](guides/vision/pretrained-models.md)
+
+</div>
+
+<div class="topic-card" markdown="1">
+
+**4 · Text**
+
+Tokenization, embeddings, variable lengths and text classification.
+
+[Tokens and embeddings](guides/text/tokens-embeddings.md) · [Classifiers and fine-tuning](guides/text/text-classifiers.md)
+
+</div>
+
+</div>
 
 **If you are starting again:** read Fundamentals first. Training explains how to compare and improve the same loop; Vision and Text show how different inputs and pretrained models fit into it. You can jump directly to a topic when reviewing.
 
@@ -35,11 +72,9 @@ Each topic has a first page for the main ideas and a second page for applying th
 
 These three projects combine the most useful mechanisms across several labs. They are small original examples, with offline defaults, so you can inspect the workflow without downloading a dataset first.
 
-| Project | What you can run and remember |
-| --- | --- |
-| [Controlled training comparison](projects/training-comparison.md) | Compare learning rates using the same starting weights and split; read macro F1; schedule LR after validation; accumulate gradients. |
-| [Image augmentation and head training](projects/vision-head.md) | Apply noise before normalization, replace a ResNet head, keep the backbone frozen, and save class/preprocessing metadata. |
-| [Variable-length text classifier](projects/text-bags.md) | Build a vocabulary from training text, collate token IDs and offsets, pool embeddings, and use class weights. |
+- [**Controlled training comparison**](projects/training-comparison.md): shared starting weights and split, macro F1, learning-rate scheduling and gradient accumulation.
+- [**Image augmentation and head training**](projects/vision-head.md): noise before normalization, a replacement ResNet head, frozen features and saved class metadata.
+- [**Variable-length text classifier**](projects/text-bags.md): a training-only vocabulary, token offsets, pooled embeddings and class weights.
 
 The project gallery also contains the four foundation examples: regression, EMNIST letters, robust image loading and a regularized CNN. Choose a project after reading its short “What to remember” section; the full source is expandable.
 
