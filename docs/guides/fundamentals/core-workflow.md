@@ -5,7 +5,7 @@ tags:
   - fundamentals
   - tensors
   - training
-last_reviewed: 2026-09-27
+last_reviewed: 2026-09-30
 ---
 
 # Fundamentals — core workflow
@@ -120,6 +120,38 @@ result = batch + bias  # [4, 3]
   <output data-broadcast-output aria-live="polite"></output>
 </div>
 
+### Tensor operations worth remembering
+
+| Operation | Purpose | Important distinction |
+| --- | --- | --- |
+| `torch.tensor(data)` | create a tensor from values | normally copies input data |
+| `torch.from_numpy(array)` | wrap a NumPy array | shares its CPU storage; edits can affect both |
+| `zeros`, `ones`, `arange`, `rand` | construct test values | `rand` is uniform; `randn` is Gaussian |
+| `x[:, 0]` / `x[:, 0:1]` | select a feature | `[N]` vs `[N,1]` |
+| `x[mask]` | select matching values | boolean comparisons form the mask |
+| `cat(items, dim)` | join along an existing axis | other dimensions must agree |
+| `stack(items, dim)` | add a new axis | all input shapes must agree |
+| `x * y` / `x @ y` | elementwise / matrix multiplication | different shape rules and meanings |
+| `sum`, `mean`, `std` | summarize values along `dim` | `keepdim=True` preserves broadcast-friendly axes |
+| `permute` / `transpose` | reorder axes | `reshape` does not reorder image channels semantically |
+| `clone` / `detach` | copy storage / stop gradient history | detaching alone still shares storage |
+| `.item()` | get a Python scalar | tensor must contain one value |
+
+An original feature example connects boolean masks and concatenation:
+
+```python
+readings = torch.tensor([[12., 8.], [31., 17.], [24., 12.]])  # temperature, hour
+late = (readings[:, 1] >= 16).float().unsqueeze(1)  # [3,1]
+features = torch.cat([readings, late], dim=1)       # [3,3]
+mean = features.mean(dim=0, keepdim=True)          # [1,3]
+std = features.std(dim=0, keepdim=True, correction=0).clamp_min(1e-6)
+scaled = (features - mean) / std
+```
+
+Fit feature statistics on training data and reuse them for new inputs. A engineered feature expresses a hypothesis; validation must show whether it helps. There is no general `torch.from_dataframe` API: convert the selected numeric columns to an array, then use `from_numpy` or `tensor` with the intended dtype.
+
+**Shape trap:** predictions `[N,1]` and targets `[N]` can broadcast to an unintended `[N,N]` regression error. Match both to `[N,1]` before MSE. `squeeze()` without a dimension can also remove the batch axis when `N=1`; use `squeeze(1)` when only that axis should disappear.
+
 ### Dtype and device
 
 Neural-network inputs are normally floating point; single-label class targets for `CrossEntropyLoss` are normally `torch.long`.
@@ -132,6 +164,8 @@ labels = labels.to(device=device, dtype=torch.long)
 ```
 
 The model, inputs, targets, and helper tensors used in the same operation must share a device.
+
+Assign tensor transfers: `x = x.to(device)`. Merely calling `x.to(device)` and discarding its result does not change `x`'s reference. Move the model to its intended device before creating its optimizer.
 
 **Next:** see shape, device, autograd, and nonlinearity together in [nonlinear regression](../../projects/regression.md).
 
@@ -300,6 +334,18 @@ probabilities = logits.softmax(dim=1) # only when probabilities are needed
 
 Do not apply softmax before `CrossEntropyLoss`; the loss already combines the stable operations it needs.
 
+### Match the output, target and loss
+
+| Task | Output / target | Common loss |
+| --- | --- | --- |
+| Numeric regression | matching floating shapes | `MSELoss` (squares errors), `L1Loss` (absolute errors) |
+| Robust numeric regression | matching floating shapes | `SmoothL1Loss`, less dominated by large errors than MSE |
+| One class per sample | logits `[N,K]`, long class IDs `[N]` | `CrossEntropyLoss` |
+| Binary / independent multilabel | logits and float targets with the same shape | `BCEWithLogitsLoss`; sigmoid only for interpretation |
+| Already computed log probabilities | log probabilities `[N,K]`, long targets `[N]` | `NLLLoss`, often paired with `LogSoftmax` |
+
+`Sigmoid` outputs `0..1`; `Tanh` outputs `-1..1`; `LeakyReLU` keeps a small negative slope; `Softmax(dim=1)` normalizes mutually exclusive class scores. Choose output behavior for the task, rather than inserting an activation after every layer. MSE and cross-entropy use different scales; their raw values are not comparable measures of model quality. `SmoothL1Loss` and `HuberLoss` are related but differ in scaling/parameterization.
+
 **Next:** the [EMNIST project](../../projects/emnist.md) compares a dense classifier with a CNN and produces predictions, curves, metrics, and a checkpoint.
 
 ## Loss, autograd, and optimizers
@@ -317,6 +363,10 @@ print(w.grad)
 ```
 
 Gradients accumulate by default. That is why each independent update clears old gradients before backpropagation.
+
+In the scalar example, `w.grad` is 36: `d(9w²)/dw = 18w` at `w=2`. `backward()` calculates this derivative; it does not change `w`. Plain SGD subsequently performs `w ← w - lr × gradient`. Momentum uses an accumulated direction, while Adam adapts updates using gradient statistics; neither chooses a suitable learning rate for you.
+
+PyTorch builds the autograd graph from the operations actually executed during a forward pass. Ordinary Python branches and loops can participate. `nn.Sequential` is a registered ordered chain, not a separate static-graph framework; inspect its children or attach hooks when you need intermediate values.
 
 ### The complete training loop
 
@@ -438,4 +488,4 @@ Before trusting a run, answer these questions:
 7. Does evaluation use stable data, `eval()`, and no gradients?
 8. Can the pipeline overfit one tiny batch?
 
-Continue with [Fundamentals — vision and real data](vision-real-data.md), where the same workflow is applied to images, CNNs, imperfect files, and generalization.
+Continue with [Fundamentals — vision and real data](vision-real-data.md), where the same workflow is applied to images, CNNs, imperfect files, and generalization. Once that path is clear, [metrics and tuning](../training/training-quality.md) explains the next choices without changing the loop's purpose.

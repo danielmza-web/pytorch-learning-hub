@@ -261,6 +261,107 @@
     render();
   }
 
+  function initAccumulationLab(root) {
+    const micro = by(root, "[data-microbatch]");
+    const steps = by(root, "[data-accumulation]");
+    const samples = by(root, "[data-epoch-samples]");
+    const output = by(root, "[data-accumulation-output]");
+    const update = () => {
+      const values = [micro, steps, samples].map((input) => Number(input.value));
+      const [size, count, total] = values;
+      if (values.some((v) => !Number.isSafeInteger(v) || v < 1) || !Number.isSafeInteger(size * count)) {
+        output.textContent = "Enter positive whole numbers within the safe integer range.";
+        return;
+      }
+      const effective = size * count;
+      const updates = Math.ceil(total / effective);
+      const last = total % effective || Math.min(effective, total);
+      output.textContent = `${size} × ${count} = ${effective} samples per full update. ${updates} updates; final update: ${last} samples. BatchNorm still sees individual microbatches.`;
+    };
+    [micro, steps, samples].forEach((input) => input.addEventListener("input", update));
+    update();
+  }
+
+  function initPaddingLab(root) {
+    const lengths = by(root, "[data-sequence-lengths]");
+    const maximum = by(root, "[data-fixed-length]");
+    const output = by(root, "[data-padding-output]");
+    const update = () => {
+      const items = lengths.value.split(",").map((value) => Number(value.trim()));
+      const fixed = Number(maximum.value);
+      if (!items.length || items.length > 64 || items.some((v) => !Number.isInteger(v) || v < 1 || v > 4096) || !Number.isInteger(fixed) || fixed < 1 || fixed > 4096) {
+        output.textContent = "Use up to 64 positive sequence lengths and a maximum from 1 to 4096.";
+        return;
+      }
+      const tokens = items.reduce((sum, v) => sum + v, 0);
+      const dynamic = Math.max(...items) * items.length;
+      const kept = items.reduce((sum, v) => sum + Math.min(v, fixed), 0);
+      const slots = items.length * fixed;
+      output.textContent = `Dynamic: ${dynamic} positions, ${dynamic - tokens} padding. Fixed length ${fixed}: ${slots} positions, ${slots - kept} padding; ${tokens - kept} tokens truncated. A mask marks padding but does not eliminate all its computation.`;
+    };
+    [lengths, maximum].forEach((input) => input.addEventListener("input", update));
+    update();
+  }
+
+  function initNoiseLab(root) {
+    const clean = by(root, "[data-noise-clean]");
+    const noisy = by(root, "[data-noise-changed]");
+    const kind = by(root, "[data-noise-kind]");
+    const amount = by(root, "[data-noise-amount]");
+    const output = by(root, "[data-noise-output]");
+    const cleanContext = clean.getContext("2d");
+    const noisyContext = noisy.getContext("2d");
+    if (!cleanContext || !noisyContext) {
+      output.textContent = "Canvas unavailable. Impulse noise selects pixels to turn black or white; Gaussian noise adds fluctuating values.";
+      return;
+    }
+    const original = cleanContext.createImageData(clean.width, clean.height);
+    for (let y = 0; y < clean.height; y += 1) {
+      for (let x = 0; x < clean.width; x += 1) {
+        const index = (y * clean.width + x) * 4;
+        let value = 45 + Math.round(45 * x / clean.width);
+        if (x > 25 && x < 214 && y > 25 && y < 136) value = 135 + Math.round(60 * y / clean.height);
+        if (x > 55 && x < 190 && y > 45 && y < 111 && x + y > 160) value = 220;
+        if (x > 150 && x < 156 && y > 65 && y < 96) value = 65;
+        if ((x - 82) ** 2 + (y - 75) ** 2 < 100) value = 95;
+        original.data.set([value, value, value, 255], index);
+      }
+    }
+    cleanContext.putImageData(original, 0, 0);
+    const update = () => {
+      let seed = 731;
+      const random = () => {
+        seed = (1664525 * seed + 1013904223) >>> 0;
+        return (seed + 1) / 4294967297;
+      };
+      const level = Number(amount.value) / 100;
+      const result = new ImageData(new Uint8ClampedArray(original.data), clean.width, clean.height);
+      let selected = 0;
+      for (let i = 0; i < result.data.length; i += 4) {
+        if (kind.value === "impulse") {
+          const draw = random();
+          if (draw < level) {
+            selected += 1;
+            const value = draw < level / 2 ? 255 : 0;
+            result.data[i] = value; result.data[i + 1] = value; result.data[i + 2] = value;
+          }
+        } else {
+          for (let channel = 0; channel < 3; channel += 1) {
+            const gaussian = Math.sqrt(-2 * Math.log(random())) * Math.cos(2 * Math.PI * random());
+            result.data[i + channel] += 255 * level * gaussian;
+          }
+        }
+      }
+      noisyContext.putImageData(result, 0, 0);
+      output.textContent = kind.value === "impulse"
+        ? `Salt and pepper: ${(level * 100).toFixed(0)}% selection probability; ${selected} of ${clean.width * clean.height} spatial pixels selected in this seeded illustration. Half bright / half dark in expectation.`
+        : `Gaussian comparison: σ = ${level.toFixed(2)} on a 0–1 pixel scale, then clipped. This is a simplified additive model, not a measured camera simulation.`;
+    };
+    kind.addEventListener("change", update);
+    amount.addEventListener("input", update);
+    update();
+  }
+
   function initAll() {
     document.querySelectorAll("[data-broadcast-lab]").forEach(initBroadcastLab);
     document.querySelectorAll("[data-batch-lab]").forEach(initBatchLab);
@@ -271,6 +372,9 @@
     document.querySelectorAll("[data-regression-lab]").forEach(initRegressionLab);
     document.querySelectorAll("[data-pipeline-lab]").forEach(initPipelineLab);
     document.querySelectorAll("[data-kernel-lab]").forEach(initKernelLab);
+    document.querySelectorAll("[data-accumulation-lab]").forEach(initAccumulationLab);
+    document.querySelectorAll("[data-padding-lab]").forEach(initPaddingLab);
+    document.querySelectorAll("[data-noise-lab]").forEach(initNoiseLab);
     if (window.mermaid) {
       window.mermaid.initialize({ startOnLoad: true, securityLevel: "strict", theme: "dark" });
     }

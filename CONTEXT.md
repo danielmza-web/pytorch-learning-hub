@@ -2,7 +2,17 @@
 
 Read this before changing the detailed library. It records the current architecture and release decisions without reproducing development history.
 
-## Local review — 2026-09-27
+## Local course coverage — 2026-09-30
+
+Reviewed the complete sibling `Pytorch` archive as a read-only source: 171 files, eight slide decks (1,656 pages), lab/assignment exports, two notebooks including stored outputs, four support scripts, all 111 stored images/plots, dataset/checkpoint inventory and its README. The user's completion of Course 2 is a supplied fact; the archive README still describes it as pending. [Coverage notes](notes/course-coverage-2026-09-30.md) map every module and teaching export, identify three missing image references and explain missing auxiliary files. Binary datasets/checkpoints were inventoried and hashed, not executed or deserialized. Only representative PDF pages were visually inspected; all slide text was extracted and reviewed.
+
+Added three two-page guides: Training (metrics/search and efficient pipelines), Vision (transforms/noise and pretrained models), Text (tokens/embeddings and classifiers). Expanded the two Fundamentals pages with Course 1 tensor/storage operations, loss contracts, model introspection and separate train/validation transforms. Home, reference function finder and About connect all eight modules. Original tested snippets live in `examples/recall_patterns.py`; interactive illustrations show noise, accumulation and padding. The actual lab noise is salt and pepper; Gaussian/read-noise and photon-noise comparisons are explicitly explanatory extensions. No course assessments or solutions were copied into the public library.
+
+The current source has 16 Markdown pages and produces 17 HTML pages. Content checks derive the inventory from navigation and enforce two pages per guide; built-site checks reject missing output. The Pages workflow also checks the new recall examples. Optuna, Lightning and TorchMetrics are absent from the global environment; optional ecosystem snippets are source-checked explanations, not claimed end-to-end runs. Nothing was installed. The archive and retained experiment images/results remain unchanged. This is local work; no commit, push or publication was performed.
+
+Local checks passed the strict build, 16/17 source/output validators, four-guide DaZu links, shared JavaScript syntax, 68 guide Python excerpt syntax checks, original recall-pattern tests and all four existing smoke examples on a disposable copy. Offline tiny random DistilBERT checked module paths, zero-block/head-only freezing, logits and external weighted loss; a random ResNet checked head replacement and frozen BatchNorm mode. No pretrained downloads or accuracy claims result from those checks. CUDA was unavailable to this process, so the AMP excerpt was not run on a GPU. Browser checks at 1440×900 and 390×844 covered new-page layout, noise controls, accumulation/padding including invalid input, search results, mobile guide navigation and code-copy success feedback. No horizontal page overflow was observed. Real-device touch, full training, optional ecosystem runtime, current CI/hosting and Netlify aliases remain unverified.
+
+## Previous local review — 2026-09-27
 
 A later local learning pass expanded the two Fundamentals guides with shape traces, ReLU's exact behavior, data-split cautions, CNN block reasoning, and short self-checks. All four project pages gained a focused question, and the home page now routes directly to ReLU and the compact Course 2 reference. The reference documents metrics, epoch-based learning-rate scheduling, and a frozen-backbone transfer-learning starting point from the organized labs studied so far. This does not mark Course 2 complete. The separate `Pytorch` archive was not edited. DaZu's two entry pages were revised in the parent repository and require their own release.
 
@@ -24,7 +34,7 @@ The final cleanup verification passed a fresh strict MkDocs build, content valid
 
 1. Save and synchronize this repository separately. A push to `main` triggers GitHub Pages, including maintenance changes; confirm the matching Actions run before claiming publication.
 2. Use Python 3.14 and the current requirements for future environments. Dependency ranges are not a lockfile; record versions with new experiment evidence.
-3. Content validation expects ten Markdown pages. The generated-site validator can accept zero HTML pages; verify a real build exists. The current output has eleven HTML pages.
+3. Build before validating links. Content validation compares navigation with every source page; generated-site validation rejects missing output. The current source/output counts are 16/17.
 4. Smoke tests regenerate a maintained regression image and local results. Use a disposable copy when preserving existing website assets and evidence is required.
 5. Full dataset training, fresh dataset downloads and comprehensive browser/mobile/accessibility checks remain separate tasks. The retained Letters dataset works without the removed EMNIST variants/archive.
 6. Preserve `artifacts/`: the retained CPU experiment supports the published result. Before a release, inspect the revised pages in a local browser at desktop and phone widths and exercise the interactive controls.
@@ -43,6 +53,9 @@ Markdown under `docs/` is the source of truth. `mkdocs.yml` owns the explicit pu
 
 - Start here
 - Learn the fundamentals (two numbered pages)
+- Improve training (metrics/tuning and efficient pipelines)
+- Work with vision (transforms/noise and pretrained models)
+- Work with text (tokens/embeddings and classifiers)
 - Practice with projects (chooser and four examples)
 - Quick reference
 - About this library
@@ -52,7 +65,7 @@ Each published PyTorch guide uses two substantial pages rather than many small p
 - `/guides/fundamentals/core-workflow/`
 - `/guides/fundamentals/vision-real-data/`
 
-The library also has a project gallery, four complete project pages, one combined reference, and one combined about/sources page. Preserve stable anchors when editing long pages because `dazu.xyz/learn/pytorch/fundamentals/` links directly to them.
+The library also has a project gallery, four complete project pages, one combined reference, and one combined about/sources page. Preserve stable anchors when editing long pages because the four DaZu quick guides link directly to them. Each detailed page starts with a return-to-section map; keep explanations moderate and connected, with concrete function and parameter details rather than a transcript of the course.
 
 Future PyTorch guides follow the same two-page pattern and enter navigation only when both pages contain useful material. OpenCV, YOLO, and other non-PyTorch libraries belong in separate future hubs, not here.
 
@@ -101,7 +114,7 @@ DaZu is independent. Update `../site/learn/pytorch/` only when the short guide i
 
 Confirm the GitHub Actions run succeeded, then check:
 
-- the homepage and both Fundamentals guides;
+- the homepage and both pages of every affected guide;
 - all four project pages and complete-source inclusions;
 - direct anchors used by DaZu;
 - search, mobile navigation, images, and code-copy controls;

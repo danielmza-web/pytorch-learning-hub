@@ -2,6 +2,14 @@
 
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
+## 2026-09-30 — Course 1/2 recall library (local)
+
+- Reviewed all 171 files in the sibling course archive, including text from eight slide decks (1,656 pages), lab/assignment exports, notebooks and support interfaces. Added internal source coverage notes; preserved the archive, course solutions and retained experiment evidence outside the public content. Recorded three missing source images and auxiliary/runtime limits.
+- Added six original pages in three connected two-page guides: metrics/tuning and efficient pipelines; image transforms/noise and pretrained models; tokens/embeddings and classifiers. Filled Fundamentals gaps in tensor/storage operations, losses, model inspection and split transforms. Added direct function lookup and module/source mapping to reference/About.
+- Added original noise, masked-pooling, bag-collation and accumulation excerpts plus meaningful invariant checks. Added seeded visual noise comparison and interactive padding/accumulation arithmetic with invalid-input messages. Adapted navigation and validators for 16 Markdown / 17 generated HTML pages; Pages now validates recall excerpts too.
+- Strict build, source/generated links, JavaScript syntax, 68 guide excerpt syntax checks, original recall tests, DaZu cross-site anchors and four existing smoke examples passed. Smoke outputs stayed on a disposable copy. Offline random DistilBERT/ResNet checks confirmed selected contracts without downloads. CUDA AMP runtime was skipped because CUDA was unavailable; Optuna/Lightning/TorchMetrics and full training were not executed.
+- Local browser checks covered new guides at 1440×900 and 390×844, working noise/padding/accumulation controls, invalid input, search, mobile navigation and code-copy feedback; no page overflow or logged errors observed. No commit, push, workflow run or publication for this request.
+
 ## 2026-09-27 — learning-detail pass (local)
 
 - Added runnable microexamples and explicit learning checks for tensor flattening, ReLU and nonlinear capacity, CNN shapes, data leakage, and validation. Added one check to each of the four project pages and clearer study paths on Home.

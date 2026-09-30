@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -77,10 +78,25 @@ def main() -> None:
                 f"{guide_directory}: published guides require exactly two substantial pages, found {len(pages)}"
             )
 
-    if len(markdown_files) != 10:
-        errors.append(
-            f"{DOCS}: expected 10 public Markdown pages (6 primary + 4 project details), found {len(markdown_files)}"
-        )
+    # Navigation is the published inventory; every source page must be reachable.
+    config = yaml.load((ROOT / "mkdocs.yml").read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+    def nav_paths(value):
+        if isinstance(value, str):
+            return [value]
+        if isinstance(value, list):
+            return [item for child in value for item in nav_paths(child)]
+        if isinstance(value, dict):
+            return [item for child in value.values() for item in nav_paths(child)]
+        return []
+    listed = nav_paths(config["nav"])
+    if len(listed) != len(set(listed)):
+        errors.append("Navigation lists a page more than once")
+    published = {(DOCS / item).resolve() for item in listed}
+    actual = {path.resolve() for path in markdown_files}
+    for path in sorted(published - actual):
+        errors.append(f"Navigation source is missing: {path}")
+    for path in sorted(actual - published):
+        errors.append(f"Public page is absent from navigation: {path}")
     if errors:
         raise SystemExit("\n".join(errors))
     print(f"Validated {len(markdown_files)} Markdown files")

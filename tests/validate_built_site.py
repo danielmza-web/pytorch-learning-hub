@@ -47,6 +47,14 @@ def main() -> None:
         parser.feed(html_path.read_text(encoding="utf-8"))
         pages[html_path.resolve()] = parser
 
+    if not pages:
+        raise SystemExit("No generated HTML pages found; run the strict MkDocs build first")
+    for source in (ROOT / "docs").rglob("*.md"):
+        relative = source.relative_to(ROOT / "docs")
+        expected = SITE / (relative.parent / "index.html" if relative.name == "index.md" else relative.with_suffix("") / "index.html")
+        if expected.resolve() not in pages:
+            errors.append(f"Missing generated page for {relative}")
+
     for source, parser in pages.items():
         for href in parser.links:
             parsed = urlparse(href)

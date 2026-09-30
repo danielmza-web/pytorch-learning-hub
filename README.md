@@ -26,7 +26,7 @@ The rollback snapshot is intentionally detached from `pytorch.dazu.xyz`. Do not 
 
 ## Content structure
 
-The public navigation stays small and follows a clear route: Start here, two Fundamentals pages in order, a project chooser with four projects, Quick reference, and About. The home page also offers direct paths for learning the workflow, working with images, finding an example, or debugging.
+The public navigation follows a connected route: Start here → Fundamentals → Improve training → Work with vision → Work with text → projects → Quick reference → About. Each of the four guides has two pages. There are 16 maintained Markdown pages and 17 generated HTML pages including the error page.
 
 The maintained source pages are:
 
@@ -36,7 +36,7 @@ The maintained source pages are:
 - `docs/reference/index.md`: reminder, cheatsheet, troubleshooting, and glossary.
 - `docs/about/index.md`: purpose, sources, attribution, and results policy.
 
-The reference includes a decision table and compact code reminders for topics already studied in the second certificate course (metrics, learning-rate schedules, and transfer learning). It is not a second published guide or a copy of course labs. The Fundamentals pages include annotated microexamples and self-check questions; each project adds one targeted learning check.
+The six training, vision and text pages cover metrics, schedulers, Optuna, model budgets, DataLoader tuning, Lightning, profiling, precision, accumulation, image noise, pretrained weights, transfer learning, tokens, padding, embeddings and text classifiers. Fundamentals adds tensor/storage details, loss contracts, model inspection and safe dataset splits. Each page connects concepts, functions, important parameters, original excerpts, common mistakes and a recall check. The reference has a function finder with direct section links. [Course coverage](notes/course-coverage-2026-09-30.md) records the read-only source review and its limits; protected course material is not included in the public site.
 
 PyTorch Fundamentals currently uses:
 
@@ -44,6 +44,8 @@ PyTorch Fundamentals currently uses:
 2. `docs/guides/fundamentals/vision-real-data.md`
 
 Do not create future-guide placeholders. Add a guide to `mkdocs.yml` only after both pages contain useful material.
+
+`examples/recall_patterns.py` contains the original, tested impulse-noise, masked-pooling, EmbeddingBag-collation and gradient-accumulation excerpts included in the guides. It uses the existing project dependencies and performs no downloads. Optional ecosystem excerpts need `optuna`, `lightning`, `torchmetrics` or `transformers`; these are not required to build the website or run the four maintained projects. On 2026-09-30, Transformers was available locally, while Optuna, Lightning and TorchMetrics were absent. Nothing was installed for this review, and those optional snippets have not been executed end to end.
 
 ## Update locally
 
@@ -85,6 +87,7 @@ Run every check before pushing:
 python -m mkdocs build --strict
 python tests/validate_content.py
 python tests/validate_built_site.py
+python tests/validate_recall_patterns.py
 python tests/smoke_examples.py
 python -m py_compile scripts/generate_concept_visuals.py examples/regression_demo.py examples/emnist_model.py examples/robust_dataset.py examples/nature_cnn.py
 node --check docs/assets/javascripts/interactions.js
@@ -92,9 +95,9 @@ node --check docs/assets/javascripts/interactions.js
 
 The GitHub Pages workflow repeats these checks and publishes only when they all pass. The smoke suite calls regression training, writes `artifacts/regression_metrics.json`, and regenerates the tracked `docs/assets/images/regression-comparison.png`; inspect `git diff` afterward. Building replaces generated `site/`, and Python compilation creates caches. These are not read-only checks.
 
-For a review that must preserve non-documentation files, use `python -B tests/validate_content.py`, `python -B tests/validate_built_site.py` (only after confirming a built `site/` exists), and the JavaScript syntax check. The built-site validator can report zero files successfully if `site/` is missing; that is not a valid build verification. A complete maintenance verification can run the build and smoke suite on a disposable source copy to preserve the checked-in visuals and retained experiment results.
+For a review that must preserve non-documentation files, use `python -B tests/validate_content.py`, `python -B tests/validate_built_site.py` after a fresh strict build, `python -B tests/validate_recall_patterns.py`, and the JavaScript syntax check. The built-site validator rejects absent output and checks every maintained source page. Run the smoke suite on a disposable source copy to preserve checked-in visuals and retained experiment results.
 
-When nested inside DaZu, build here first, then run `python -B tests/validate_pytorch_hub.py` from the parent root to verify quick-guide links against the generated library. Both validators encode the current one-guide / ten-Markdown-page scope; adjust them deliberately when adding guides.
+When nested inside DaZu, build here first, then run `python -B tests/validate_pytorch_hub.py` from the parent root to verify all four quick-guide links against the generated library. Content validation compares navigation with the actual source inventory and retains the two-page-per-guide rule. Update the parent guide list deliberately when adding another guide.
 
 ## Publish with GitHub Pages
 

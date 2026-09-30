@@ -5,7 +5,7 @@ tags:
   - fundamentals
   - cnn
   - data-quality
-last_reviewed: 2026-09-27
+last_reviewed: 2026-09-30
 ---
 
 # Fundamentals — vision and real data
@@ -191,6 +191,27 @@ handle.remove()
 
 Most shape failures are easier to understand at the first incorrect boundary than at the final linear-layer error.
 
+### Inspect the model and its activations
+
+| Method | What you see |
+| --- | --- |
+| `print(model)` | layer hierarchy and declared dimensions |
+| `named_children()` | direct child modules |
+| `named_modules()` | nested modules recursively |
+| `named_parameters()` | registered weight/bias names and tensors |
+| `buffers()` | non-parameter state, such as BatchNorm running statistics |
+| `state_dict()` | persisted parameters and buffers |
+
+```python
+for name, parameter in model.named_parameters():
+    print(name, tuple(parameter.shape), parameter.requires_grad)
+total = sum(parameter.numel() for parameter in model.parameters())
+```
+
+A linear layer with `F` inputs and `K` outputs has `F*K + K` parameters with bias. An ordinary convolution has `out_channels * in_channels * kernel_height * kernel_width + out_channels` with bias and `groups=1`. Pooling and ReLU have no trainable parameters. Parameter count is not the same as compute cost.
+
+Inspect finite values, mean, standard deviation, minimum, maximum and zero fraction after a suspicious block. Mostly zero ReLU outputs or collapsing variance can guide an investigation; they do not prove a bug alone. Hooks are temporary diagnostics: remove their handles and avoid storing tensors with live computation graphs. Start by overfitting one tiny batch before changing the architecture.
+
 **Next:** compare a dense model with a CNN in [EMNIST](../../projects/emnist.md), then inspect a modular regularized model in [Nature CNN](../../projects/nature-cnn.md).
 
 ## Reliable image data
@@ -240,6 +261,26 @@ train_set, validation_set = random_split(
 
 Record the split seed and per-class distribution. For multiple images of the same person, object, location, or capture burst, split by entity rather than individual image. `random_split` by itself does not prevent that kind of leakage.
 
+### Separate transforms for shared split indices
+
+`Subset` and `random_split` retain references to their underlying dataset. Assigning a new transform through a shared parent can accidentally augment validation too. With identical folder contents and ordering, use separate dataset objects:
+
+```python
+from torchvision.datasets import ImageFolder
+from torch.utils.data import Subset
+
+train_base = ImageFolder("images", transform=train_transform)
+val_base = ImageFolder("images", transform=validation_transform)
+assert train_base.samples == val_base.samples
+assert train_base.class_to_idx == val_base.class_to_idx
+order = torch.randperm(len(train_base), generator=torch.Generator().manual_seed(17))
+cut = int(0.8 * len(order))
+train_set = Subset(train_base, order[:cut].tolist())
+val_set = Subset(val_base, order[cut:].tolist())
+```
+
+Here the transform objects were defined earlier. Use group-aware indices instead of the random permutation when samples are related. A custom per-subset wrapper is another solution; it must receive raw samples so it does not transform an already transformed tensor twice.
+
 **Check yourself:** if two crops of the same photo land in different splits, validation can reward recognition of that photo rather than a pattern that works on new photos. Group them before splitting.
 
 ### Monitor data, not only the model
@@ -250,6 +291,8 @@ Record the split seed and per-class distribution. For multiple images of the sam
 - Batch loading time and accelerator idle time.
 - Class mapping stored with the run.
 - Example transformed images from both training and validation.
+
+Decode images in a context manager and convert to RGB explicitly. `Image.verify()` checks file integrity but requires reopening before decoding/transforming; a successful check does not validate the label. For one-based label files, translate IDs consistently. For filenames starting at 1 and sample indices starting at 0, keep the offset explicit. Do not repeatedly load an entire table inside `__getitem__` when only one row is needed.
 
 The [robust image-pipeline project](../../projects/robust-image-pipeline.md) downloads public data, builds a folder dataset, adds one known corrupt file, records the validation decision, and trains only on valid examples.
 
@@ -345,6 +388,8 @@ torch.save({
 
 A usable model is more than its tensors. Retain architecture code, preprocessing, class order, input shape, selected metric, split identity, seed, and package versions. Verify the restored model on a known input.
 
+To resume training consistently, retain scheduler state, mixed-precision scaler state when used, and the next epoch as well. For a best model held in memory, use `copy.deepcopy(model.state_dict())` or save immediately: a dictionary of live tensor references can follow later updates. Random state and sampler state matter when exact continuation is required.
+
 Never load an untrusted pickle-based checkpoint. Prefer weight-only loading when the saved format and installed PyTorch version support it.
 
 ## Vision-workflow checklist
@@ -360,3 +405,5 @@ Before trusting an image model, confirm:
 7. The selected checkpoint can be restored with its preprocessing and class order.
 
 Use the [project gallery](../../projects/index.md) to move from these patterns to complete, runnable examples, or open the [reference](../../reference/index.md) when debugging a specific run.
+
+For the next layer of the same workflow, study [noise and augmentation](../vision/augmentation.md) and [pretrained vision models](../vision/pretrained-models.md). Both rely on the shape, split and evaluation checks above.

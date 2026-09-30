@@ -84,6 +84,15 @@ nav:
   - Learn the fundamentals:
       - 1 · Build and train: guides/fundamentals/core-workflow.md
       - 2 · Images and CNNs: guides/fundamentals/vision-real-data.md
+  - Improve training:
+      - 1 · Metrics and tuning: guides/training/training-quality.md
+      - 2 · Efficient pipelines: guides/training/efficient-training.md
+  - Work with vision:
+      - 1 · Data, transforms and noise: guides/vision/augmentation.md
+      - 2 · Pretrained models: guides/vision/pretrained-models.md
+  - Work with text:
+      - 1 · Tokens and embeddings: guides/text/tokens-embeddings.md
+      - 2 · Classifiers and fine-tuning: guides/text/text-classifiers.md
   - Practice with projects:
       - Choose a project: projects/index.md
       - Nonlinear regression: projects/regression.md
