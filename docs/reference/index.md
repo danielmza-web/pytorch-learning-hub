@@ -4,7 +4,7 @@ tags:
   - reference
   - cheatsheet
   - debugging
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # PyTorch reference and troubleshooting
@@ -40,90 +40,106 @@ For connected explanations of these choices, open [metrics and tuning](../guides
 
 ### Course 2: what changes in practice
 
-The same loop now supports more deliberate choices. Use these direct routes instead of re-reading a whole course:
+??? note "Course 2 routes and extra snippets"
+    The same loop now supports more deliberate choices. Use these direct routes instead of re-reading a whole course:
 
-| Need to remember | Read |
-| --- | --- |
-| Precision, recall, macro F1, and metric state | [Metrics](../guides/training/training-quality.md#metrics-that-answer-the-right-question) |
-| Step, cosine and plateau LR schedules | [Schedulers](../guides/training/training-quality.md#learning-rate-schedulers) |
-| Search spaces, trials and TPE | [Optuna](../guides/training/training-quality.md#a-small-optuna-search) |
-| Salt and pepper noise or transform order | [Augmentation](../guides/vision/augmentation.md#noise-as-a-controlled-augmentation) |
-| Weights metadata, boxes and masks | [Pretrained vision](../guides/vision/pretrained-models.md) |
-| Frozen vs partially fine-tuned features | [Vision stages](../guides/vision/pretrained-models.md#train-the-head-then-fine-tune) |
-| Tokenization, padding and vectors | [Text representation](../guides/text/tokens-embeddings.md) |
-| EmbeddingBag, class weights and DistilBERT | [Text classifiers](../guides/text/text-classifiers.md) |
-| Workers, prefetching and profiling | [Efficient training](../guides/training/efficient-training.md) |
-| Mixed precision and accumulation | [Precision](../guides/training/efficient-training.md#mixed-precision) · [Accumulation](../guides/training/efficient-training.md#gradient-accumulation) |
+    | Need to remember | Read |
+    | --- | --- |
+    | Precision, recall, macro F1, and metric state | [Metrics](../guides/training/training-quality.md#metrics-that-answer-the-right-question) |
+    | Step, cosine and plateau LR schedules | [Schedulers](../guides/training/training-quality.md#learning-rate-schedulers) |
+    | Search spaces, trials and TPE | [Optuna](../guides/training/training-quality.md#a-small-optuna-search) |
+    | Salt and pepper noise or transform order | [Augmentation](../guides/vision/augmentation.md#noise-as-a-controlled-augmentation) |
+    | Weights metadata, boxes and masks | [Pretrained vision](../guides/vision/pretrained-models.md) |
+    | Frozen vs partially fine-tuned features | [Vision stages](../guides/vision/pretrained-models.md#train-the-head-then-fine-tune) |
+    | Tokenization, padding and vectors | [Text representation](../guides/text/tokens-embeddings.md) |
+    | EmbeddingBag, class weights and DistilBERT | [Text classifiers](../guides/text/text-classifiers.md) |
+    | Workers, prefetching and profiling | [Efficient training](../guides/training/efficient-training.md) |
+    | Mixed precision and accumulation | [Precision](../guides/training/efficient-training.md#mixed-precision) · [Accumulation](../guides/training/efficient-training.md#gradient-accumulation) |
 
-**Metrics:** accuracy can hide a weak minority class. Read per-class results and keep the final test set outside tuning.
+    **Metrics:** accuracy can hide a weak minority class. Read per-class results and keep the final test set outside tuning.
 
-**Learning rate:** the optimizer changes weights; a scheduler changes the optimizer's learning rate over time. For an epoch-based `StepLR`, call `scheduler.step()` after that epoch's training updates:
+    **Learning rate:** the optimizer changes weights; a scheduler changes the optimizer's learning rate over time. For an epoch-based `StepLR`, call `scheduler.step()` after that epoch's training updates:
 
-```python
-optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
-scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
-for epoch in range(epochs):
-    train_one_epoch(model, train_loader, optimizer)  # your training function
-    scheduler.step()  # after five calls, multiply the learning rate by 0.1
-```
+    ```python
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+    for epoch in range(epochs):
+        train_one_epoch(model, train_loader, optimizer)  # your training function
+        scheduler.step()  # after five calls, multiply the learning rate by 0.1
+    ```
 
-**Transfer learning:** reuse learned visual features and train a new final classifier first. The replacement layer must have one output per class; the optimizer should receive only parameters you intend to train:
+    **Transfer learning:** reuse learned visual features and train a new final classifier first. The replacement layer must have one output per class; the optimizer should receive only parameters you intend to train:
 
-```python
-from torchvision.models import resnet18, ResNet18_Weights
-weights = ResNet18_Weights.DEFAULT
-model = resnet18(weights=weights)
-for parameter in model.parameters():
-    parameter.requires_grad = False
-model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
-optimizer = torch.optim.Adam(model.fc.parameters(), lr=1e-3)
-preprocess = weights.transforms()  # use for the model's expected input format
-```
+    ```python
+    from torchvision.models import resnet18, ResNet18_Weights
+    weights = ResNet18_Weights.DEFAULT
+    model = resnet18(weights=weights)
+    for parameter in model.parameters():
+        parameter.requires_grad = False
+    model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
+    optimizer = torch.optim.Adam(model.fc.parameters(), lr=1e-3)
+    preprocess = weights.transforms()  # use for the model's expected input format
+    ```
 
-The frozen backbone still participates in the forward pass; `requires_grad=False` prevents its weights from being updated. Decide on fine-tuning only after checking validation behavior. If you change which layers are trainable, rebuild the optimizer for the new parameter set.
+    The frozen backbone still participates in the forward pass; `requires_grad=False` prevents its weights from being updated. Decide on fine-tuning only after checking validation behavior. If you change which layers are trainable, rebuild the optimizer for the new parameter set.
 
-Freezing parameters does not freeze BatchNorm statistics. Use a deliberate [training-mode policy](../guides/vision/pretrained-models.md#frozen-weights-and-evaluation-mode-are-different) for the backbone.
+    Freezing parameters does not freeze BatchNorm statistics. Use a deliberate [training-mode policy](../guides/vision/pretrained-models.md#frozen-weights-and-evaluation-mode-are-different) for the backbone.
+
 
 ## Function finder
 
 Each row groups related functions by the reason to use them. Follow the link for the shape contract, example and common mistake.
 
-| Function / parameter | Remember | Explanation |
-| --- | --- | --- |
-| `tensor`, `from_numpy`, `zeros`, `ones`, `arange`, `rand` | creation; copy vs shared storage | [Tensor operations](../guides/fundamentals/core-workflow.md#tensor-operations-worth-remembering) |
-| `reshape`, `flatten`, `squeeze`, `unsqueeze` | change dimensions; preserve batch | [Shapes](../guides/fundamentals/core-workflow.md#reshape-without-changing-the-data) |
-| `cat`, `stack`, `transpose`, `permute` | join or reorder; not equivalent | [Tensor operations](../guides/fundamentals/core-workflow.md#tensor-operations-worth-remembering) |
-| boolean masks, `sum`, `mean`, `std`, `matmul` | selection, reductions and matrix math | [Tensor operations](../guides/fundamentals/core-workflow.md#tensor-operations-worth-remembering) |
-| `.to`, `.float`, `.long`, `.item`, `.detach` | device/dtype or Python scalar; gradient history | [Dtype/device](../guides/fundamentals/core-workflow.md#dtype-and-device) |
-| `Module`, `Sequential`, `ModuleList` | register layers; define their flow | [Flexible models](../guides/training/training-quality.md#flexible-models-must-register-every-layer) |
-| `Linear`, `ReLU`, `Tanh`, `Sigmoid`, `Softmax` | representation and output meaning | [Activations and logits](../guides/fundamentals/core-workflow.md#models-activations-and-logits) |
-| `MSELoss`, `L1Loss`, `SmoothL1Loss`, `CrossEntropyLoss`, `BCEWithLogitsLoss`, `NLLLoss` | match task, target shape and output | [Loss table](../guides/fundamentals/core-workflow.md#match-the-output-target-and-loss) |
-| `backward`, `zero_grad`, `step`, `SGD`, `Adam`, `AdamW` | calculate then apply gradients | [Update loop](../guides/fundamentals/core-workflow.md#loss-autograd-and-optimizers) |
-| `train`, `eval`, `no_grad`, `inference_mode` | module behavior vs gradient tracking | [Evaluation](../guides/fundamentals/core-workflow.md#validation-and-metrics) |
-| `Dataset`, `Subset`, `random_split`, `DataLoader` | samples, indices and batches | [Data contracts](../guides/fundamentals/core-workflow.md#dataset-transforms-and-dataloader) |
-| `num_workers`, `pin_memory`, `prefetch_factor`, `persistent_workers`, `drop_last` | CPU preparation and batching trade-offs | [Loader settings](../guides/training/efficient-training.md#dataloader-settings) |
-| `Conv2d`, `MaxPool2d`, `AdaptiveAvgPool2d` | learned spatial features and reduction | [CNN shapes](../guides/fundamentals/vision-real-data.md#cnn-architecture-and-shapes) |
-| `Dropout`, `BatchNorm2d`, `weight_decay` | training-only variation / statistics / regularization | [Hyperparameters](../guides/training/training-quality.md#what-each-hyperparameter-changes) |
-| `named_parameters`, `named_children`, `named_modules`, `register_forward_hook` | inspect registered tensors and activations | [Inspection](../guides/fundamentals/vision-real-data.md#inspect-the-model-and-its-activations) |
-| `decode_image`, `ToTensor`, `ToPILImage`, `make_grid`, `save_image` | image type, range and visual inspection | [Image utilities](../guides/vision/augmentation.md#pil-tensors-and-image-utilities) |
-| `ImageFolder`, `FakeData`, `EMNIST`, `SVHN` | dataset-specific labels and split arguments | [Dataset choices](../guides/vision/augmentation.md#choose-a-dataset-interface) |
-| `Compose`, `Resize`, `CenterCrop`, `RandomResizedCrop`, `ColorJitter`, `RandomAffine` | ordered, label-preserving transforms | [Transform pipeline](../guides/vision/augmentation.md#build-the-transform-pipeline-in-order) |
-| custom `__call__`, `Normalize` | noise before normalization; fixed mean/std | [Noise](../guides/vision/augmentation.md#an-original-tensor-transform) · [Normalization](../guides/vision/augmentation.md#normalization-and-display) |
-| `weights.transforms`, `weights.meta`, `topk`, `requires_grad_` | pretrained input/label contract and adaptation | [Pretrained models](../guides/vision/pretrained-models.md#weights-preprocessing-and-class-names) |
-| `draw_bounding_boxes`, `draw_segmentation_masks`, `argmax` | display predictions; choose the correct axis | [Task outputs](../guides/vision/pretrained-models.md#classification-detection-and-segmentation) |
-| TorchMetrics `update`, `compute`, `reset`, `average` | aggregate across a measurement interval | [Metrics](../guides/training/training-quality.md#average-over-the-dataset) |
-| `StepLR`, `CosineAnnealingLR`, `ReduceLROnPlateau` | schedules and monitored direction | [Schedulers](../guides/training/training-quality.md#learning-rate-schedulers) |
-| Optuna `suggest_*`, `create_study`, `optimize`, `best_params`, `trials_dataframe` | search → validation score → recorded trials | [Optuna](../guides/training/training-quality.md#a-small-optuna-search) |
-| `AutoTokenizer`, `BertTokenizerFast`, `DataCollatorWithPadding` | matching IDs, special tokens and padded batches | [Tokenizer](../guides/text/tokens-embeddings.md#use-the-matching-pretrained-tokenizer) |
-| `Embedding`, `EmbeddingBag`, `collate_fn`, offsets | vectors, pooling and variable-length inputs | [Text classifiers](../guides/text/text-classifiers.md#embeddingbag-with-offsets) |
-| `cosine_similarity`, `PCA` | similarity and limited 2D visualization | [Embedding interpretation](../guides/text/tokens-embeddings.md#similarity-context-and-visualization) |
-| `AutoModel`, `AutoModelForSequenceClassification`, `.logits`, `save_pretrained` | contextual vectors vs class predictions | [Text fine-tuning](../guides/text/text-classifiers.md#fine-tune-a-pretrained-text-model) |
-| `LightningModule`, `LightningDataModule`, `Trainer`, `self.log` | separate learning logic and orchestration | [Lightning](../guides/training/efficient-training.md#what-lightning-automates) |
-| `EarlyStopping`, `ModelCheckpoint`, `fast_dev_run`, callback hooks | stopping, best weights and diagnostics | [Callbacks](../guides/training/efficient-training.md#callbacks-and-scheduler-configuration) |
-| `PyTorchProfiler`, `schedule`, `profile_memory`, `record_shapes` | identify expensive work | [Profiling](../guides/training/efficient-training.md#profile-a-short-representative-run) |
-| `autocast`, `GradScaler`, `precision`, `accumulate_grad_batches` | numerical precision and update boundaries | [Efficient training](../guides/training/efficient-training.md#mixed-precision) |
-| `synchronize`, `reset_peak_memory_stats`, `max_memory_allocated`, `element_size` | measure completion and tensor bytes | [Measurements](../guides/training/efficient-training.md#measure-latency-and-memory) |
-| `state_dict`, `save`, `load`, `load_state_dict` | retain weights plus their interpretation | [Saving](../guides/fundamentals/vision-real-data.md#saving-and-restoring) |
+??? note "Tensors, models and the learning loop"
+    | Function / parameter | Remember | Explanation |
+    | --- | --- | --- |
+    | `tensor`, `from_numpy`, `zeros`, `ones`, `arange`, `rand` | creation; copy vs shared storage | [Tensor operations](../guides/fundamentals/core-workflow.md#tensor-operations-worth-remembering) |
+    | `reshape`, `flatten`, `squeeze`, `unsqueeze` | change dimensions; preserve batch | [Shapes](../guides/fundamentals/core-workflow.md#reshape-without-changing-the-data) |
+    | `cat`, `stack`, `transpose`, `permute` | join or reorder; not equivalent | [Tensor operations](../guides/fundamentals/core-workflow.md#tensor-operations-worth-remembering) |
+    | boolean masks, `sum`, `mean`, `std`, `matmul` | selection, reductions and matrix math | [Tensor operations](../guides/fundamentals/core-workflow.md#tensor-operations-worth-remembering) |
+    | `.to`, `.float`, `.long`, `.item`, `.detach` | device/dtype or Python scalar; gradient history | [Dtype/device](../guides/fundamentals/core-workflow.md#dtype-and-device) |
+    | `Module`, `Sequential`, `ModuleList` | register layers; define their flow | [Flexible models](../guides/training/training-quality.md#flexible-models-must-register-every-layer) |
+    | `Linear`, `ReLU`, `Tanh`, `Sigmoid`, `Softmax` | representation and output meaning | [Activations and logits](../guides/fundamentals/core-workflow.md#models-activations-and-logits) |
+    | `MSELoss`, `L1Loss`, `SmoothL1Loss`, `CrossEntropyLoss`, `BCEWithLogitsLoss`, `NLLLoss` | match task, target shape and output | [Loss table](../guides/fundamentals/core-workflow.md#match-the-output-target-and-loss) |
+    | `backward`, `zero_grad`, `step`, `SGD`, `Adam`, `AdamW` | calculate then apply gradients | [Update loop](../guides/fundamentals/core-workflow.md#loss-autograd-and-optimizers) |
+    | `train`, `eval`, `no_grad`, `inference_mode` | module behavior vs gradient tracking | [Evaluation](../guides/fundamentals/core-workflow.md#validation-and-metrics) |
+    | `Dataset`, `Subset`, `random_split`, `DataLoader` | samples, indices and batches | [Data contracts](../guides/fundamentals/core-workflow.md#dataset-transforms-and-dataloader) |
+    | `num_workers`, `pin_memory`, `prefetch_factor`, `persistent_workers`, `drop_last` | CPU preparation and batching trade-offs | [Loader settings](../guides/training/efficient-training.md#dataloader-settings) |
+    | `Conv2d`, `MaxPool2d`, `AdaptiveAvgPool2d` | learned spatial features and reduction | [CNN shapes](../guides/fundamentals/vision-real-data.md#cnn-architecture-and-shapes) |
+    | `Dropout`, `BatchNorm2d`, `weight_decay` | training-only variation / statistics / regularization | [Hyperparameters](../guides/training/training-quality.md#what-each-hyperparameter-changes) |
+    | `named_parameters`, `named_children`, `named_modules`, `register_forward_hook` | inspect registered tensors and activations | [Inspection](../guides/fundamentals/vision-real-data.md#inspect-the-model-and-its-activations) |
+
+??? note "Images, pretrained models and metrics"
+    | Function / parameter | Remember | Explanation |
+    | --- | --- | --- |
+    | `decode_image`, `ToTensor`, `ToPILImage`, `make_grid`, `save_image` | image type, range and visual inspection | [Image utilities](../guides/vision/augmentation.md#pil-tensors-and-image-utilities) |
+    | `ImageFolder`, `FakeData`, `EMNIST`, `SVHN` | dataset-specific labels and split arguments | [Dataset choices](../guides/vision/augmentation.md#choose-a-dataset-interface) |
+    | `Compose`, `Resize`, `CenterCrop`, `RandomResizedCrop`, `ColorJitter`, `RandomAffine` | ordered, label-preserving transforms | [Transform pipeline](../guides/vision/augmentation.md#build-the-transform-pipeline-in-order) |
+    | custom `__call__`, `Normalize` | noise before normalization; fixed mean/std | [Noise](../guides/vision/augmentation.md#an-original-tensor-transform) · [Normalization](../guides/vision/augmentation.md#normalization-and-display) |
+    | `weights.transforms`, `weights.meta`, `topk`, `requires_grad_` | pretrained input/label contract and adaptation | [Pretrained models](../guides/vision/pretrained-models.md#weights-preprocessing-and-class-names) |
+    | `draw_bounding_boxes`, `draw_segmentation_masks`, `argmax` | display predictions; choose the correct axis | [Task outputs](../guides/vision/pretrained-models.md#classification-detection-and-segmentation) |
+    | TorchMetrics `update`, `compute`, `reset`, `average` | aggregate across a measurement interval | [Metrics](../guides/training/training-quality.md#average-over-the-dataset) |
+    | `StepLR`, `CosineAnnealingLR`, `ReduceLROnPlateau` | schedules and monitored direction | [Schedulers](../guides/training/training-quality.md#learning-rate-schedulers) |
+    | Optuna `suggest_*`, `create_study`, `optimize`, `best_params`, `trials_dataframe` | search → validation score → recorded trials | [Optuna](../guides/training/training-quality.md#a-small-optuna-search) |
+
+??? note "Text and contextual models"
+    | Function / parameter | Remember | Explanation |
+    | --- | --- | --- |
+    | `AutoTokenizer`, `BertTokenizerFast`, `DataCollatorWithPadding` | matching IDs, special tokens and padded batches | [Tokenizer](../guides/text/tokens-embeddings.md#use-the-matching-pretrained-tokenizer) |
+    | `Embedding`, `EmbeddingBag`, `collate_fn`, offsets | vectors, pooling and variable-length inputs | [Text classifiers](../guides/text/text-classifiers.md#embeddingbag-with-offsets) |
+    | `cosine_similarity`, `PCA` | similarity and limited 2D visualization | [Embedding interpretation](../guides/text/tokens-embeddings.md#similarity-context-and-visualization) |
+    | `AutoModel`, `AutoModelForSequenceClassification`, `.logits`, `save_pretrained` | contextual vectors vs class predictions | [Text fine-tuning](../guides/text/text-classifiers.md#fine-tune-a-pretrained-text-model) |
+
+??? note "Training tools and efficiency"
+    | Function / parameter | Remember | Explanation |
+    | --- | --- | --- |
+    | `LightningModule`, `LightningDataModule`, `Trainer`, `self.log` | separate learning logic and orchestration | [Lightning](../guides/training/efficient-training.md#what-lightning-automates) |
+    | `EarlyStopping`, `ModelCheckpoint`, `fast_dev_run`, callback hooks | stopping, best weights and diagnostics | [Callbacks](../guides/training/efficient-training.md#callbacks-and-scheduler-configuration) |
+    | `PyTorchProfiler`, `schedule`, `profile_memory`, `record_shapes` | identify expensive work | [Profiling](../guides/training/efficient-training.md#profile-a-short-representative-run) |
+    | `autocast`, `GradScaler`, `precision`, `accumulate_grad_batches` | numerical precision and update boundaries | [Efficient training](../guides/training/efficient-training.md#mixed-precision) |
+    | `synchronize`, `reset_peak_memory_stats`, `max_memory_allocated`, `element_size` | measure completion and tensor bytes | [Measurements](../guides/training/efficient-training.md#measure-latency-and-memory) |
+    | `state_dict`, `save`, `load`, `load_state_dict` | retain weights plus their interpretation | [Saving](../guides/fundamentals/vision-real-data.md#saving-and-restoring) |
+
 
 ## Cheatsheet
 
@@ -269,10 +285,16 @@ For `K` output classes, labels for `CrossEntropyLoss` must normally be integer i
 : PyTorch's automatic differentiation system.
 
 **Batch**
-: A group of samples processed together before one optimizer update.
+: A group of samples processed together. With accumulation, several microbatches contribute to one optimizer update.
 
 **Epoch**
 : One pass through the training dataset.
+
+**Microbatch**
+: A smaller batch processed in one forward/backward pass. Several can accumulate gradients before one update.
+
+**Optimizer step**
+: One call that updates the optimizer's owned parameters using their current gradients. It need not happen after every microbatch.
 
 **Feature map**
 : One channel of activations produced by a convolutional filter.
@@ -287,7 +309,7 @@ For `K` output classes, labels for `CrossEntropyLoss` must normally be integer i
 : A differentiable scalar objective measuring prediction error.
 
 **Parameter**
-: A trainable tensor such as a weight or bias.
+: A registered model tensor such as a weight or bias. It remains a parameter when frozen; `requires_grad` determines whether gradients are recorded for it.
 
 **Regularization**
 : A technique intended to improve generalization rather than only training fit.

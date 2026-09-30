@@ -2,7 +2,7 @@
 title: Start here
 tags:
   - home
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # PyTorch Learning Hub
@@ -80,6 +80,6 @@ The project gallery also contains the four foundation examples: regression, EMNI
 
 ## How to use a page
 
-Read the explanation, follow the important code, then use its visual check or run command. Return through the sidebar for another topic, or search for an exact name such as `EmbeddingBag`, `ReduceLROnPlateau` or `pin_memory`.
+Read the visible explanation and visual first; expand “Code and details” only when you need implementation or variants. Direct section links and search results reveal their matching details. Then use the project run command to reproduce a small workflow. Return through the sidebar for another topic, or search for an exact name such as `EmbeddingBag`, `ReduceLROnPlateau` or `pin_memory`.
 
 Illustrations are labelled; toy runs demonstrate mechanisms, and retained measurements state their source. This is an independent study library with original content. [About and sources](about/index.md) explains its scope and evidence policy.

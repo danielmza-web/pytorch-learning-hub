@@ -1,0 +1,24 @@
+{
+  "kind": "seeded execution on an original illustration",
+  "seed": 71,
+  "transforms": [
+    "RandomResizedCrop: scale .65\u2013.85, output 180\u00d7220",
+    "ColorJitter: brightness/contrast/saturation .3",
+    "ToTensor",
+    "ImpulseNoise .05",
+    "Normalize mean=.5 std=.5"
+  ],
+  "float_shape": [
+    3,
+    180,
+    220
+  ],
+  "float_range": [
+    0.0,
+    1.0
+  ],
+  "normalized_range": [
+    -1.0,
+    1.0
+  ]
+}

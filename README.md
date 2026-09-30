@@ -8,6 +8,17 @@ Read [CONTEXT.md](CONTEXT.md) before changing the information architecture, rout
 
 Use [CHANGELOG.md](CHANGELOG.md) for verifiable history and [AGENTS.md](AGENTS.md) for Codex continuity. When checked out inside DaZu, the [parent README](../README.md) is the workspace index. That relative link is only available in the combined local workspace; this library can also run as a standalone repository.
 
+## Current recall features — 2026-10-01
+
+Existing routes now show compact explanations and local diagrams first; long code/variants are expandable. Direct anchors and search results reveal the relevant details. The project gallery uses mobile cards and the reference groups functions by purpose. Start here explains how guides, projects and reference connect.
+
+The three selected Course 2 workflows have retained CPU reports and reproducible new figures under `docs/assets/data/recall-2026-10-01/`. Run `python scripts/render_recall_evidence.py` to render the new evidence charts and original transform illustration; it does not replace historical EMNIST/regression figures. Training benchmarking is optional: `python examples/training_comparison.py --benchmark --device cpu` (CPU default), `--device auto` or `--device cuda`. CUDA additionally attempts AMP and records timing, throughput, peak allocation and available CUDA memory. No CUDA run is claimed for this implementation session.
+
+EMNIST/Nature now reserve 20% of the training pool for validation, restore the minimum-loss checkpoint and evaluate official test at the end. Historical EMNIST results are explicitly retained as the original configuration. The source archive remains read-only. When editing the new shared recall CSS/JS, synchronize their copies in DaZu's `site/learn/pytorch/assets/` and validate both independent repositories.
+
+
+Local browser verification on 2026-10-01 covered all 24 learning routes (19 Hub and five DaZu) at desktop 1440×900 and mobile 390×844. The four replacement diagrams displayed their real stage labels; new transform/task/metric charts were inspected as rendered images. No page overflow or broken loaded images remained; lazy Fundamentals images were checked after scrolling into view. Metrics zero/absent positives/invalid values, padding masks/truncation, keyboard disclosure activation, direct inner anchors, same-anchor search reopening and code-copy content passed. The Hub now uses the modern clipboard API: the selected folded code and DaZu code were independently compared with clipboard text, then the prior clipboard was restored. Both themes were inspected; the new matrix fits a phone column and keyboard-focus text uses dark ink on the orange background. 73 rendered guide Python excerpts parsed successfully. Formal whole-site WCAG certification and physical-device touch are not claimed.
+
 ## Latest verified release — 2026-09-30
 
 Orientation/example source `8670ca5` was pushed to `main`; [Pages run 36777275109](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36777275109) completed successfully, including the new offline workflow checks. All nineteen public pages returned HTTPS 200. Live mobile navigation reached the new comparison project; accumulation, noise and padding controls responded without logged errors. A follow-up replaces home tables with paragraphs/cards for phone readability. DaZu quick guides were released separately to Netlify. This verifies publication, not full model training or every optional ecosystem snippet. Documentation-only follow-ups also trigger Pages; consult the current commit/run for their status.
@@ -93,12 +104,15 @@ python tests/validate_content.py
 python tests/validate_built_site.py
 python tests/validate_recall_patterns.py
 python tests/validate_selected_examples.py
-python tests/smoke_examples.py
+python tests/validate_learning_contracts.py
+node tests/validate_recall_visuals.cjs
+python tests/smoke_in_copy.py
 python -m py_compile scripts/generate_concept_visuals.py examples/regression_demo.py examples/emnist_model.py examples/robust_dataset.py examples/nature_cnn.py
 node --check docs/assets/javascripts/interactions.js
+node --check docs/assets/javascripts/recall-visuals.js
 ```
 
-The GitHub Pages workflow repeats these checks and publishes only when they all pass. The smoke suite calls regression training, writes `artifacts/regression_metrics.json`, and regenerates the tracked `docs/assets/images/regression-comparison.png`; inspect `git diff` afterward. Building replaces generated `site/`, and Python compilation creates caches. These are not read-only checks.
+The GitHub Pages workflow repeats these checks and publishes only when they all pass. `tests/smoke_in_copy.py` runs the smoke suite in a disposable checkout. Calling the underlying `tests/smoke_examples.py` directly still runs regression training, writes `artifacts/regression_metrics.json`, and regenerates the tracked `docs/assets/images/regression-comparison.png`; inspect `git diff` afterward. Building replaces generated `site/`, and Python compilation creates caches. These are not read-only checks.
 
 For a review that must preserve non-documentation files, use `python -B tests/validate_content.py`, `python -B tests/validate_built_site.py` after a fresh strict build, `python -B tests/validate_recall_patterns.py`, and the JavaScript syntax check. The built-site validator rejects absent output and checks every maintained source page. Run the smoke suite on a disposable source copy to preserve checked-in visuals and retained experiment results.
 

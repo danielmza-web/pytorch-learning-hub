@@ -1,7 +1,7 @@
 ---
 title: Training — efficient pipelines
 tags: [dataloader, profiling, lightning, mixed-precision]
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # Training — efficient pipelines
@@ -14,17 +14,22 @@ storage → decode / transform on CPU → batch → transfer → GPU work → up
               DataLoader workers                 model and optimizer
 ```
 
-If the GPU waits for data, a bigger model is unlikely to help. If convolution dominates time, adding loader workers may change very little. Start from [a trustworthy validation comparison](training-quality.md), then use this map:
+If the GPU waits for data, a bigger model is unlikely to help. If convolution dominates time, adding loader workers may change very little. Start from [a trustworthy validation comparison](training-quality.md), inspect preparation, transfers and computation separately.
 
-| Need | Section |
-| --- | --- |
-| Keep batches ready | [DataLoader settings](#dataloader-settings) |
-| Understand the training framework | [Lightning](#what-lightning-automates) |
-| Find expensive operations | [Profiling](#profile-a-short-representative-run) |
-| Fit the run in memory | [Mixed precision](#mixed-precision) and [accumulation](#gradient-accumulation) |
-| Compare actual cost | [Latency and memory](#measure-latency-and-memory) |
+
+
+**Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
 ## DataLoader settings
+
+<div class="recall-flow" role="group" aria-label="Input to output">
+<div><b>Prepare on CPU</b><code>read → decode → transform</code><small>workers and prefetch keep batches ready</small></div>
+<div><b>Transfer</b><code>CPU → device</code><small>pinned memory may help CUDA transfers</small></div>
+<div><b>Compute</b><code>forward → backward → update</code><small>measure without profiler overhead</small></div>
+</div>
+<p class="visual-caption">Illustration: shapes and operations, not measured model performance.</p>
+<div class="memory-parts"><b>Training memory includes</b><span>Parameters and buffers</span><span>Activations</span><span>Gradients</span><span>Optimizer state</span></div>
+<p class="visual-caption">Categories, not a to-scale memory chart. Frozen parameters still occupy storage and participate in the forward pass.</p>
 
 | Parameter | What it controls | Trade-off |
 | --- | --- | --- |
@@ -78,34 +83,36 @@ Lightning organizes the same PyTorch computation rather than changing what a neu
 
 In ordinary automatic optimization, do not duplicate `backward()` and `optimizer.step()` inside `training_step`. A small original model wrapper:
 
-```python
-import lightning.pytorch as pl
-import torch
-from torch import nn
+??? note "Implementation excerpt · requires the objects described above"
+    ```python
+    import lightning.pytorch as pl
+    import torch
+    from torch import nn
 
-class SmallClassifier(pl.LightningModule):
-    def __init__(self, features=6, classes=3, lr=1e-3):
-        super().__init__()
-        self.save_hyperparameters()
-        self.network = nn.Linear(features, classes)
+    class SmallClassifier(pl.LightningModule):
+        def __init__(self, features=6, classes=3, lr=1e-3):
+            super().__init__()
+            self.save_hyperparameters()
+            self.network = nn.Linear(features, classes)
 
-    def forward(self, x):
-        return self.network(x)
+        def forward(self, x):
+            return self.network(x)
 
-    def training_step(self, batch, batch_idx):
-        x, y = batch
-        loss = nn.functional.cross_entropy(self(x), y)
-        self.log("train_loss", loss, on_step=False, on_epoch=True, batch_size=len(y))
-        return loss
+        def training_step(self, batch, batch_idx):
+            x, y = batch
+            loss = nn.functional.cross_entropy(self(x), y)
+            self.log("train_loss", loss, on_step=False, on_epoch=True, batch_size=len(y))
+            return loss
 
-    def validation_step(self, batch, batch_idx):
-        x, y = batch
-        loss = nn.functional.cross_entropy(self(x), y)
-        self.log("val_loss", loss, on_epoch=True, batch_size=len(y))
+        def validation_step(self, batch, batch_idx):
+            x, y = batch
+            loss = nn.functional.cross_entropy(self(x), y)
+            self.log("val_loss", loss, on_epoch=True, batch_size=len(y))
 
-    def configure_optimizers(self):
-        return torch.optim.AdamW(self.parameters(), lr=self.hparams.lr)
-```
+        def configure_optimizers(self):
+            return torch.optim.AdamW(self.parameters(), lr=self.hparams.lr)
+    ```
+
 
 Given compatible loaders, `pl.Trainer(max_epochs=5, accelerator="auto", devices=1).fit(model, train_loader, val_loader)` runs it. Lightning and TorchMetrics are optional ecosystem dependencies; the four existing runnable projects use ordinary PyTorch.
 
@@ -113,32 +120,35 @@ Given compatible loaders, `pl.Trainer(max_epochs=5, accelerator="auto", devices=
 
 ### Callbacks and scheduler configuration
 
-```python
-from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
+Stopping ends a run; checkpointing saves weights. Configure each callback around the intended validation metric.
 
-stopping = EarlyStopping(monitor="val_loss", mode="min", patience=3, min_delta=1e-3)
-saving = ModelCheckpoint(monitor="val_loss", mode="min", save_top_k=1)
-trainer = pl.Trainer(max_epochs=20, accelerator="auto", devices=1,
-                     callbacks=[stopping, saving])
-```
+??? note "Code and details"
+    ```python
+    from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 
-`patience` counts validation checks without sufficient improvement. `stopping_threshold` ends a run when a target is reached; it is different from `min_delta`. Early stopping does not restore the best weights by itself: use the checkpoint's `best_model_path`. `fast_dev_run=True` tests a few batches, not model quality. `trainer.callback_metrics` contains logged metrics, and sanity-validation results should be excluded from experiment summaries.
+    stopping = EarlyStopping(monitor="val_loss", mode="min", patience=3, min_delta=1e-3)
+    saving = ModelCheckpoint(monitor="val_loss", mode="min", save_top_k=1)
+    trainer = pl.Trainer(max_epochs=20, accelerator="auto", devices=1,
+                         callbacks=[stopping, saving])
+    ```
 
-For a plateau schedule, return this structure from `configure_optimizers()`:
+    `patience` counts validation checks without sufficient improvement. `stopping_threshold` ends a run when a target is reached; it is different from `min_delta`. Early stopping does not restore the best weights by itself: use the checkpoint's `best_model_path`. `fast_dev_run=True` tests a few batches, not model quality. `trainer.callback_metrics` contains logged metrics, and sanity-validation results should be excluded from experiment summaries.
 
-```python
-return {
-    "optimizer": optimizer,
-    "lr_scheduler": {
-        "scheduler": scheduler,
-        "monitor": "val_loss",  # match the logged name and mode="min"
-        "interval": "epoch",
-        "frequency": 1,
-    },
-}
-```
+    For a plateau schedule, return this structure from `configure_optimizers()`:
 
-`self.log` of a TorchMetrics object lets Lightning manage epoch state. If you manually manage metric objects outside that integration, use `update/compute/reset` and separate train/validation state.
+    ```python
+    return {
+        "optimizer": optimizer,
+        "lr_scheduler": {
+            "scheduler": scheduler,
+            "monitor": "val_loss",  # match the logged name and mode="min"
+            "interval": "epoch",
+            "frequency": 1,
+        },
+    }
+    ```
+
+    `self.log` of a TorchMetrics object lets Lightning manage epoch state. If you manually manage metric objects outside that integration, use `update/compute/reset` and separate train/validation state.
 
 ## Profile a short representative run
 
@@ -193,6 +203,14 @@ The model must already be on CUDA. Clipping is optional; choose it for a reason.
 
 ## Gradient accumulation
 
+<div class="recall-flow" role="group" aria-label="Input to output">
+<div><b>Microbatch 1</b><code>16 samples → backward</code><small>gradients accumulate; weights stay fixed</small></div>
+<div><b>Microbatch 2</b><code>16 samples → backward</code><small>add to existing gradients</small></div>
+<div><b>Microbatch 3</b><code>16 samples → backward</code><small>average by 48 actual samples</small></div>
+<div><b>Update</b><code>optimizer.step()</code><small>one update, then clear gradients</small></div>
+</div>
+<p class="visual-caption">Single-device illustration. For 133 samples, full groups are 48 and 48; the final update uses 37.</p>
+
 Accumulate gradients over several **microbatches**, then update once. On one device:
 
 ```text
@@ -234,24 +252,26 @@ The second quantity includes frozen weights and buffers, but excludes activation
 
 For a forward-only latency measurement:
 
-```python
-import time
+??? note "Implementation excerpt · requires the objects described above"
+    ```python
+    import time
 
-model.eval()
-device = next(model.parameters()).device
-sample = sample.to(device)  # keep transfer outside this forward-only timing
-with torch.inference_mode():
-    for _ in range(10):
-        model(sample)  # warm up
-    if device.type == "cuda":
-        torch.cuda.synchronize(device)
-    start = time.perf_counter()
-    for _ in range(50):
-        model(sample)
-    if device.type == "cuda":
-        torch.cuda.synchronize(device)
-    latency_ms = 1000 * (time.perf_counter() - start) / 50
-```
+    model.eval()
+    device = next(model.parameters()).device
+    sample = sample.to(device)  # keep transfer outside this forward-only timing
+    with torch.inference_mode():
+        for _ in range(10):
+            model(sample)  # warm up
+        if device.type == "cuda":
+            torch.cuda.synchronize(device)
+        start = time.perf_counter()
+        for _ in range(50):
+            model(sample)
+        if device.type == "cuda":
+            torch.cuda.synchronize(device)
+        latency_ms = 1000 * (time.perf_counter() - start) / 50
+    ```
+
 
 CUDA work is asynchronous; synchronization includes completion rather than just dispatch. State input shape, batch size, device, precision, warmup and repetitions. Batch-one latency and large-batch throughput are different. Measure end-to-end latency separately if decoding and transfers matter.
 

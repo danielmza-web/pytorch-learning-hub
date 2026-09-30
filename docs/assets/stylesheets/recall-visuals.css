@@ -1,0 +1,40 @@
+/* Original recall components shared by DaZu and the Hub. */
+.recall-flow, .memory-parts, .task-views, .project-grid { display:grid; gap:12px; margin:20px 0; grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr)); }
+.recall-flow > div, .memory-parts > div, .project-choice { padding:16px; border:1px solid #70839b; border-radius:10px; min-width:0; }
+.recall-flow b, .recall-flow code, .recall-flow small, .memory-parts b, .memory-parts small { display:block; margin-bottom:8px; }
+.recall-flow code { white-space:normal; overflow-wrap:anywhere; }
+.recall-flow { counter-reset:recall-stage; }
+.recall-flow > div::before { counter-increment:recall-stage; content:counter(recall-stage) " ·"; display:block; font-weight:700; color:inherit; margin-bottom:8px; }
+.recall-flow small, .memory-parts small, .visual-caption, .token-rows small { font-size:14px; line-height:1.6; }
+.memory-parts > b { grid-column:1 / -1; }
+.memory-parts > span { padding:14px; border:1px solid #70839b; border-radius:8px; }
+.visual-caption { border-left:3px solid #d67629; padding:4px 12px; }
+.task-views figure { margin:0; min-width:0; }
+.task-views img { width:100%; height:auto; border-radius:8px; }
+.task-views figcaption { padding:8px 0; font-size:14px; }
+.metrics-inputs { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
+.metrics-inputs label { display:grid; gap:6px; }
+.metrics-inputs input { box-sizing:border-box; width:100%; max-width:160px; min-height:40px; padding:7px; color:inherit; background:transparent; border:1px solid #70839b; border-radius:5px; }
+[data-metrics-lab] button { padding:10px 14px; min-height:44px; border:1px solid #70839b; border-radius:6px; color:inherit; background:transparent; cursor:pointer; }
+[data-metrics-lab] output { display:block; line-height:1.7; padding:12px 0; }
+[data-metric-matrix] { overflow-x:auto; }
+[data-metric-matrix] table { border-collapse:collapse; width:100%; font-size:14px; margin:15px 0; }
+[data-metric-matrix] th, [data-metric-matrix] td { padding:9px; border:1px solid #70839b; text-align:left; }
+[data-metric-matrix] caption { text-align:left; margin-bottom:8px; }
+.md-typeset [data-metric-matrix] table { display:table; width:100%; min-width:0; font-size:14px; }
+.md-typeset [data-metric-matrix] table th, .md-typeset [data-metric-matrix] table td { min-width:0; padding:9px; }
+[data-metrics-lab] button:hover, [data-metrics-lab] button:focus-visible { color:#071321; background:#d67629; }
+.offset-strip { display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
+.offset-strip span { display:block; padding:12px; border:2px solid #70839b; border-radius:7px; }
+.offset-strip b, .offset-strip small { display:block; }
+.token-rows { margin-top:18px; }
+.token-rows > div { margin-bottom:14px; }
+.token-cells { display:flex; flex-wrap:wrap; gap:5px; margin:8px 0; }
+.token-cells span { padding:6px; border:1px solid #70839b; border-radius:4px; font:13px monospace; }
+.token-cells .is-token { border-color:#278666; }
+.token-cells .is-pad { border-style:dashed; opacity:.8; }
+.project-choice h3 { margin-top:0; }
+.project-choice p { line-height:1.65; }
+.project-choice code { overflow-wrap:anywhere; white-space:normal; }
+.recall-flow :focus-visible, [data-metrics-lab] :focus-visible { outline:3px solid #d67629; outline-offset:3px; }
+@media (max-width:600px) { .recall-flow, .memory-parts, .task-views, .project-grid { grid-template-columns:1fr; } .recall-flow > div { padding:14px; } }

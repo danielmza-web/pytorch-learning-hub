@@ -1,0 +1,35 @@
+{
+  "mode": "synthetic mechanism demo",
+  "backbone_weights": "random",
+  "classes": [
+    "synthetic-0",
+    "synthetic-1",
+    "synthetic-2"
+  ],
+  "preprocessing": {
+    "size": 32,
+    "range": [
+      0,
+      1
+    ],
+    "normalization": null
+  },
+  "noise_amount": 0.02,
+  "train_samples": 24,
+  "validation_samples": 12,
+  "trainable_parameters": 1539,
+  "frozen_parameter_count": 11176512,
+  "frozen_parameters_unchanged": true,
+  "frozen_buffers_unchanged": true,
+  "head_changed": true,
+  "history": [
+    {
+      "epoch": 1,
+      "validation_accuracy": 0.3333333333333333
+    },
+    {
+      "epoch": 2,
+      "validation_accuracy": 0.25
+    }
+  ]
+}

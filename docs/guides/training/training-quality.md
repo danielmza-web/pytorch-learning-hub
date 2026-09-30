@@ -1,7 +1,7 @@
 ---
 title: Training — metrics and tuning
 tags: [training, metrics, schedulers, optuna]
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # Training — metrics and tuning
@@ -11,15 +11,25 @@ Once the [basic training loop](../fundamentals/core-workflow.md#the-complete-tra
 
 **Read in order:** choose a metric → establish a baseline → tune the learning rate → schedule it → search a few settings → compare quality and cost. For faster execution of the same experiment, continue with [efficient training](efficient-training.md).
 
-| Return to… | When you need… |
-| --- | --- |
-| [Metrics](#metrics-that-answer-the-right-question) | precision, recall, F1 and averaging |
-| [Hyperparameters](#what-each-hyperparameter-changes) | a reason to change a setting |
-| [Schedulers](#learning-rate-schedulers) | the correct placement of `step()` |
-| [Optuna](#a-small-optuna-search) | trials, search spaces and results |
-| [Model selection](#quality-within-a-budget) | memory and latency trade-offs |
+
+
+**Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
 ## Metrics that answer the right question
+
+<div class="interactive-panel" data-metrics-lab>
+  <div class="interactive-heading">Inspection outcomes → metrics</div>
+  <p>Positive means “defect”. Rows are truth; columns are predictions.</p>
+  <div class="metrics-inputs">
+    <label>True positives <input type="number" min="0" value="8" data-tp></label>
+    <label>False positives <input type="number" min="0" value="2" data-fp></label>
+    <label>False negatives <input type="number" min="0" value="2" data-fn></label>
+    <label>True negatives <input type="number" min="0" value="88" data-tn></label>
+  </div>
+  <button type="button" data-metric-preset>Try always predicting “good”</button>
+  <div data-metric-matrix></div><output data-metric-output aria-live="polite"></output>
+  <small>Exact arithmetic on editable counts; no trained detector.</small>
+</div>
 
 The **loss** is the differentiable quantity used to train. A **metric** describes behavior you care about. Lower cross-entropy and higher accuracy often move together, but they are different measurements.
 
@@ -45,22 +55,23 @@ If 99 of 100 items are good, always predicting “good” gives 99% accuracy and
 
 In multiclass work, **macro** gives every class equal weight; **weighted** weights classes by support; **micro** pools the underlying counts. For ordinary single-label multiclass predictions over all classes, micro precision, recall and F1 equal accuracy. Macro F1 is the average of per-class F1 values, not F1 calculated from macro precision and recall.
 
-This excerpt needs TorchMetrics, an existing model, validation loader and device:
+??? note "Code and details"
+    This excerpt needs TorchMetrics, an existing model, validation loader and device:
 
-```python
-from torchmetrics.classification import MulticlassF1Score
+    ```python
+    from torchmetrics.classification import MulticlassF1Score
 
-metric = MulticlassF1Score(num_classes=classes, average="macro").to(device)
-model.eval()
-with torch.no_grad():
-    for x, y in validation_loader:
-        logits = model(x.to(device))
-        metric.update(logits.argmax(1), y.to(device))
-macro_f1 = metric.compute().item()
-metric.reset()  # do this before measuring the next epoch with the same object
-```
+    metric = MulticlassF1Score(num_classes=classes, average="macro").to(device)
+    model.eval()
+    with torch.no_grad():
+        for x, y in validation_loader:
+            logits = model(x.to(device))
+            metric.update(logits.argmax(1), y.to(device))
+    macro_f1 = metric.compute().item()
+    metric.reset()  # do this before measuring the next epoch with the same object
+    ```
 
-Use `MulticlassAccuracy`, `MulticlassPrecision`, `MulticlassRecall` and `MulticlassConfusionMatrix` similarly. `update()` accumulates counts; `compute()` summarizes them; `reset()` starts a new measurement. Averaging individual batch F1 values is generally incorrect. Keep separate state for training and validation.
+    Use `MulticlassAccuracy`, `MulticlassPrecision`, `MulticlassRecall` and `MulticlassConfusionMatrix` similarly. `update()` accumulates counts; `compute()` summarizes them; `reset()` starts a new measurement. Averaging individual batch F1 values is generally incorrect. Keep separate state for training and validation.
 
 ## What each hyperparameter changes
 
@@ -82,6 +93,17 @@ Use `MulticlassAccuracy`, `MulticlassPrecision`, `MulticlassRecall` and `Multicl
 Try a small logarithmic LR range first, for example `1e-4`, `1e-3`, `1e-2`. These are experiment candidates, not universal defaults. Compare the same split, initialization policy, training budget and metric. Change one hypothesis at a time before widening the search.
 
 ## Learning-rate schedulers
+
+![Learning rates used by step, cosine and plateau schedules in a toy execution](../../assets/images/training-schedules.svg)
+
+Toy execution: StepLR halves LR every four calls; cosine spans 12 epochs; plateau responds to the declared validation-loss signal `[1, .8, .8, .8, .7, .7, .7, .7, .7, .7, .7, .7]` with patience 1. The chart shows LR used before each end-of-epoch scheduler call. This is a schedule comparison, not measured model training. [Calls and values](../../assets/data/recall-2026-10-01/schedules.json).
+
+<div class="recall-flow" role="group" aria-label="Input to output">
+<div><b>StepLR</b><code>0.001 → 0.0005 → 0.00025</code><small>drop after every 4 epoch calls</small></div>
+<div><b>Cosine</b><code>high → smooth low</code><small>T_max counts schedule calls</small></div>
+<div><b>Plateau</b><code>validate → compare → maybe reduce</code><small>patience waits for non-improving checks</small></div>
+</div>
+<p class="visual-caption">Illustrative schedules. A short improving run may never trigger a plateau reduction. Log LR used before the step and LR next afterward.</p>
 
 An optimizer changes weights; a scheduler changes the optimizer's LR. It cannot repair wrong labels or leakage.
 
@@ -123,27 +145,29 @@ scheduler.step(validation_loss)  # once after each validation measurement
 
 The structure below requires Optuna and your own `fit_and_validate` function. Each call must build a **fresh model and optimizer**, use the same data split, and return validation macro F1:
 
-```python
-import optuna
+??? note "Implementation excerpt · requires the objects described above"
+    ```python
+    import optuna
 
-def objective(trial):
-    settings = {
-        "lr": trial.suggest_float("lr", 1e-4, 1e-2, log=True),
-        "width": trial.suggest_int("width", 16, 64, step=16),
-        "dropout": trial.suggest_float("dropout", 0.0, 0.4),
-        "kernel": trial.suggest_categorical("kernel", [3, 5]),
-    }
-    score, seconds = fit_and_validate(settings)
-    trial.set_user_attr("training_seconds", seconds)
-    return score
+    def objective(trial):
+        settings = {
+            "lr": trial.suggest_float("lr", 1e-4, 1e-2, log=True),
+            "width": trial.suggest_int("width", 16, 64, step=16),
+            "dropout": trial.suggest_float("dropout", 0.0, 0.4),
+            "kernel": trial.suggest_categorical("kernel", [3, 5]),
+        }
+        score, seconds = fit_and_validate(settings)
+        trial.set_user_attr("training_seconds", seconds)
+        return score
 
-study = optuna.create_study(
-    direction="maximize", sampler=optuna.samplers.TPESampler(seed=17),
-)
-study.optimize(objective, n_trials=12)
-print(study.best_params, study.best_value)
-table = study.trials_dataframe()
-```
+    study = optuna.create_study(
+        direction="maximize", sampler=optuna.samplers.TPESampler(seed=17),
+    )
+    study.optimize(objective, n_trials=12)
+    print(study.best_params, study.best_value)
+    table = study.trials_dataframe()
+    ```
+
 
 `suggest_int` chooses discrete integers; `suggest_float(log=True)` searches orders of magnitude; `suggest_categorical` chooses named options. If the objective is loss, use `direction="minimize"`.
 

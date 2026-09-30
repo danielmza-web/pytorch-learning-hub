@@ -25,6 +25,8 @@ class PageParser(HTMLParser):
         href = values.get("href")
         if href:
             self.links.append(href)
+        if tag in ("img", "script", "source") and values.get("src"):
+            self.links.append(values["src"])
 
 
 def target_file(source: Path, path: str) -> Path:
@@ -71,7 +73,7 @@ def main() -> None:
 
     if errors:
         raise SystemExit("\n".join(errors))
-    print(f"Validated generated links and anchors across {len(pages)} HTML pages")
+    print(f"Validated generated links, resources and anchors across {len(pages)} HTML pages")
 
 
 if __name__ == "__main__":

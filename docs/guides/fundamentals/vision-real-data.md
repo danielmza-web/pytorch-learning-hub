@@ -5,13 +5,15 @@ tags:
   - fundamentals
   - cnn
   - data-quality
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # Fundamentals — vision and real data
 
 Apply the core workflow to images: trace shapes through a CNN, check the files before training, then decide whether validation evidence supports the model.
 { .page-lead }
+
+**Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
 ## What this guide connects
 
@@ -31,13 +33,7 @@ Read [Fundamentals — core workflow](core-workflow.md) first if Dataset, logits
 
 **Study target:** after each section, name the input, output, and reason for the operation. A CNN is the same training loop as before; the important new questions are spatial shape, file quality, and generalization.
 
-| Section | Main question | Useful next example |
-| --- | --- | --- |
-| [Convolution and feature maps](#convolution-and-feature-maps) | How does a CNN look for local patterns? | [EMNIST](../../projects/emnist.md) |
-| [CNN architecture and shapes](#cnn-architecture-and-shapes) | Where do channels grow and spatial dimensions shrink? | [Nature CNN](../../projects/nature-cnn.md) |
-| [Reliable image data](#reliable-image-data) | What must be true before a metric is trustworthy? | [Robust pipeline](../../projects/robust-image-pipeline.md) |
-| [Generalization and regularization](#generalization-and-regularization) | Is the model learning a reusable pattern or memorizing? | [Learning curves](#read-learning-curves) |
-| [Saving and restoring](#saving-and-restoring) | What must be retained to use the model again? | [Reference](../../reference/index.md) |
+
 
 ## Convolution and feature maps
 
@@ -70,28 +66,31 @@ The pictured filter is hand-designed to make its response visible. A trained CNN
 
 ### Channels
 
-```python
-nn.Conv2d(
-    in_channels=3,
-    out_channels=32,
-    kernel_size=3,
-    padding=1,
-)
-```
+Convolutions turn input channels into learned feature channels while preserving each sample.
 
-Each of the 32 learned filters spans all three RGB input channels. The result is 32 feature maps—not 32 colours. Early filters may respond to edges, colour transitions, or texture; deeper layers combine those maps into patterns useful for the task.
+??? note "Code and details"
+    ```python
+    nn.Conv2d(
+        in_channels=3,
+        out_channels=32,
+        kernel_size=3,
+        padding=1,
+    )
+    ```
 
-Try one layer with a small batch:
+    Each of the 32 learned filters spans all three RGB input channels. The result is 32 feature maps—not 32 colours. Early filters may respond to edges, colour transitions, or texture; deeper layers combine those maps into patterns useful for the task.
 
-```python
-from torch import nn
-images = torch.zeros(4, 3, 32, 32)      # four RGB images
-conv = nn.Conv2d(3, 8, 3, padding=1)    # learn eight 3 × 3 filters
-maps = conv(images)
-print(maps.shape)                       # [4, 8, 32, 32]
-```
+    Try one layer with a small batch:
 
-The batch count stays 4; the filter count sets output channels to 8. Padding keeps 32 × 32 here. **Check yourself:** what changes if `padding=0`? The spatial output becomes 30 × 30.
+    ```python
+    from torch import nn
+    images = torch.zeros(4, 3, 32, 32)      # four RGB images
+    conv = nn.Conv2d(3, 8, 3, padding=1)    # learn eight 3 × 3 filters
+    maps = conv(images)
+    print(maps.shape)                       # [4, 8, 32, 32]
+    ```
+
+    The batch count stays 4; the filter count sets output channels to 8. Padding keeps 32 × 32 here. **Check yourself:** what changes if `padding=0`? The spatial output becomes 30 × 30.
 
 ### Kernel size, stride, and padding
 
@@ -123,32 +122,35 @@ The values in the diagram are an illustrative shape trace. Always inspect the re
 
 ### A reusable block
 
-```python
-class CNNBlock(nn.Module):
-    def __init__(self, in_channels, out_channels):
-        super().__init__()
-        self.block = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, 3, padding=1),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(),
-            nn.MaxPool2d(2),
-        )
+A convolution learns local features; an activation adds nonlinearity; pooling reduces spatial size.
 
-    def forward(self, x):
-        return self.block(x)
-```
+??? note "Code and details"
+    ```python
+    class CNNBlock(nn.Module):
+        def __init__(self, in_channels, out_channels):
+            super().__init__()
+            self.block = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels, 3, padding=1),
+                nn.BatchNorm2d(out_channels),
+                nn.ReLU(),
+                nn.MaxPool2d(2),
+            )
 
-Convolution learns local features, ReLU adds nonlinearity, normalization stabilizes intermediate distributions, and pooling reduces spatial resolution.
+        def forward(self, x):
+            return self.block(x)
+    ```
 
-Trace this block on `[4, 3, 32, 32]`: convolution gives `[4, 8, 32, 32]`; batch normalization and ReLU keep that shape; `MaxPool2d(2)` gives `[4, 8, 16, 16]`. Pooling keeps the strongest value in each 2 × 2 window. It reduces detail and compute, so excessive pooling can discard information. Batch normalization tracks statistics during training and uses stored statistics in evaluation; that is one reason `model.eval()` matters.
+    Convolution learns local features, ReLU adds nonlinearity, normalization stabilizes intermediate distributions, and pooling reduces spatial resolution.
 
-<div class="shape-tracer interactive-panel" data-shape-tracer>
-  <div class="interactive-heading">CNN shape tracer</div>
-  <label>Input size <input type="number" min="8" value="32" data-spatial-size></label>
-  <label>Pooling blocks <input type="number" min="0" max="6" value="3" data-pool-blocks></label>
-  <button type="button" data-trace-shape>Trace</button>
-  <output data-shape-output aria-live="polite"></output>
-</div>
+    Trace this block on `[4, 3, 32, 32]`: convolution gives `[4, 8, 32, 32]`; batch normalization and ReLU keep that shape; `MaxPool2d(2)` gives `[4, 8, 16, 16]`. Pooling keeps the strongest value in each 2 × 2 window. It reduces detail and compute, so excessive pooling can discard information. Batch normalization tracks statistics during training and uses stored statistics in evaluation; that is one reason `model.eval()` matters.
+
+    <div class="shape-tracer interactive-panel" data-shape-tracer>
+      <div class="interactive-heading">CNN shape tracer</div>
+      <label>Input size <input type="number" min="8" value="32" data-spatial-size></label>
+      <label>Pooling blocks <input type="number" min="0" max="6" value="3" data-pool-blocks></label>
+      <button type="button" data-trace-shape>Trace</button>
+      <output data-shape-output aria-live="polite"></output>
+    </div>
 
 ### Safer classifier boundaries
 
@@ -193,28 +195,38 @@ Most shape failures are easier to understand at the first incorrect boundary tha
 
 ### Inspect the model and its activations
 
-| Method | What you see |
-| --- | --- |
-| `print(model)` | layer hierarchy and declared dimensions |
-| `named_children()` | direct child modules |
-| `named_modules()` | nested modules recursively |
-| `named_parameters()` | registered weight/bias names and tensors |
-| `buffers()` | non-parameter state, such as BatchNorm running statistics |
-| `state_dict()` | persisted parameters and buffers |
+Inspect registered modules and intermediate output shapes to locate the first unexpected transformation.
 
-```python
-for name, parameter in model.named_parameters():
-    print(name, tuple(parameter.shape), parameter.requires_grad)
-total = sum(parameter.numel() for parameter in model.parameters())
-```
+??? note "Code and details"
+    | Method | What you see |
+    | --- | --- |
+    | `print(model)` | layer hierarchy and declared dimensions |
+    | `named_children()` | direct child modules |
+    | `named_modules()` | nested modules recursively |
+    | `named_parameters()` | registered weight/bias names and tensors |
+    | `buffers()` | non-parameter state, such as BatchNorm running statistics |
+    | `state_dict()` | persisted parameters and buffers |
 
-A linear layer with `F` inputs and `K` outputs has `F*K + K` parameters with bias. An ordinary convolution has `out_channels * in_channels * kernel_height * kernel_width + out_channels` with bias and `groups=1`. Pooling and ReLU have no trainable parameters. Parameter count is not the same as compute cost.
+    ```python
+    for name, parameter in model.named_parameters():
+        print(name, tuple(parameter.shape), parameter.requires_grad)
+    total = sum(parameter.numel() for parameter in model.parameters())
+    ```
 
-Inspect finite values, mean, standard deviation, minimum, maximum and zero fraction after a suspicious block. Mostly zero ReLU outputs or collapsing variance can guide an investigation; they do not prove a bug alone. Hooks are temporary diagnostics: remove their handles and avoid storing tensors with live computation graphs. Start by overfitting one tiny batch before changing the architecture.
+    A linear layer with `F` inputs and `K` outputs has `F*K + K` parameters with bias. An ordinary convolution has `out_channels * in_channels * kernel_height * kernel_width + out_channels` with bias and `groups=1`. Pooling and ReLU have no trainable parameters. Parameter count is not the same as compute cost.
 
-**Next:** compare a dense model with a CNN in [EMNIST](../../projects/emnist.md), then inspect a modular regularized model in [Nature CNN](../../projects/nature-cnn.md).
+    Inspect finite values, mean, standard deviation, minimum, maximum and zero fraction after a suspicious block. Mostly zero ReLU outputs or collapsing variance can guide an investigation; they do not prove a bug alone. Hooks are temporary diagnostics: remove their handles and avoid storing tensors with live computation graphs. Start by overfitting one tiny batch before changing the architecture.
+
+    **Next:** compare a dense model with a CNN in [EMNIST](../../projects/emnist.md), then inspect a modular regularized model in [Nature CNN](../../projects/nature-cnn.md).
 
 ## Reliable image data
+
+<div class="recall-flow" role="group" aria-label="Input to output">
+<div><b>Train</b><code>fit parameters</code><small>random label-preserving transforms</small></div>
+<div><b>Validation</b><code>choose settings and checkpoint</code><small>deterministic inputs; no gradient updates</small></div>
+<div><b>Test</b><code>assess selected model once</code><small>keep outside tuning</small></div>
+</div>
+<p class="visual-caption">Illustration: shapes and operations, not measured model performance.</p>
 
 A larger architecture cannot repair inconsistent labels, leakage, corrupt files, or transforms applied to the wrong split.
 
@@ -265,23 +277,24 @@ Record the split seed and per-class distribution. For multiple images of the sam
 
 `Subset` and `random_split` retain references to their underlying dataset. Assigning a new transform through a shared parent can accidentally augment validation too. With identical folder contents and ordering, use separate dataset objects:
 
-```python
-from torchvision.datasets import ImageFolder
-from torch.utils.data import Subset
+??? note "Code and details"
+    ```python
+    from torchvision.datasets import ImageFolder
+    from torch.utils.data import Subset
 
-train_base = ImageFolder("images", transform=train_transform)
-val_base = ImageFolder("images", transform=validation_transform)
-assert train_base.samples == val_base.samples
-assert train_base.class_to_idx == val_base.class_to_idx
-order = torch.randperm(len(train_base), generator=torch.Generator().manual_seed(17))
-cut = int(0.8 * len(order))
-train_set = Subset(train_base, order[:cut].tolist())
-val_set = Subset(val_base, order[cut:].tolist())
-```
+    train_base = ImageFolder("images", transform=train_transform)
+    val_base = ImageFolder("images", transform=validation_transform)
+    assert train_base.samples == val_base.samples
+    assert train_base.class_to_idx == val_base.class_to_idx
+    order = torch.randperm(len(train_base), generator=torch.Generator().manual_seed(17))
+    cut = int(0.8 * len(order))
+    train_set = Subset(train_base, order[:cut].tolist())
+    val_set = Subset(val_base, order[cut:].tolist())
+    ```
 
-Here the transform objects were defined earlier. Use group-aware indices instead of the random permutation when samples are related. A custom per-subset wrapper is another solution; it must receive raw samples so it does not transform an already transformed tensor twice.
+    Here the transform objects were defined earlier. Use group-aware indices instead of the random permutation when samples are related. A custom per-subset wrapper is another solution; it must receive raw samples so it does not transform an already transformed tensor twice.
 
-**Check yourself:** if two crops of the same photo land in different splits, validation can reward recognition of that photo rather than a pattern that works on new photos. Group them before splitting.
+    **Check yourself:** if two crops of the same photo land in different splits, validation can reward recognition of that photo rather than a pattern that works on new photos. Group them before splitting.
 
 ### Monitor data, not only the model
 
@@ -292,9 +305,10 @@ Here the transform objects were defined earlier. Use group-aware indices instead
 - Class mapping stored with the run.
 - Example transformed images from both training and validation.
 
-Decode images in a context manager and convert to RGB explicitly. `Image.verify()` checks file integrity but requires reopening before decoding/transforming; a successful check does not validate the label. For one-based label files, translate IDs consistently. For filenames starting at 1 and sample indices starting at 0, keep the offset explicit. Do not repeatedly load an entire table inside `__getitem__` when only one row is needed.
+??? note "Code and details"
+    Decode images in a context manager and convert to RGB explicitly. `Image.verify()` checks file integrity but requires reopening before decoding/transforming; a successful check does not validate the label. For one-based label files, translate IDs consistently. For filenames starting at 1 and sample indices starting at 0, keep the offset explicit. Do not repeatedly load an entire table inside `__getitem__` when only one row is needed.
 
-The [robust image-pipeline project](../../projects/robust-image-pipeline.md) downloads public data, builds a folder dataset, adds one known corrupt file, records the validation decision, and trains only on valid examples.
+    The [robust image-pipeline project](../../projects/robust-image-pipeline.md) downloads public data, builds a folder dataset, adds one known corrupt file, records the validation decision, and trains only on valid examples.
 
 ## Generalization and regularization
 
@@ -302,20 +316,23 @@ Generalization asks whether patterns learned from training examples remain usefu
 
 ### Read learning curves
 
-<div class="curve-lab interactive-panel" data-curve-lab>
-  <div class="interactive-heading">Learning-curve comparison</div>
-  <label>Illustrative regularization strength <input type="range" min="0" max="100" value="35" data-regularization></label>
-  <canvas width="720" height="260" data-curve-canvas aria-label="Illustrative training and validation loss curves"></canvas>
-  <output data-curve-output aria-live="polite"></output>
-  <small>Illustrative curves—not measured benchmark results.</small>
-</div>
+Compare training and validation curves to see whether learning generalizes or begins to overfit.
 
-| Observation | Likely issue | First checks |
-| --- | --- | --- |
-| Training and validation both poor | underfitting or broken pipeline | labels, loss, learning rate, capacity |
-| Training improves; validation worsens | overfitting | split quality, augmentation, regularization |
-| Loss becomes NaN | numerical instability | invalid inputs, learning rate, gradients |
-| High total accuracy; one class fails | imbalance or shortcut learning | per-class recall and confusion matrix |
+??? note "Code and details"
+    <div class="curve-lab interactive-panel" data-curve-lab>
+      <div class="interactive-heading">Learning-curve comparison</div>
+      <label>Illustrative regularization strength <input type="range" min="0" max="100" value="35" data-regularization></label>
+      <canvas width="720" height="260" data-curve-canvas aria-label="Illustrative training and validation loss curves"></canvas>
+      <output data-curve-output aria-live="polite"></output>
+      <small>Illustrative curves—not measured benchmark results.</small>
+    </div>
+
+    | Observation | Likely issue | First checks |
+    | --- | --- | --- |
+    | Training and validation both poor | underfitting or broken pipeline | labels, loss, learning rate, capacity |
+    | Training improves; validation worsens | overfitting | split quality, augmentation, regularization |
+    | Loss becomes NaN | numerical instability | invalid inputs, learning rate, gradients |
+    | High total accuracy; one class fails | imbalance or shortcut learning | per-class recall and confusion matrix |
 
 ### Four gaps to inspect
 
@@ -330,29 +347,30 @@ A model can improve on a standard held-out set and still fail on an external sou
 
 **Data augmentation** creates realistic label-preserving variation. An upside-down vehicle or severely distorted character may not preserve the label.
 
-**Weight decay** discourages unnecessarily large weights:
+??? note "Code and details"
+    **Weight decay** discourages unnecessarily large weights:
 
-```python
-optimizer = torch.optim.AdamW(
-    model.parameters(),
-    lr=1e-3,
-    weight_decay=1e-4,
-)
-```
+    ```python
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=1e-3,
+        weight_decay=1e-4,
+    )
+    ```
 
-**Dropout** randomly removes activations during training:
+    **Dropout** randomly removes activations during training:
 
-```python
-self.dropout = nn.Dropout(0.3)
-```
+    ```python
+    self.dropout = nn.Dropout(0.3)
+    ```
 
-It is active in `model.train()` and disabled in `model.eval()`.
+    It is active in `model.train()` and disabled in `model.eval()`.
 
-**Early stopping** keeps the checkpoint associated with the best validation behavior instead of assuming the final epoch is best.
+    **Early stopping** ends training after sufficient non-improvement. Saving and restoring the **best validation checkpoint** is a separate action; stopping alone does not restore those weights.
 
-Change one hypothesis at a time. Use the same split, seed, metrics, and evaluation procedure so an apparent gain does not come from changing the test.
+    Change one hypothesis at a time. Use the same split, seed, metrics, and evaluation procedure so an apparent gain does not come from changing the test.
 
-If training loss falls while validation loss rises, first inspect the split and the mistakes. Then try one change, such as realistic augmentation, weight decay, or a smaller model. Dropout is a training-time source of noise; it is not a repair for incorrect labels or leakage.
+    If training loss falls while validation loss rises, first inspect the split and the mistakes. Then try one change, such as realistic augmentation, weight decay, or a smaller model. Dropout is a training-time source of noise; it is not a repair for incorrect labels or leakage.
 
 ## Saving and restoring
 
@@ -374,23 +392,26 @@ model.eval()
 
 ### Save a training checkpoint
 
-```python
-torch.save({
-    "epoch": epoch,
-    "model_state": model.state_dict(),
-    "optimizer_state": optimizer.state_dict(),
-    "validation_loss": validation_loss,
-    "class_names": class_names,
-    "input_shape": input_shape,
-    "normalization": normalization,
-}, "checkpoint.pth")
-```
+A resumable checkpoint includes optimizer state and run context as well as model weights.
 
-A usable model is more than its tensors. Retain architecture code, preprocessing, class order, input shape, selected metric, split identity, seed, and package versions. Verify the restored model on a known input.
+??? note "Code and details"
+    ```python
+    torch.save({
+        "epoch": epoch,
+        "model_state": model.state_dict(),
+        "optimizer_state": optimizer.state_dict(),
+        "validation_loss": validation_loss,
+        "class_names": class_names,
+        "input_shape": input_shape,
+        "normalization": normalization,
+    }, "checkpoint.pth")
+    ```
 
-To resume training consistently, retain scheduler state, mixed-precision scaler state when used, and the next epoch as well. For a best model held in memory, use `copy.deepcopy(model.state_dict())` or save immediately: a dictionary of live tensor references can follow later updates. Random state and sampler state matter when exact continuation is required.
+    A usable model is more than its tensors. Retain architecture code, preprocessing, class order, input shape, selected metric, split identity, seed, and package versions. Verify the restored model on a known input.
 
-Never load an untrusted pickle-based checkpoint. Prefer weight-only loading when the saved format and installed PyTorch version support it.
+    To resume training consistently, retain scheduler state, mixed-precision scaler state when used, and the next epoch as well. For a best model held in memory, use `copy.deepcopy(model.state_dict())` or save immediately: a dictionary of live tensor references can follow later updates. Random state and sampler state matter when exact continuation is required.
+
+    Never load an untrusted pickle-based checkpoint. Prefer weight-only loading when the saved format and installed PyTorch version support it.
 
 ## Vision-workflow checklist
 

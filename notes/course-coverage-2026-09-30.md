@@ -107,3 +107,23 @@ Many teaching exports import course-supplied `helper_utils`, `model_architecture
 Strict MkDocs build, 16-page content validation, 17-page generated link/anchor validation, four-guide DaZu cross-site validation and shared JavaScript syntax passed. The original recall-pattern tests passed: impulse-noise boundaries/input preservation, masked pooling/padding invariance, EmbeddingBag collation and SGD accumulation equivalence with uneven final samples. All four existing smoke examples passed on a disposable copy, preserving the maintained regression image and prior experiment artifacts.
 
 Browser verification covers affected routes at 1440×900 and 390×844, valid and invalid accumulation/padding inputs, both noise modes and zero/noisy levels, mobile guide navigation, search results and code-copy success feedback. No horizontal page overflow was observed; clipboard contents were not independently read back by the browser tool. Offline random tiny DistilBERT/ResNet checks confirmed selected freezing, head, logits and weighted-loss contracts without downloads. CUDA was unavailable to the process, so AMP GPU execution was skipped. Full dataset training, pretrained downloads, model-quality reproduction, optional Optuna/Lightning/TorchMetrics runtime execution, real-device touch, live deployment and redirect behavior were not validated. Nothing was installed, committed or published during the original content-review phase. The subsequent explicit release request pushed Hub content commit `10cff36`; Pages run `36770490711` succeeded and all sixteen public routes returned HTTPS 200. DaZu quick guides were independently released from website commit `90a8b6b` in Netlify deploy `6abd6c46b1fd9399018fe764`.
+
+
+## Implemented recall layer — 2026-10-01
+
+The source review above remains historical. This implementation preserves all eight mapped modules and existing 19 public routes, without editing or executing the personal archive.
+
+| Coverage purpose | Final implementation / evidence |
+| --- | --- |
+| Course 1 tensors and loop | Concrete 2-sample logits/loss/gradient/update; cat/stack and batch boundaries; view/reshape/as_tensor storage distinctions; expandable implementation |
+| Course 1 image/data/generalization | Existing CNN/regression images reused; four project shape maps replaced locally; train/validation/test selection aligned in EMNIST and Nature |
+| Course 2 metrics and tuning | Editable confusion matrix, zero-denominator policy, toy scheduler calls and measured selected-project loss/F1/confusion matrix |
+| Course 2 efficient training | Microbatch update diagram, time/memory categories and optional same-state physical/accumulated CPU/auto/CUDA benchmark; incomplete final group checked |
+| Course 2 vision | Original seeded crop/colour/noise panels, ranges and classification/boxes/masks; recorded frozen parameters/buffers versus changed classifier |
+| Course 2 text | Token/ID/embedding/pooling path; visible masks/removal; offsets; actual saved vocabulary, weights, predictions, unknown input and order loss |
+| Recall/navigation | Home orientation retained; mobile project cards; function groups; folded code/details; search and inner anchors reveal their destinations |
+
+Public evidence is in `docs/assets/data/recall-2026-10-01/`; the renderer is `scripts/render_recall_evidence.py`. New offline checks exercise actual training/validation/test code paths using synthetic stand-ins, not downloaded datasets. Historical EMNIST/regression evidence is preserved. Optional full/pretrained/AMP quality is not inferred from CPU toy runs. Current validation covers 19 Markdown pages, 20 generated pages (including 404) and five DaZu quick pages; publication is verified separately in README/CONTEXT/CHANGELOG.
+
+
+Local browser verification on 2026-10-01 covered all 24 learning routes (19 Hub and five DaZu) at desktop 1440×900 and mobile 390×844. The four replacement diagrams displayed their real stage labels; new transform/task/metric charts were inspected as rendered images. No page overflow or broken loaded images remained; lazy Fundamentals images were checked after scrolling into view. Metrics zero/absent positives/invalid values, padding masks/truncation, keyboard disclosure activation, direct inner anchors, same-anchor search reopening and code-copy content passed. The Hub now uses the modern clipboard API: the selected folded code and DaZu code were independently compared with clipboard text, then the prior clipboard was restored. Both themes were inspected; the new matrix fits a phone column and keyboard-focus text uses dark ink on the orange background. 73 rendered guide Python excerpts parsed successfully. Formal whole-site WCAG certification and physical-device touch are not claimed.

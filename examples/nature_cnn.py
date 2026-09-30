@@ -10,14 +10,20 @@ JSON metrics. Use --full --device cuda for a longer run.
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import random
 from pathlib import Path
 
+try:
+    from .validation_patterns import split_indices, BestState
+except ImportError:  # direct script execution
+    from validation_patterns import split_indices, BestState
+
 import matplotlib.pyplot as plt
 import torch
 from torch import nn
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, Dataset, Subset
 from torchvision import datasets, transforms
 
 
@@ -126,8 +132,8 @@ def save_artifacts(images, labels, predictions, history, output: Path) -> None:
     figure.savefig(output / "nature-confusion-matrix.png", dpi=160); plt.close(figure)
 
     figure, axes = plt.subplots(1, 2, figsize=(9, 3.5))
-    axes[0].plot(history["train_loss"], label="train"); axes[0].plot(history["test_loss"], label="test"); axes[0].set(title="Loss", xlabel="epoch"); axes[0].legend()
-    axes[1].plot(history["train_accuracy"], label="train"); axes[1].plot(history["test_accuracy"], label="test"); axes[1].set(title="Accuracy", xlabel="epoch"); axes[1].legend()
+    axes[0].plot(history["train_loss"], label="train"); axes[0].plot(history["validation_loss"], label="validation"); axes[0].set(title="Loss", xlabel="epoch"); axes[0].legend()
+    axes[1].plot(history["train_accuracy"], label="train"); axes[1].plot(history["validation_accuracy"], label="validation"); axes[1].set(title="Accuracy", xlabel="epoch"); axes[1].legend()
     figure.tight_layout(); figure.savefig(output / "nature-training-curves.png", dpi=160); plt.close(figure)
 
 
@@ -137,21 +143,36 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     test_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))])
     root = Path(args.data_dir)
     train_source = datasets.CIFAR100(root, train=True, download=True, transform=train_transform)
+    # Share the decoded image storage, but give validation a separate transform policy.
+    validation_source = copy.copy(train_source)
+    validation_source.transform = test_transform
     test_source = datasets.CIFAR100(root, train=False, download=True, transform=test_transform)
     train_data = NatureSubset(train_source, None if args.full else args.train_per_class, args.seed)
+    train_indices, val_indices = split_indices(len(train_data), args.validation_fraction, args.seed)
+    val_base = NatureSubset(validation_source, None if args.full else args.train_per_class, args.seed)
+    assert train_data.samples == val_base.samples
+    split_record = {"training_source_indices": [train_data.samples[i][0] for i in train_indices],
+                    "validation_source_indices": [train_data.samples[i][0] for i in val_indices]}
+    val_data = Subset(val_base, val_indices)
+    train_data = Subset(train_data, train_indices)
     test_data = NatureSubset(test_source, None if args.full else args.test_per_class, args.seed + 1)
     loader = {"batch_size": args.batch_size, "num_workers": 0, "pin_memory": device.type == "cuda"}
     train_loader = DataLoader(train_data, shuffle=True, **loader); test_loader = DataLoader(test_data, shuffle=False, **loader)
+    val_loader = DataLoader(val_data, shuffle=False, **loader)
     model = NatureCNN().to(device); optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay); loss_fn = nn.CrossEntropyLoss()
-    epochs = args.full_epochs if args.full else args.epochs; history = {key: [] for key in ("train_loss", "train_accuracy", "test_loss", "test_accuracy")}
-    for _ in range(epochs):
+    epochs = args.full_epochs if args.full else args.epochs; history = {key: [] for key in ("train_loss", "train_accuracy", "validation_loss", "validation_accuracy")}
+    best = BestState()
+    for epoch_index in range(epochs):
         train_loss, train_accuracy = epoch(model, train_loader, optimizer, loss_fn, device, True)
-        test_loss, test_accuracy = epoch(model, test_loader, optimizer, loss_fn, device, False)
-        history["train_loss"].append(train_loss); history["train_accuracy"].append(train_accuracy); history["test_loss"].append(test_loss); history["test_accuracy"].append(test_accuracy)
+        val_loss, val_accuracy = epoch(model, val_loader, optimizer, loss_fn, device, False)
+        history["train_loss"].append(train_loss); history["train_accuracy"].append(train_accuracy); history["validation_loss"].append(val_loss); history["validation_accuracy"].append(val_accuracy)
+        best.consider(model, val_loss, epoch_index + 1)
+    best.restore(model)
+    test_loss, test_accuracy = epoch(model, test_loader, optimizer, loss_fn, device, False)
     images, labels, predictions = collect_predictions(model, test_loader, device); output = Path(args.output_dir)
     save_artifacts(images, labels, predictions, history, output)
-    torch.save({"model_state": model.state_dict(), "classes": CLASS_NAMES, "history": history}, output / "nature-cnn.pt")
-    summary = {"device": str(device), "train_examples": len(train_data), "test_examples": len(test_data), "epochs": epochs, "test_accuracy": history["test_accuracy"][-1]}
+    torch.save({"model_state": model.state_dict(), "classes": CLASS_NAMES, "history": history, "best_epoch": best.epoch, "normalization": {"mean": [0.5071, 0.4867, 0.4408], "std": [0.2675, 0.2565, 0.2761]}, "split": split_record}, output / "nature-cnn.pt")
+    summary = {"device": str(device), "train_examples": len(train_data), "test_examples": len(test_data), "epochs": epochs, "test_accuracy": test_accuracy, "test_loss": test_loss, "validation_examples": len(val_data), "best_epoch": best.epoch, "selection": "minimum validation loss", "split": split_record}
     (output / "nature-metrics.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     return summary
 
@@ -168,6 +189,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--epochs", default=4, type=int); parser.add_argument("--full-epochs", default=20, type=int)
     parser.add_argument("--train-per-class", default=120, type=int); parser.add_argument("--test-per-class", default=40, type=int); parser.add_argument("--batch-size", default=64, type=int)
     parser.add_argument("--learning-rate", default=1e-3, type=float); parser.add_argument("--weight-decay", default=1e-4, type=float); parser.add_argument("--seed", default=42, type=int)
+    parser.add_argument("--validation-fraction", type=float, default=0.2)
     parser.add_argument("--device", choices=("auto", "cpu", "cuda"), default="auto"); parser.add_argument("--full", action="store_true"); parser.add_argument("--smoke-test", action="store_true")
     return parser.parse_args()
 

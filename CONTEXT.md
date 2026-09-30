@@ -2,6 +2,21 @@
 
 Read this before changing the detailed library. It records the current architecture and release decisions without reproducing development history.
 
+## Recall implementation — 2026-10-01
+
+Implemented the approved comprehension plan across the existing 19 public pages: visible concept/shape summaries and original local visuals, expandable long code/variants, a mobile project-card catalogue and reference groups by purpose. The sidebar/footer navigation, four two-page guides, English content, routes and previous anchors remain. Start here stays an orientation to guides, projects and reference. Direct headings, inner code anchors and search results reveal associated details, including a same-anchor link after closing the section.
+
+Four broken Mermaid project diagrams were replaced with responsive HTML stage cards. Mermaid is no longer initialized or loaded; its unused local bundle is retained for now. New shared `recall-visuals.js`/`.css` components support binary metrics, token/mask/truncation rows and destination expansion. The DaZu quick guides have identical copies of these files; synchronize both after edits. Illustrations, toy executions and measured results are labelled. Batch/microbatch/update, frozen parameters, best checkpoints versus early stopping, view/reshape storage and weighted class-index loss denominators are clarified.
+
+Three small Course 2 CPU runs retain public JSON evidence under `docs/assets/data/recall-2026-10-01/`. Training includes measured validation loss/F1/counts, optional physical-versus-accumulated benchmarking (CPU default; `--device cpu|auto|cuda`, optional CUDA AMP), timing scope and available CUDA memory metadata. Vision records unchanged frozen parameters/BatchNorm buffers and a changed head; its random offline default is distinct from optional own-image/pretrained transfer learning. Text includes vocabulary, actual IDs/offsets, embedding rows, class weights, unknown input and order-invariant logits. `scripts/render_recall_evidence.py` regenerates only the new chart/transform assets from retained reports and an original scene.
+
+EMNIST and Nature CNN now split the training pool with a fixed seed, use deterministic validation transforms, select and restore minimum-validation-loss weights, and measure official test only at the end. Checkpoints save best epoch, classes, normalization and disjoint source indices. Historical EMNIST images and the original 24.4% result remain unchanged and explicitly describe their former test-during-training configuration. No new full dataset or pretrained run is claimed.
+
+Local verification: strict build; 19 source pages/20 generated HTML pages including 404; resource/link/anchor checks; DaZu's five routes and cross-Hub links; original recall/selected-workflow checks; new split/checkpoint and retained-report integration checks; empty/absent-positive metrics, invalid inputs and truncation; incomplete 133-sample accumulation. Four foundation smokes ran in a disposable copy through `tests/smoke_in_copy.py`. CUDA is unavailable to this session: CPU benchmarks are measured, CUDA/AMP and large runs remain optional. Browser results and publication identifiers are recorded after final verification. The personal course archive is read-only and was not modified. Real-device touch and optional external training ecosystems remain outside these checks.
+
+
+Local browser verification on 2026-10-01 covered all 24 learning routes (19 Hub and five DaZu) at desktop 1440×900 and mobile 390×844. The four replacement diagrams displayed their real stage labels; new transform/task/metric charts were inspected as rendered images. No page overflow or broken loaded images remained; lazy Fundamentals images were checked after scrolling into view. Metrics zero/absent positives/invalid values, padding masks/truncation, keyboard disclosure activation, direct inner anchors, same-anchor search reopening and code-copy content passed. The Hub now uses the modern clipboard API: the selected folded code and DaZu code were independently compared with clipboard text, then the prior clipboard was restored. Both themes were inspected; the new matrix fits a phone column and keyboard-focus text uses dark ink on the orange background. 73 rendered guide Python excerpts parsed successfully. Formal whole-site WCAG certification and physical-device touch are not claimed.
+
 ## Verified orientation/examples publication — 2026-09-30
 
 Release source `8670ca5` was pushed to `main`; GitHub Pages run `36777275109` passed both build/checks and deployment. All nineteen public routes returned HTTPS 200. Live mobile navigation reached the comparison project, and accumulation/noise/padding controls responded without logged errors. DaZu quick pages were independently published from website source `26315fc` in Netlify deploy `6abd7a02fa14784d7ae22e72`; the Hub was never sent to Netlify. A follow-up home layout uses readable paragraphs/cards instead of narrow phone tables. Follow-up pushes trigger Pages as well; inspect the matching run for the current head.
@@ -81,7 +96,7 @@ Each published PyTorch guide uses two substantial pages rather than many small p
 - `/guides/fundamentals/core-workflow/`
 - `/guides/fundamentals/vision-real-data/`
 
-The library also has a project gallery, seven complete project pages, one combined reference, and one combined about/sources page. Preserve stable anchors when editing long pages because the four DaZu quick guides link directly to them. Each detailed page starts with a return-to-section map; keep explanations moderate and connected, with concrete function and parameter details rather than a transcript of the course.
+The library also has a project gallery, seven complete project pages, one combined reference, and one combined about/sources page. Preserve stable anchors when editing long pages because the four DaZu quick guides link directly to them. Use the sidebar and page contents rather than repeated return-to-section maps; keep explanations moderate and connected, with concrete function and parameter details rather than a transcript of the course.
 
 Future PyTorch guides follow the same two-page pattern and enter navigation only when both pages contain useful material. OpenCV, YOLO, and other non-PyTorch libraries belong in separate future hubs, not here.
 
@@ -97,7 +112,7 @@ The maintained examples are:
 - `examples/vision_head.py`
 - `examples/text_bags.py`
 
-Regression uses seeded synthetic data on CPU and has no CLI flags. The three image projects use small seeded configurations, download public data through TorchVision and default to `--device auto`, which selects CUDA when available. They accept `--device cpu`, `--smoke-test`, and the optional longer `--full --device cuda` mode. Seeding does not guarantee identical results across environments. Project pages explain the practical question, important excerpts, evidence or clearly labelled conceptual visuals, an interaction, run instructions, expected artifacts, and the complete included source.
+Regression uses seeded synthetic data on CPU and has no CLI flags. EMNIST and Nature use small seeded configurations, download public data through TorchVision and default to `--device auto`, which selects CUDA when available. They accept `--device cpu`, `--smoke-test`, and the optional longer `--full --device cuda` mode. Seeding does not guarantee identical results across environments. Project pages explain the practical question, important excerpts, evidence or clearly labelled conceptual visuals, an interaction, run instructions, expected artifacts, and the complete included source.
 
 Do not invent metrics. Reproduced claims require retained results; structural diagrams and interactive curves must say when they are illustrative. Generated artifacts stay under ignored `artifacts/`, downloaded data under ignored `data/`, and maintained local visuals under `docs/assets/images/`.
 

@@ -2,6 +2,16 @@
 
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
+## 2026-10-01 — visual recall and reproducible learning contracts
+
+- Replaced four failed Mermaid project diagrams with responsive local stage cards. Added concrete batches/gradients, tensor operations, schedules, microbatch updates, image-transform/task/freeze visuals and token/offset/mask rows. Added editable exact confusion metrics with undefined-denominator handling. All new visuals distinguish illustrations, toy executions and retained measurements.
+- Reduced visible Fundamentals/reference content using disclosures; preserved previous headings/anchors and added automatic reveal for direct links and search, including same-anchor reopening. Kept the four two-page guides, original home orientation and sidebar/footer navigation. Converted project tables to mobile cards and grouped the function finder by purpose.
+- Retained actual Course 2 CPU training curves/confusion matrix, physical/accumulated benchmark reports, frozen-backbone checks and text vocabulary/IDs/offsets/embedding/prediction evidence. Added optional CPU/auto/CUDA benchmarking with CUDA AMP/memory metadata; CUDA execution is not claimed. EMNIST/Nature select and restore validation checkpoints before final test; original images/results remain historical evidence.
+- Added real offline integration checks for disjoint source splits, worse-final-epoch restoration and single final test evaluation, retained reports and incomplete accumulation. Added JavaScript edge-case tests, local-resource checking and disposable-copy smoke execution to Pages. Local strict/content/resource/contract/control/smoke checks passed. Browser/publication evidence is recorded after final verification; full training, pretrained downloads, CUDA and real-device touch remain optional/unverified.
+
+
+Local browser verification on 2026-10-01 covered all 24 learning routes (19 Hub and five DaZu) at desktop 1440×900 and mobile 390×844. The four replacement diagrams displayed their real stage labels; new transform/task/metric charts were inspected as rendered images. No page overflow or broken loaded images remained; lazy Fundamentals images were checked after scrolling into view. Metrics zero/absent positives/invalid values, padding masks/truncation, keyboard disclosure activation, direct inner anchors, same-anchor search reopening and code-copy content passed. The Hub now uses the modern clipboard API: the selected folded code and DaZu code were independently compared with clipboard text, then the prior clipboard was restored. Both themes were inspected; the new matrix fits a phone column and keyboard-focus text uses dark ink on the orange background. 73 rendered guide Python excerpts parsed successfully. Formal whole-site WCAG certification and physical-device touch are not claimed.
+
 ## 2026-09-30 — Hub orientation and selected Course 2 examples
 
 - Replaced Start here with an orientation page describing the library contents, guide order, example selection and lookup workflow. Removed its repeated Fundamentals lesson and duplicate route lists.

@@ -1,0 +1,246 @@
+{
+  "data": "tiny original toy phrases; not a sentiment benchmark",
+  "vocabulary": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "bad": 2,
+    "blurry": 3,
+    "bright": 4,
+    "clear": 5,
+    "dark": 6,
+    "good": 7,
+    "image": 8,
+    "photo": 9,
+    "picture": 10,
+    "sharp": 11
+  },
+  "labels": [
+    "poor-image-description",
+    "good-image-description"
+  ],
+  "tokenization": "lowercase ASCII word regex",
+  "empty_input": "<unk>",
+  "pooling": "mean; no word order; no padding required",
+  "class_weights": [
+    2.0,
+    0.6666666865348816
+  ],
+  "history": [
+    {
+      "epoch": 1,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 2,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 3,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 4,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 5,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 6,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 7,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 8,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 9,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 10,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 11,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 12,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 13,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 14,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 15,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 16,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 17,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 18,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 19,
+      "validation_accuracy": 1.0
+    },
+    {
+      "epoch": 20,
+      "validation_accuracy": 1.0
+    }
+  ],
+  "predictions": [
+    {
+      "text": "good sharp image",
+      "target": 1,
+      "predicted": 1
+    },
+    {
+      "text": "bad dark picture",
+      "target": 0,
+      "predicted": 0
+    },
+    {
+      "text": "clear bright photo",
+      "target": 1,
+      "predicted": 1
+    },
+    {
+      "text": "blurry image",
+      "target": 0,
+      "predicted": 0
+    }
+  ],
+  "encoded_batch": {
+    "texts": [
+      "clear image",
+      "sharp picture"
+    ],
+    "ids": [
+      5,
+      8,
+      11,
+      10
+    ],
+    "offsets": [
+      0,
+      2
+    ]
+  },
+  "unknown_input": {
+    "text": "unseenword",
+    "ids": [
+      1
+    ],
+    "predicted": 1
+  },
+  "order_check": {
+    "texts": [
+      "clear image",
+      "image clear"
+    ],
+    "logits": [
+      [
+        -2.6688294410705566,
+        2.805745840072632
+      ],
+      [
+        -2.6688294410705566,
+        2.805745840072632
+      ]
+    ],
+    "max_logit_difference": 0.0
+  },
+  "embedding_preview": {
+    "<pad>": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "<unk>": [
+      -0.9593617916107178,
+      0.8945490121841431,
+      -0.5754876136779785,
+      0.478146493434906
+    ],
+    "bad": [
+      0.44085150957107544,
+      -0.12080998718738556,
+      0.35740819573402405,
+      -1.1126761436462402
+    ],
+    "blurry": [
+      -0.7636922597885132,
+      -1.0402319431304932,
+      0.5300660133361816,
+      1.698845624923706
+    ],
+    "bright": [
+      -0.8962130546569824,
+      2.745328187942505,
+      -1.2942198514938354,
+      0.934133768081665
+    ],
+    "clear": [
+      2.6645944118499756,
+      1.2003173828125,
+      -0.461943656206131,
+      0.49617528915405273
+    ],
+    "dark": [
+      -2.493136405944824,
+      0.23040802776813507,
+      1.2682325839996338,
+      1.2753968238830566
+    ],
+    "good": [
+      0.5573198199272156,
+      0.9513449668884277,
+      1.3767563104629517,
+      0.4684784412384033
+    ],
+    "image": [
+      -0.5490038394927979,
+      0.5360143184661865,
+      0.036747585982084274,
+      0.6498398780822754
+    ],
+    "photo": [
+      -1.242085337638855,
+      0.32648614048957825,
+      -0.9019364714622498,
+      0.07395270466804504
+    ],
+    "picture": [
+      0.07109089940786362,
+      0.7873369455337524,
+      -1.773823857307434,
+      -0.047258686274290085
+    ],
+    "sharp": [
+      1.1121114492416382,
+      0.4904814064502716,
+      -0.19452188909053802,
+      0.7251726388931274
+    ]
+  }
+}

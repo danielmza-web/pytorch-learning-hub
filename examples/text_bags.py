@@ -75,6 +75,12 @@ def run(output: Path, epochs=20):
         history.append({"epoch": epoch + 1, "validation_accuracy": accuracy})
     predictions = [{"text": text, "target": label, "predicted": int(pred)}
                    for (text, label), pred in zip(VALIDATION, predicted)]
+    with torch.no_grad():
+        unknown_ids = encode("unseenword", vocab)
+        unknown_prediction = int(model(unknown_ids, torch.tensor([0])).argmax(1))
+        forward = model(encode("clear image", vocab), torch.tensor([0]))
+        reversed_words = model(encode("image clear", vocab), torch.tensor([0]))
+    example_ids, example_offsets, _ = collate_bags(encoded[:2])
     output.mkdir(parents=True, exist_ok=True)
     report = {
         "data": "tiny original toy phrases; not a sentiment benchmark",
@@ -82,6 +88,10 @@ def run(output: Path, epochs=20):
         "tokenization": "lowercase ASCII word regex", "empty_input": "<unk>",
         "pooling": "mean; no word order; no padding required",
         "class_weights": weights.tolist(), "history": history, "predictions": predictions,
+        "encoded_batch": {"texts": [text for text, _ in TRAIN[:2]], "ids": example_ids.tolist(), "offsets": example_offsets.tolist()},
+        "unknown_input": {"text": "unseenword", "ids": unknown_ids.tolist(), "predicted": unknown_prediction},
+        "order_check": {"texts": ["clear image", "image clear"], "logits": [forward.tolist()[0], reversed_words.tolist()[0]], "max_logit_difference": (forward - reversed_words).abs().max().item()},
+        "embedding_preview": {word: model.embedding.weight[index, :4].detach().tolist() for word, index in vocab.items()},
     }
     torch.save({"state_dict": model.state_dict(), "metadata": report}, output / "text-model.pt")
     (output / "predictions.json").write_text(json.dumps(report, indent=2), encoding="utf-8")

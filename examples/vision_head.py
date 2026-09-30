@@ -66,6 +66,7 @@ def run(output: Path, data=None, pretrained=False, epochs=2, noise=0.02):
     model = resnet18(weights=weights)
     model.requires_grad_(False)
     model.fc = nn.Linear(model.fc.in_features, len(classes))
+    before = {name: value.detach().clone() for name, value in model.state_dict().items()}
     optimizer = torch.optim.Adam(model.fc.parameters(), lr=1e-3)
     history = []
     for epoch in range(epochs):
@@ -91,6 +92,10 @@ def run(output: Path, data=None, pretrained=False, epochs=2, noise=0.02):
         "noise_amount": noise, "train_samples": len(train_data),
         "validation_samples": len(val_data),
         "trainable_parameters": sum(p.numel() for p in model.parameters() if p.requires_grad),
+        "frozen_parameter_count": sum(p.numel() for p in model.parameters() if not p.requires_grad),
+        "frozen_parameters_unchanged": all(torch.equal(before[name], p) for name, p in model.named_parameters() if not p.requires_grad),
+        "frozen_buffers_unchanged": all(torch.equal(before[name], b) for name, b in model.named_buffers()),
+        "head_changed": any(not torch.equal(before[name], p) for name, p in model.named_parameters() if name.startswith("fc.")),
         "history": history,
     }
     torch.save({"state_dict": model.state_dict(), "metadata": report}, output / "head-model.pt")

@@ -2,7 +2,7 @@
 title: Image augmentation and head training
 study_context: Course 2 vision workflows
 tags: [project, vision, transfer-learning]
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # Project: image augmentation and head training
@@ -88,6 +88,22 @@ The checkpoint saves the head and backbone state together with class names, vali
 
 [Review transforms and noise](../guides/vision/augmentation.md) · [Review transfer stages](../guides/vision/pretrained-models.md#train-the-head-then-fine-tune)
 
+## What the retained execution shows
+
+![Original scene before and after crop, colour changes and impulse noise](../assets/images/vision-transforms.png)
+
+**Seeded transform execution on an original illustration.** The panels apply actual TorchVision crop and colour transforms, followed by the maintained `ImpulseNoise` code. This scene is for inspecting transforms; the head-training run uses seeded random images. Training-only transformations preserve labels only when the selected change is plausible for your task. [Exact transform order, shape and ranges](../assets/data/recall-2026-10-01/transforms.json).
+
+The retained two-epoch CPU head run uses **random ResNet18 weights**, 24 synthetic training images, 12 validation images and three synthetic labels. Random pixels have no useful class signal; its validation score does not demonstrate transfer learning.
+
+| Before/after check | Observed in saved state |
+| --- | --- |
+| Frozen backbone parameters (11,176,512 values) | Unchanged |
+| BatchNorm running buffers | Unchanged: backbone remains in evaluation mode |
+| Trainable classifier (1,539 values) | Changed after optimizer updates |
+
+The script verifies these checks against a cloned initial state. [Retained head report](../assets/data/recall-2026-10-01/report.json). To learn useful features for your own classes, supply labelled `train/` and `val/` folders; `--pretrained` optionally downloads ImageNet weights and uses their preprocessing contract. A random frozen backbone is a mechanics demo, not pretrained transfer learning.
+
 ## Complete source
 
 ??? note "Open the maintained runnable script"
@@ -101,3 +117,11 @@ The checkpoint saves the head and backbone state together with class names, vali
     ```
 
 API reference: [ResNet18 and its weight preprocessing](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.resnet18.html).
+
+
+??? note "Visual-generation source · runnable with the retained reports"
+    ```python
+    --8<-- "scripts/render_recall_evidence.py"
+    ```
+
+Run `python scripts/render_recall_evidence.py` from the repository root to regenerate these new explanatory charts and transform panels. It reads the public retained reports and leaves the legacy regression and EMNIST images intact.

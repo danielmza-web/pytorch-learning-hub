@@ -1,7 +1,7 @@
 ---
 title: Text — classifiers and fine-tuning
 tags: [text, embeddingbag, distilbert, fine-tuning]
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # Text — classifiers and fine-tuning
@@ -9,7 +9,9 @@ last_reviewed: 2026-09-30
 Compare a cheap pooled-embedding baseline with a pretrained contextual model. Both still use batches, logits, cross-entropy, gradients and validation.
 { .page-lead }
 
-Read [tokens and embeddings](tokens-embeddings.md) first. Return to [EmbeddingBag](#embeddingbag-with-offsets), [masked pooling](#manual-pooling-must-ignore-padding), [imbalance](#class-imbalance-and-validation) or [DistilBERT](#fine-tune-a-pretrained-text-model).
+Read [tokens and embeddings](tokens-embeddings.md) first.
+
+**Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
 ## Two paths to class logits
 
@@ -21,6 +23,9 @@ subword IDs + attention mask → pretrained transformer → head → [N,K]
 The first is fast and useful as a baseline, but pooling discards token order. The second can use context and order, with a higher resource cost. Classification assigns a label; it is not text generation, named-entity tagging or a conversation model.
 
 ## EmbeddingBag with offsets
+
+<div class="offset-strip" aria-label="Two token sequences and their start offsets"><span>offset 0 → <b>2</b> <b>4</b> <b>6</b></span><span>offset 3 → <b>3</b> <b>5</b></span></div>
+<p class="visual-caption">Illustration matching the code below: five concatenated IDs, two starts, two pooled vectors. Reversing tokens within either group leaves mean pooling unchanged.</p>
 
 `nn.EmbeddingBag` looks up and pools variable-length groups without creating the full padded `[N,L,E]` intermediate. With 1D input, offsets indicate where each sequence starts:
 
@@ -121,23 +126,25 @@ for batch in train_loader:
 
 The same [vision transfer strategies](../vision/pretrained-models.md#three-transfer-learning-strategies) apply. Freeze everything, then explicitly select a few final transformer blocks plus the classification layers:
 
-```python
-for parameter in model.parameters():
-    parameter.requires_grad_(False)
+??? note "Implementation excerpt · requires the objects described above"
+    ```python
+    for parameter in model.parameters():
+        parameter.requires_grad_(False)
 
-layers = model.distilbert.transformer.layer
-last_blocks = 2
-if not 0 <= last_blocks <= len(layers):
-    raise ValueError("Invalid number of blocks")
-selected = list(layers)[len(layers) - last_blocks:]
-for module in selected + [model.pre_classifier, model.classifier]:
-    for parameter in module.parameters():
-        parameter.requires_grad_(True)
+    layers = model.distilbert.transformer.layer
+    last_blocks = 2
+    if not 0 <= last_blocks <= len(layers):
+        raise ValueError("Invalid number of blocks")
+    selected = list(layers)[len(layers) - last_blocks:]
+    for module in selected + [model.pre_classifier, model.classifier]:
+        for parameter in module.parameters():
+            parameter.requires_grad_(True)
 
-optimizer = torch.optim.AdamW(
-    (p for p in model.parameters() if p.requires_grad), lr=2e-5,
-)
-```
+    optimizer = torch.optim.AdamW(
+        (p for p in model.parameters() if p.requires_grad), lr=2e-5,
+    )
+    ```
+
 
 This is specifically for a DistilBERT sequence classifier. Other architectures have different module paths. `last_blocks=0` trains only the head; avoid `layers[-0:]`, which would select every layer. Count and inspect trainable parameters before starting.
 

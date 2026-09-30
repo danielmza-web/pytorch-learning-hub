@@ -38,10 +38,11 @@ theme:
 
 extra_css:
   - assets/stylesheets/extra.css
+  - assets/stylesheets/recall-visuals.css
 
 extra_javascript:
-  - assets/javascripts/mermaid.min.js
   - assets/javascripts/interactions.js
+  - assets/javascripts/recall-visuals.js
 
 plugins:
   - search

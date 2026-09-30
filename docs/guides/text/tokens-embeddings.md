@@ -1,7 +1,7 @@
 ---
 title: Text — tokens, embeddings and batches
 tags: [text, tokenizer, embeddings, padding]
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # Text — tokens, embeddings and batches
@@ -15,9 +15,20 @@ raw text → tokens → integer IDs [N,L] → embeddings [N,L,E]
                                     pooling or contextual model
 ```
 
-Start here before [text classifiers](text-classifiers.md). Return to [tokenization](#tokens-are-not-meaning), [pretrained tokenizers](#use-the-matching-pretrained-tokenizer), [padding](#padding-truncation-and-attention-masks), [embeddings](#embeddings-are-learned-lookups) or [similarity](#similarity-context-and-visualization).
+Start here before [text classifiers](text-classifiers.md).
+
+**Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
 ## Tokens are not meaning
+
+<div class="recall-flow" role="group" aria-label="Input to output">
+<div><b>Words</b><code>clear image / bad blurry photo</code><small>lengths 2 and 3</small></div>
+<div><b>Toy vocabulary</b><code>clear=2, image=3, bad=4, blurry=5, photo=6</code><small>IDs are keys, not numeric meaning</small></div>
+<div><b>Padded batch</b><code>[2,3,0] / [4,5,6]</code><small>mask [1,1,0] / [1,1,1]</small></div>
+<div><b>Embedding lookup</b><code>[2,3,E]</code><small>one vector per token position</small></div>
+<div><b>Masked mean</b><code>[2,E]</code><small>divide each sum by its real token count</small></div>
+</div>
+<p class="visual-caption">Toy vocabulary illustration. The runnable project has its own saved training-only vocabulary; pretrained tokenizer IDs depend on the checkpoint.</p>
 
 | Tokenization | What gets an ID | Trade-off |
 | --- | --- | --- |
@@ -127,15 +138,18 @@ The vectors start from initialization unless pretrained values are loaded. Gradi
 
 ### Alternative representations
 
-| Representation | What it captures | What it loses / costs |
-| --- | --- | --- |
-| One-hot | identity in a vocabulary-sized vector | sparse; no learned similarity |
-| Bag of words | token occurrence/count | word order |
-| TF-IDF | counts weighted down for common terms | context and order; fit on training data |
-| Static vectors: GloVe, Word2Vec, FastText | learned distributional relationships | a fixed vector per token, with model-specific OOV behavior |
-| Contextual model: BERT/DistilBERT | representations influenced by surrounding tokens | more computation and memory |
+Counts, TF-IDF, learned word vectors and contextual encoders retain different information about text.
 
-A small learned embedding can be sufficient for a short-label task. A pretrained language model can help with context, but validation must establish that benefit for your data.
+??? note "Code and details"
+    | Representation | What it captures | What it loses / costs |
+    | --- | --- | --- |
+    | One-hot | identity in a vocabulary-sized vector | sparse; no learned similarity |
+    | Bag of words | token occurrence/count | word order |
+    | TF-IDF | counts weighted down for common terms | context and order; fit on training data |
+    | Static vectors: GloVe, Word2Vec, FastText | learned distributional relationships | a fixed vector per token, with model-specific OOV behavior |
+    | Contextual model: BERT/DistilBERT | representations influenced by surrounding tokens | more computation and memory |
+
+    A small learned embedding can be sufficient for a short-label task. A pretrained language model can help with context, but validation must establish that benefit for your data.
 
 ## Similarity, context and visualization
 

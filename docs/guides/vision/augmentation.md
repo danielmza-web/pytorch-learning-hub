@@ -1,7 +1,7 @@
 ---
 title: Vision — data, transforms and noise
 tags: [torchvision, augmentation, noise, datasets]
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # Vision — data, transforms and noise
@@ -11,13 +11,9 @@ An image model learns from the tensors it receives, not the files you intended t
 
 Build on [images and CNNs](../fundamentals/vision-real-data.md). This page explains the inputs; [pretrained vision models](pretrained-models.md) explains what to do with them.
 
-| Find | Main question |
-| --- | --- |
-| [Image representation](#pil-tensors-and-image-utilities) | Is this PIL, byte data or a normalized float tensor? |
-| [Dataset choices](#choose-a-dataset-interface) | Built-in, folders, synthetic data or a custom index? |
-| [Transforms](#build-the-transform-pipeline-in-order) | Which variation preserves the label? |
-| [Noise](#noise-as-a-controlled-augmentation) | What do salt and pepper pixels simulate? |
-| [Normalization](#normalization-and-display) | What do mean and std actually change? |
+
+
+**Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
 ## PIL, tensors and image utilities
 
@@ -67,6 +63,17 @@ With `ImageFolder`, inspect `.classes`, `.class_to_idx` and one sample before tr
 `random_split` returns subsets referring to the **same** underlying dataset. Setting `train_subset.dataset.transform` can therefore also change validation. Use separate dataset objects with the same split indices, or a per-subset transform wrapper. See [the split example](../fundamentals/vision-real-data.md#separate-transforms-for-shared-split-indices).
 
 ## Build the transform pipeline in order
+
+<figure><img src="../../../assets/images/vision-transforms.png" alt="Original geometric target processed by crop, colour jitter and impulse noise"><figcaption>Same original target through actual TorchVision transforms; seed 71. Variation is for inspection, not a model-quality result.</figcaption></figure>
+<div class="recall-flow" role="group" aria-label="Input to output">
+<div><b>PIL RGB</b><code>(width,height); bytes 0..255</code><small>spatial and color augmentation</small></div>
+<div><b>ToTensor</b><code>[3,H,W]; float 0..1</code><small>add tensor noise here</small></div>
+<div><b>Normalize</b><code>(x − mean) / std</code><small>negative values are normal</small></div>
+<div><b>Display</b><code>x × std + mean</code><small>reverse normalization before viewing</small></div>
+</div>
+<p class="visual-caption">Illustration: shapes and operations, not measured model performance.</p>
+
+In the saved panel execution, the PIL scene is 220×180 RGB. `ToTensor` produces `[3,180,220]` in `[0,1]`; normalization with mean/std `0.5/0.5` keeps that shape and maps the observed range to `[-1,1]`. Reverse it with `x * 0.5 + 0.5` for display. These are the toy panel's settings, not every pretrained model's required normalization.
 
 **Preprocessing** makes inputs compatible. **Augmentation** exposes training to plausible variation. Most random transforms sample a new version when a sample is accessed; they do not permanently multiply files on disk.
 
@@ -133,17 +140,18 @@ The lab's implemented example is impulse noise. Gaussian and shot noise are incl
 
 This transform expects a floating `[C,H,W]` image in `[0,1]`. Apply it **after `ToTensor()` and before `Normalize()`**:
 
-```python
---8<-- "examples/recall_patterns.py:salt-pepper"
-```
+??? note "Code and details"
+    ```python
+    --8<-- "examples/recall_patterns.py:salt-pepper"
+    ```
 
-Use `import torch`. `amount=0.02` selects approximately 2% of spatial pixels; `salt_fraction=0.5` splits selected pixels equally between bright and dark in expectation. Every channel of a selected RGB pixel is changed together. Selection is probabilistic, so the exact number varies. The input is preserved and edge pixels participate too.
+    Use `import torch`. `amount=0.02` selects approximately 2% of spatial pixels; `salt_fraction=0.5` splits selected pixels equally between bright and dark in expectation. Every channel of a selected RGB pixel is changed together. Selection is probabilistic, so the exact number varies. The input is preserved and edge pixels participate too.
 
-For the additional Gaussian comparison, an original one-line mechanism is `(image + sigma * torch.randn_like(image)).clamp(0, 1)`. `sigma` is measured in the pre-normalization pixel scale; `0.03` means a standard deviation of 3% of that full range. Clipping changes the resulting distribution at black and white.
+    For the additional Gaussian comparison, an original one-line mechanism is `(image + sigma * torch.randn_like(image)).clamp(0, 1)`. `sigma` is measured in the pre-normalization pixel scale; `0.03` means a standard deviation of 3% of that full range. Clipping changes the resulting distribution at black and white.
 
-**Common trap:** adding `[0,1]` noise to already normalized pixels then clipping to `[0,1]` destroys the normalized input. Another trap is using such strong noise that the label can no longer be inferred.
+    **Common trap:** adding `[0,1]` noise to already normalized pixels then clipping to `[0,1]` destroys the normalized input. Another trap is using such strong noise that the label can no longer be inferred.
 
-Keep ordinary validation deterministic. If you need a corruption robustness test, define a separate fixed-seed/fixed-severity evaluation and report it alongside clean validation, not mixed into a fluctuating metric.
+    Keep ordinary validation deterministic. If you need a corruption robustness test, define a separate fixed-seed/fixed-severity evaluation and report it alongside clean validation, not mixed into a fluctuating metric.
 
 ## Normalization and display
 

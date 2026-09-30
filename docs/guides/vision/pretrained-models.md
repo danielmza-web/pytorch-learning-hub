@@ -1,7 +1,7 @@
 ---
 title: Vision — pretrained models and transfer learning
 tags: [torchvision, transfer-learning, detection, segmentation]
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # Vision — pretrained models and transfer learning
@@ -10,6 +10,8 @@ A pretrained model provides learned features and an input contract. First use th
 { .page-lead }
 
 Read [transforms and noise](augmentation.md) first if pixel ranges or image preparation are unclear. Return here for [weights and labels](#weights-preprocessing-and-class-names), [task outputs](#classification-detection-and-segmentation), [freezing](#three-transfer-learning-strategies) or [training stages](#train-the-head-then-fine-tune).
+
+**Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
 ## Weights, preprocessing and class names
 
@@ -37,6 +39,13 @@ Older course code uses `pretrained=True`; the maintained examples here use the w
 
 ## Classification, detection and segmentation
 
+<div class="task-views">
+<figure><img src="../../../assets/images/inspection-class.svg" alt="Illustrative scratched panel classified as scratched"><figcaption>Classification: one class for the image · [N,K]</figcaption></figure>
+<figure><img src="../../../assets/images/inspection-boxes.svg" alt="Illustrative panel with boxes locating its two scratches"><figcaption>Detection: boxes, labels and scores per image</figcaption></figure>
+<figure><img src="../../../assets/images/inspection-mask.svg" alt="Illustrative panel with colored masks covering scratch pixels"><figcaption>Segmentation: class per pixel · [N,K,H,W]</figcaption></figure>
+</div>
+<p class="visual-caption">Original illustrative annotations, not predictions from a trained model.</p>
+
 | Task | Question | Typical output |
 | --- | --- | --- |
 | Classification | What class describes the whole image? | logits `[N,K]` |
@@ -49,18 +58,19 @@ The lab explores all three. It performs inference and visualization for detectio
 
 TorchVision detection models such as `fasterrcnn_resnet50_fpn` accept a **list of image tensors**, typically floating `[C,H,W]` in `[0,1]`. Their pipeline differs from a classification model's centre crop and manual ImageNet normalization.
 
-Given a detection model on the same device as `image_float`:
+??? note "Code and details"
+    Given a detection model on the same device as `image_float`:
 
-```python
-detector.eval()
-with torch.inference_mode():
-    prediction = detector([image_float])[0]
-keep = prediction["scores"] >= 0.7
-boxes = prediction["boxes"][keep]    # [M,4], x1,y1,x2,y2 in image coordinates
-labels = prediction["labels"][keep]
-```
+    ```python
+    detector.eval()
+    with torch.inference_mode():
+        prediction = detector([image_float])[0]
+    keep = prediction["scores"] >= 0.7
+    boxes = prediction["boxes"][keep]    # [M,4], x1,y1,x2,y2 in image coordinates
+    labels = prediction["labels"][keep]
+    ```
 
-`draw_bounding_boxes` overlays boxes; it does not detect them. For a straightforward display, pass an unnormalized RGB `uint8` image on CPU plus CPU boxes and class-name labels. A higher score threshold removes more candidates and may miss valid objects. It is a decision threshold, not a universal quality setting.
+    `draw_bounding_boxes` overlays boxes; it does not detect them. For a straightforward display, pass an unnormalized RGB `uint8` image on CPU plus CPU boxes and class-name labels. A higher score threshold removes more candidates and may miss valid objects. It is a decision threshold, not a universal quality setting.
 
 ### Segmentation and masks
 
@@ -79,6 +89,13 @@ target_masks = torch.stack([pixel_classes[0] == i for i in target_ids])
 
 ## Three transfer-learning strategies
 
+<div class="recall-flow" role="group" aria-label="Input to output">
+<div><b>Head only</b><code>backbone frozen / new head learns</code><small>keep backbone BatchNorm statistics fixed</small></div>
+<div><b>Partial fine-tuning</b><code>late block + head learn</code><small>include newly unfrozen parameters in optimizer</small></div>
+<div><b>Full fine-tuning</b><code>all pretrained layers learn</code><small>higher backward and optimizer cost</small></div>
+</div>
+<p class="visual-caption">Illustration: shapes and operations, not measured model performance.</p>
+
 | Strategy | Updated tensors | Typical reason |
 | --- | --- | --- |
 | Feature extraction | new classifier head | start cheaply with a small target dataset |
@@ -89,20 +106,23 @@ Full fine-tuning starts from pretrained weights. Training from scratch uses rand
 
 ### Replace the head before the optimizer
 
-```python
-from torch import nn
+Freeze the backbone, create a head for your classes, then construct the optimizer from trainable parameters.
 
-model = resnet18(weights=weights)
-for parameter in model.parameters():
-    parameter.requires_grad_(False)
-model.fc = nn.Linear(model.fc.in_features, classes)  # new parameters are trainable
-model = model.to(device)
-optimizer = torch.optim.AdamW(model.fc.parameters(), lr=1e-3)
-```
+??? note "Code and details"
+    ```python
+    from torch import nn
 
-For a MobileNet head, the corresponding replacement is `model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, classes)`. If you freeze only `.features`, other classifier layers can remain trainable. Verify the actual parameter list instead of inferring it from the phrase “head only.”
+    model = resnet18(weights=weights)
+    for parameter in model.parameters():
+        parameter.requires_grad_(False)
+    model.fc = nn.Linear(model.fc.in_features, classes)  # new parameters are trainable
+    model = model.to(device)
+    optimizer = torch.optim.AdamW(model.fc.parameters(), lr=1e-3)
+    ```
 
-The backbone still runs during inference. Freezing reduces gradient/optimizer work; it does not remove forward computation or stored weights. [Parameter bytes and latency](../training/efficient-training.md#measure-latency-and-memory) are separate measurements.
+    For a MobileNet head, the corresponding replacement is `model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, classes)`. If you freeze only `.features`, other classifier layers can remain trainable. Verify the actual parameter list instead of inferring it from the phrase “head only.”
+
+    The backbone still runs during inference. Freezing reduces gradient/optimizer work; it does not remove forward computation or stored weights. [Parameter bytes and latency](../training/efficient-training.md#measure-latency-and-memory) are separate measurements.
 
 ## Train the head, then fine-tune
 
@@ -129,15 +149,16 @@ These rates illustrate different adaptation speeds, not a recommended optimum. R
 
 `requires_grad=False` freezes parameter gradients. It does **not** freeze BatchNorm running statistics or disable Dropout. `model.train()` can therefore change a nominally frozen backbone's behavior.
 
-For strict frozen-backbone feature extraction with a ResNet:
+??? note "Code and details"
+    For strict frozen-backbone feature extraction with a ResNet:
 
-```python
-model.eval()      # backbone uses fixed BatchNorm statistics
-model.fc.train()  # new head is in training mode
-# gradients remain enabled for the head; eval() does not disable autograd
-```
+    ```python
+    model.eval()      # backbone uses fixed BatchNorm statistics
+    model.fc.train()  # new head is in training mode
+    # gradients remain enabled for the head; eval() does not disable autograd
+    ```
 
-Repeat this setup at each training epoch if another call switches the whole model to train mode. For partial fine-tuning, choose which blocks adapt statistics and set their modes deliberately. In Lightning, preserve this policy when its lifecycle switches training mode. Always call `model.eval()` and disable gradients for validation.
+    Repeat this setup at each training epoch if another call switches the whole model to train mode. For partial fine-tuning, choose which blocks adapt statistics and set their modes deliberately. In Lightning, preserve this policy when its lifecycle switches training mode. Always call `model.eval()` and disable gradients for validation.
 
 ## Save the adapted contract
 

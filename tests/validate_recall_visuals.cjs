@@ -1,0 +1,14 @@
+const assert = require('node:assert/strict');
+const {binaryMetrics, paddingRows} = require('../docs/assets/javascripts/recall-visuals.js');
+assert.deepEqual(binaryMetrics(8, 2, 2, 88), {accuracy:.96, precision:.8, recall:.8, f1:.8});
+assert.deepEqual(binaryMetrics(0, 0, 0, 0), {accuracy:null, precision:null, recall:null, f1:null});
+assert.deepEqual(binaryMetrics(0, 0, 1, 99), {accuracy:.99, precision:null, recall:0, f1:0});
+assert.deepEqual(binaryMetrics(0, 1, 0, 99), {accuracy:.99, precision:0, recall:null, f1:0});
+assert.equal(binaryMetrics(-1, 0, 0, 0), null);
+assert.equal(binaryMetrics(NaN, 0, 0, 0), null);
+assert.equal(binaryMetrics(Number.MAX_SAFE_INTEGER, 1, 0, 0), null);
+assert.deepEqual(paddingRows([3, 8, 16], 8), [{kept:3,padding:5,truncated:0},{kept:8,padding:0,truncated:0},{kept:8,padding:0,truncated:8}]);
+assert.equal(paddingRows([0], 8), null);
+assert.equal(paddingRows([1], 0), null);
+assert.equal(paddingRows([4097], 8), null);
+console.log('Recall controls passed: empty/absent positives, invalid counts, masks and truncation');

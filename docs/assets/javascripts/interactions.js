@@ -375,9 +375,7 @@
     document.querySelectorAll("[data-accumulation-lab]").forEach(initAccumulationLab);
     document.querySelectorAll("[data-padding-lab]").forEach(initPaddingLab);
     document.querySelectorAll("[data-noise-lab]").forEach(initNoiseLab);
-    if (window.mermaid) {
-      window.mermaid.initialize({ startOnLoad: true, securityLevel: "strict", theme: "dark" });
-    }
+
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initAll);

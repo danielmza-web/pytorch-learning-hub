@@ -2,7 +2,7 @@
 title: Complete PyTorch projects
 tags:
   - projects
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-01
 ---
 
 # Complete PyTorch projects
@@ -14,20 +14,85 @@ Choose the workflow you want to run. Each page explains the important steps befo
 
 Three examples combine useful ideas across the course rather than reproduce each lab.
 
-| Project | Main ideas | Default run |
-| --- | --- | --- |
-| [Controlled training comparison](training-comparison.md) | Metrics, learning-rate choice, plateau scheduling, gradient accumulation | Small synthetic classification problem on CPU; saves a comparison report. |
-| [Image augmentation and head training](vision-head.md) | Training transforms, impulse noise, frozen ResNet backbone, replacement head | Synthetic images with random weights; no downloads. Optional own images + pretrained weights. |
-| [Variable-length text classifier](text-bags.md) | Training-only vocabulary, offsets, mean pooling, class weights | Tiny original phrases on CPU; saves predictions and the model contract. |
+<div class="project-grid" markdown="1">
+
+<div class="project-choice" markdown="1">
+
+[Controlled training comparison](training-comparison.md)
+
+Metrics, learning-rate choice, plateau scheduling, gradient accumulation
+
+**Run / output:** Small synthetic classification problem on CPU; saves a comparison report.
+
+</div>
+
+<div class="project-choice" markdown="1">
+
+[Image augmentation and head training](vision-head.md)
+
+Training transforms, impulse noise, frozen ResNet backbone, replacement head
+
+**Run / output:** Synthetic images with random weights; no downloads. Optional own images + pretrained weights.
+
+</div>
+
+<div class="project-choice" markdown="1">
+
+[Variable-length text classifier](text-bags.md)
+
+Training-only vocabulary, offsets, mean pooling, class weights
+
+**Run / output:** Tiny original phrases on CPU; saves predictions and the model contract.
+
+</div>
+
+</div>
 
 ## Foundation projects
 
-| Project | Main ideas | Output to inspect |
-| --- | --- | --- |
-| [Nonlinear regression](regression.md) | Linear versus nonlinear representation, MSE, autograd | Retained prediction chart and validation MSE. |
-| [EMNIST letters](emnist.md) | CNN shapes, classification, evaluation | Predictions, learning curves and a confusion matrix. |
-| [Robust image pipeline](robust-image-pipeline.md) | Stable class IDs, readable files, rejected samples | Validated manifest and diagnostics. |
-| [Nature CNN](nature-cnn.md) | Reusable blocks, regularization, overfitting | Training versus validation curves. |
+<div class="project-grid" markdown="1">
+
+<div class="project-choice" markdown="1">
+
+[Nonlinear regression](regression.md)
+
+Linear versus nonlinear representation, MSE, autograd
+
+**Run / output:** Retained prediction chart and validation MSE.
+
+</div>
+
+<div class="project-choice" markdown="1">
+
+[EMNIST letters](emnist.md)
+
+CNN shapes, classification, evaluation
+
+**Run / output:** Predictions, learning curves and a confusion matrix.
+
+</div>
+
+<div class="project-choice" markdown="1">
+
+[Robust image pipeline](robust-image-pipeline.md)
+
+Stable class IDs, readable files, rejected samples
+
+**Run / output:** Validated manifest and diagnostics.
+
+</div>
+
+<div class="project-choice" markdown="1">
+
+[Nature CNN](nature-cnn.md)
+
+Reusable blocks, regularization, overfitting
+
+**Run / output:** Training versus validation curves.
+
+</div>
+
+</div>
 
 ## Running and interpreting the examples
 

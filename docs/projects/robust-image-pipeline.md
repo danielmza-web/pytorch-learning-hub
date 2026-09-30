@@ -4,7 +4,7 @@ study_context: PyTorch Fundamentals
 tags:
   - project
   - data-pipeline
-last_reviewed: 2026-09-27
+last_reviewed: 2026-10-01
 ---
 
 # Project: robust image pipeline
@@ -42,15 +42,14 @@ Sorting protects the class-to-index contract. `verify()` checks readability duri
 
 The full project downloads public CIFAR-10 images through TorchVision, writes a deterministic five-class folder dataset, deliberately includes one corrupt JPEG, and then trains only on the validated samples. It saves a validation report, prediction grid, confusion matrix, curves, checkpoint, and JSON metrics.
 
-```mermaid
-flowchart LR
-    A["Folder scan"] --> B["Sorted classes\nclass → stable id"]
-    B --> C{"Supported and readable?"}
-    C -->|"yes"| D["Sample list\npath + label"]
-    C -->|"no"| E["Invalid list\npath + reason"]
-    D --> F["Transform + Dataset"]
-    F --> G["DataLoader"]
-```
+<div class="recall-flow" role="group" aria-label="Input to output">
+<div><b>Scan folders</b><code>class → stable ID</code><small>sort and retain labels</small></div>
+<div><b>Validate</b><code>readable image?</code><small>accepted samples or rejected-file report</small></div>
+<div><b>Prepare</b><code>[3,32,32]</code><small>decode RGB and transform</small></div>
+<div><b>Batch</b><code>[N,3,32,32]</code><small>DataLoader groups accepted samples</small></div>
+</div>
+<p class="visual-caption">Illustration: shapes and operations, not measured model performance.</p>
+
 
 ## Interactive check
 
