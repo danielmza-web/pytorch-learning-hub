@@ -1,4 +1,4 @@
-"""Fast deterministic checks for every public project implementation."""
+"""Fast deterministic checks for the four foundation project implementations."""
 
 from pathlib import Path
 import sys
@@ -26,4 +26,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

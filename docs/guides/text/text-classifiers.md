@@ -158,6 +158,8 @@ Interpret the ID with your saved class map. Save model and tokenizer with `save_
 
 **Check yourself:** only the classifier was unfrozen, but the optimizer was created before replacing that head. Will the new head learn? It may not: confirm that the optimizer contains the new parameters, then rebuild it.
 
+**Run the baseline:** [Variable-length text classifier](../../projects/text-bags.md) shows a training-only vocabulary, offsets, mean pooling, class weights and saved predictions in one original script with no downloads.
+
 For the next experiment, compare one baseline, one partial fine-tune and one full fine-tune using quality, time and memory. [Efficient pipelines](../training/efficient-training.md) explains the measurement and accumulation choices.
 
 **Sources:** [EmbeddingBag](https://docs.pytorch.org/docs/stable/generated/torch.nn.EmbeddingBag.html), [DistilBERT](https://huggingface.co/docs/transformers/en/model_doc/distilbert), [Hugging Face text classification](https://huggingface.co/docs/transformers/en/tasks/sequence_classification).

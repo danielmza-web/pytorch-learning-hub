@@ -39,6 +39,7 @@ jobs:
           python tests/validate_content.py
           python tests/validate_built_site.py
           python tests/validate_recall_patterns.py
+          python tests/validate_selected_examples.py
           python tests/smoke_examples.py
           python -m py_compile scripts/generate_concept_visuals.py examples/regression_demo.py examples/emnist_model.py examples/robust_dataset.py examples/nature_cnn.py
           node --check docs/assets/javascripts/interactions.js

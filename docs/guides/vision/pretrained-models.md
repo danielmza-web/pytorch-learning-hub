@@ -145,6 +145,8 @@ Save weights, architecture, class order, chosen pretrained weight version, prepr
 
 **Check yourself:** after replacing a 1000-class head with four outputs, can ImageNet categories label those outputs? No. They now refer to your four target classes in the saved dataset order.
 
+**Run the idea:** [Image augmentation and head training](../../projects/vision-head.md) combines impulse noise, a replacement ResNet head, frozen backbone statistics and saved class/preprocessing metadata. Its default is an offline mechanism demo; an optional run uses your images and pretrained weights.
+
 Next, [text transfer learning](../text/text-classifiers.md#fine-tune-a-pretrained-text-model) reuses the same freeze/adapt/evaluate idea with a tokenizer and attention mask.
 
 **Sources:** [TorchVision weights and models](https://docs.pytorch.org/vision/stable/models.html), [transfer-learning tutorial](https://docs.pytorch.org/tutorials/beginner/transfer_learning_tutorial.html), [visualization utilities](https://docs.pytorch.org/vision/stable/utils.html).

@@ -2,67 +2,38 @@
 title: Complete PyTorch projects
 tags:
   - projects
-last_reviewed: 2026-09-27
+last_reviewed: 2026-09-30
 ---
 
 # Complete PyTorch projects
 
-Choose the behavior you want to understand. Each project connects one idea to a maintained script, visible output, and the guide section that explains it.
+Choose the workflow you want to run. Each page explains the important steps before showing the complete maintained script.
 { .page-lead }
 
-## Choose a project
+## Selected Course 2 workflows
 
-<div class="topic-grid" markdown="1">
+Three examples combine useful ideas across the course rather than reproduce each lab.
 
-<div class="topic-card" markdown="1">
+| Project | Main ideas | Default run |
+| --- | --- | --- |
+| [Controlled training comparison](training-comparison.md) | Metrics, learning-rate choice, plateau scheduling, gradient accumulation | Small synthetic classification problem on CPU; saves a comparison report. |
+| [Image augmentation and head training](vision-head.md) | Training transforms, impulse noise, frozen ResNet backbone, replacement head | Synthetic images with random weights; no downloads. Optional own images + pretrained weights. |
+| [Variable-length text classifier](text-bags.md) | Training-only vocabulary, offsets, mean pooling, class weights | Tiny original phrases on CPU; saves predictions and the model contract. |
 
-**01 · Nonlinear regression**
+## Foundation projects
 
-Why can a network fit a curve that a linear model misses? Compare a measured prediction chart and validation MSE.
+| Project | Main ideas | Output to inspect |
+| --- | --- | --- |
+| [Nonlinear regression](regression.md) | Linear versus nonlinear representation, MSE, autograd | Retained prediction chart and validation MSE. |
+| [EMNIST letters](emnist.md) | CNN shapes, classification, evaluation | Predictions, learning curves and a confusion matrix. |
+| [Robust image pipeline](robust-image-pipeline.md) | Stable class IDs, readable files, rejected samples | Validated manifest and diagnostics. |
+| [Nature CNN](nature-cnn.md) | Reusable blocks, regularization, overfitting | Training versus validation curves. |
 
-[Open project](regression.md) · [Review activations](../guides/fundamentals/core-workflow.md#models-activations-and-logits)
+## Running and interpreting the examples
 
-</div>
+Commands run from the repository root after preparing the documented project dependencies. On Windows, use `py -3.14` in place of `python` if that is your installed launcher.
 
-<div class="topic-card" markdown="1">
+The three new workflows use CPU and small offline defaults. The original image projects use `--device auto`, selecting CUDA when available and otherwise CPU; they may download public TorchVision data. Their optional `--full --device cuda` mode increases the run budget.
 
-**02 · EMNIST letters**
-
-Why preserve an image's spatial structure? Trace the CNN, then inspect predictions, curves, and a confusion matrix.
-
-[Open project](emnist.md) · [Review CNN shapes](../guides/fundamentals/vision-real-data.md#cnn-architecture-and-shapes)
-
-</div>
-
-<div class="topic-card" markdown="1">
-
-**03 · Robust image pipeline**
-
-How should bad files be handled before training? Follow a validated manifest through batches and diagnostics.
-
-[Open project](robust-image-pipeline.md) · [Review reliable data](../guides/fundamentals/vision-real-data.md#reliable-image-data)
-
-</div>
-
-<div class="topic-card" markdown="1">
-
-**04 · Nature CNN**
-
-How can validation reveal overfitting? Compare reusable blocks, regularization, and learning curves.
-
-[Open project](nature-cnn.md) · [Review generalization](../guides/fundamentals/vision-real-data.md#generalization-and-regularization)
-
-</div>
-
-</div>
-
-## What each project includes
-
-Every project starts with a question and a short explanation, then shows the key code, evidence or a clearly labelled illustration, an interactive check, run instructions, and the maintained complete source.
-
-## Small by default, longer when requested
-
-The default commands use fixed seeds and intentionally limited data or epochs. Regression runs on CPU. The three image projects use `--device auto`: they select CUDA when it is available and otherwise run on CPU. Add `--device cpu` to compare on CPU deliberately. The optional `--full --device cuda` mode increases the run budget without changing the conceptual workflow.
-
-!!! note "Results policy"
-    Only output produced by retained, reproducible runs is reported as measurement. Conceptual diagrams and adjustable curves are clearly labelled illustrative. Smoke tests verify code paths; they are not model-quality benchmarks.
+!!! note "What a small run proves"
+    Synthetic images, toy phrases and smoke tests verify the code path and make the mechanics visible. They do not establish real dataset quality, pretrained transfer performance or an efficiency benchmark. A measured claim needs retained evidence from the corresponding run.

@@ -1,149 +1,50 @@
 ---
-title: PyTorch learning hub
+title: Start here
 tags:
   - home
 last_reviewed: 2026-09-30
 ---
 
-<div class="hub-hero" markdown="1">
+# PyTorch Learning Hub
 
-<span class="eyebrow">A practical PyTorch reference</span>
+A library of explanations, visual checks and runnable examples for learning PyTorch or remembering how to use it. It covers the foundations from Course 1 and the training, vision and text workflows from Course 2.
+{ .page-lead }
 
-# Understand the step. Remember the reason.
+## What you will find here
 
-Follow a model from its first tensor to a trustworthy result. Use the short explanations when learning and return to a specific question when coding.
-
-Start with the working path, then follow the question you need: improve training, prepare image data, reuse a model, or classify text. Each guide connects the idea, important functions and parameters, a small example, and a check for understanding.
-
-[Start with the training path](guides/fundamentals/core-workflow.md){ .md-button .md-button--primary }
-[Choose a runnable project](projects/index.md){ .md-button }
-
-</div>
-
-## Pick a path
-
-<div class="topic-grid" markdown="1">
-
-<div class="topic-card" markdown="1">
-
-**I'm learning the workflow**
-
-Start with shapes, batches, model output, loss, and the update step.
-
-[Build and train](guides/fundamentals/core-workflow.md)
-
-</div>
-
-<div class="topic-card" markdown="1">
-
-**I'm working with images**
-
-Prepare realistic variation, inspect noise, and reuse a pretrained model.
-
-[Transforms and noise](guides/vision/augmentation.md) · [Review CNNs](guides/fundamentals/vision-real-data.md)
-
-</div>
-
-<div class="topic-card" markdown="1">
-
-**I need a working example**
-
-Choose a small project by the question it helps answer.
-
-[Choose a project](projects/index.md)
-
-</div>
-
-<div class="topic-card" markdown="1">
-
-**Something is going wrong**
-
-Use a short checklist to inspect shapes, labels, devices, and evaluation.
-
-[Quick reference](reference/index.md)
-
-</div>
-
-<div class="topic-card" markdown="1">
-
-**I want better or faster training**
-
-Choose metrics, schedules and search settings; measure loading, compute and memory.
-
-[Metrics and tuning](guides/training/training-quality.md) · [Efficient pipelines](guides/training/efficient-training.md)
-
-</div>
-
-<div class="topic-card" markdown="1">
-
-**I'm working with text**
-
-Connect token IDs, masks and embeddings to a pooled classifier or DistilBERT.
-
-[Tokens and embeddings](guides/text/tokens-embeddings.md) · [Text classifiers](guides/text/text-classifiers.md)
-
-</div>
-
-</div>
-
-## The workflow at a glance
-
-One mental model connects the pages:
-
-![Conceptual diagram showing a batch moving through model, logits, loss, gradients, and an optimizer update](assets/images/training-cycle-visual.png)
-
-**Data → batch → model output → loss → gradients → update.** Classification models often output logits; regression models output values. Validation checks whether the learned pattern works beyond the training batch.
-
-Begin with the two connected Fundamentals pages:
-
-1. [Core workflow](guides/fundamentals/core-workflow.md) explains tensors, Dataset, DataLoader, models, logits, loss, autograd, optimization, and evaluation.
-2. [Vision and real data](guides/fundamentals/vision-real-data.md) explains convolution, CNN shapes, robust image pipelines, generalization, regularization, and saving.
-
-Each page starts with a map and has direct section links for return visits.
-
-## Continue through connected guides
-
-| Guide | First understand | Then apply |
+| Part of the library | Use it when… | What it contains |
 | --- | --- | --- |
-| Fundamentals | [Tensors and training](guides/fundamentals/core-workflow.md) | [CNNs, data checks and saving](guides/fundamentals/vision-real-data.md) |
-| Training | [Metrics, schedules and Optuna](guides/training/training-quality.md) | [DataLoader, Lightning, profiling and memory](guides/training/efficient-training.md) |
-| Vision | [Datasets, transforms and noise](guides/vision/augmentation.md) | [Pretrained inference and transfer learning](guides/vision/pretrained-models.md) |
-| Text | [Tokens, masks and embeddings](guides/text/tokens-embeddings.md) | [Pooling, imbalance and fine-tuning](guides/text/text-classifiers.md) |
+| **Guides** | You need to understand a concept or connect several steps. | Four topics, two connected pages each: explanations, shapes, functions, parameters and common mistakes. |
+| [**Projects**](projects/index.md) | You want to run the code and inspect what happens. | Seven original scripts with important excerpts, run commands, output explanations and complete source. |
+| [**Quick reference**](reference/index.md) | You remember a name or error and need a direct answer. | A function finder, training cheatsheet, shape reminders and troubleshooting. |
 
-Read the mechanism first; use the application page when deciding how to implement it. The sidebar follows this order. If you remember a function name instead of a topic, open the [function finder](reference/index.md#function-finder).
+## Choose a guide
 
-## Choose a question
+Each topic has a first page for the main ideas and a second page for applying them. The sidebar keeps this order throughout the library.
 
-| If you want to understand… | Open this section |
+| Topic | First page | Continue with |
+| --- | --- | --- |
+| **1 · Fundamentals** | [Tensors, models and the training loop](guides/fundamentals/core-workflow.md) | [Image data, CNNs and validation](guides/fundamentals/vision-real-data.md) |
+| **2 · Training** | [Metrics, schedules and tuning](guides/training/training-quality.md) | [Data loading, profiling and memory](guides/training/efficient-training.md) |
+| **3 · Vision** | [Transforms, augmentation and noise](guides/vision/augmentation.md) | [Pretrained models and transfer learning](guides/vision/pretrained-models.md) |
+| **4 · Text** | [Tokens, padding and embeddings](guides/text/tokens-embeddings.md) | [Pooled classifiers and fine-tuning](guides/text/text-classifiers.md) |
+
+**If you are starting again:** read Fundamentals first. Training explains how to compare and improve the same loop; Vision and Text show how different inputs and pretrained models fit into it. You can jump directly to a topic when reviewing.
+
+## Selected Course 2 examples
+
+These three projects combine the most useful mechanisms across several labs. They are small original examples, with offline defaults, so you can inspect the workflow without downloading a dataset first.
+
+| Project | What you can run and remember |
 | --- | --- |
-| What `[32, 3, 224, 224]` means | [Tensors and shapes](guides/fundamentals/core-workflow.md#tensors-shapes-dtype-and-device) |
-| How files become shuffled batches | [Dataset, transforms, and DataLoader](guides/fundamentals/core-workflow.md#dataset-transforms-and-dataloader) |
-| When a classifier returns logits | [Models, activations, and logits](guides/fundamentals/core-workflow.md#models-activations-and-logits) |
-| Why ReLU makes a hidden layer nonlinear | [Why activations matter](guides/fundamentals/core-workflow.md#why-activations-matter) |
-| Where weights actually change | [Loss, autograd, and optimizers](guides/fundamentals/core-workflow.md#loss-autograd-and-optimizers) |
-| Why a CNN preserves image structure | [Convolution and feature maps](guides/fundamentals/vision-real-data.md#convolution-and-feature-maps) |
-| Why training improves while validation worsens | [Generalization and regularization](guides/fundamentals/vision-real-data.md#generalization-and-regularization) |
-| What to inspect when a run fails | [Reference and troubleshooting](reference/index.md#common-errors) |
-| How to simulate scattered faulty pixels | [Noise and the visual comparison](guides/vision/augmentation.md#noise-as-a-controlled-augmentation) |
-| Which LR scheduler to step after validation | [Schedulers](guides/training/training-quality.md#learning-rate-schedulers) |
-| Why a GPU waits for data | [DataLoader settings](guides/training/efficient-training.md#dataloader-settings) |
-| How accumulation changes samples per update | [Gradient accumulation](guides/training/efficient-training.md#gradient-accumulation) |
-| Why padding changes a pooled text vector | [Masked pooling](guides/text/text-classifiers.md#manual-pooling-must-ignore-padding) |
-| What frozen pretrained layers still do | [Transfer strategies](guides/vision/pretrained-models.md#three-transfer-learning-strategies) |
+| [Controlled training comparison](projects/training-comparison.md) | Compare learning rates using the same starting weights and split; read macro F1; schedule LR after validation; accumulate gradients. |
+| [Image augmentation and head training](projects/vision-head.md) | Apply noise before normalization, replace a ResNet head, keep the backbone frozen, and save class/preprocessing metadata. |
+| [Variable-length text classifier](projects/text-bags.md) | Build a vocabulary from training text, collate token IDs and offsets, pool embeddings, and use class weights. |
 
-## Learn from complete examples
+The project gallery also contains the four foundation examples: regression, EMNIST letters, robust image loading and a regularized CNN. Choose a project after reading its short “What to remember” section; the full source is expandable.
 
-The four projects are maintained programs, not isolated fragments. Each page connects one question to code, evidence, a small interactive check, and complete source. The image projects use limited data by default and choose CUDA when available; `--device cpu` forces a CPU run.
+## How to use a page
 
-| Project | What it makes visible |
-| --- | --- |
-| [Nonlinear regression](projects/regression.md) | why an activation changes what a network can represent |
-| [EMNIST letter classifier](projects/emnist.md) | a complete image-classification workflow and CNN shape path |
-| [Robust image pipeline](projects/robust-image-pipeline.md) | validation, corrupt-file decisions, batches, and diagnostics |
-| [Nature CNN](projects/nature-cnn.md) | reusable CNN blocks, regularization, curves, and saved artifacts |
+Read the explanation, follow the important code, then use its visual check or run command. Return through the sidebar for another topic, or search for an exact name such as `EmbeddingBag`, `ReduceLROnPlateau` or `pin_memory`.
 
-## How this library grows
-
-The topic map draws on the first two courses in the [PyTorch for Deep Learning certificate](https://www.coursera.org/professional-certificates/pytorch-for-deep-learning): foundations, model tuning, TorchVision, text models and efficient pipelines. The [study map and sources](about/index.md#study-map) explain where each group connects. Explanations and examples are original; course exercises and solutions remain outside this library.
-
-For a short review outside the documentation site, open [DaZu's PyTorch guides](https://dazu.xyz/learn/pytorch/).
+Illustrations are labelled; toy runs demonstrate mechanisms, and retained measurements state their source. This is an independent study library with original content. [About and sources](about/index.md) explains its scope and evidence policy.

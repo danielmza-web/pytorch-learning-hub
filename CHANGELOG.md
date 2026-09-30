@@ -2,6 +2,13 @@
 
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
+## 2026-09-30 — Hub orientation and selected Course 2 examples
+
+- Replaced Start here with an orientation page describing the library contents, guide order, example selection and lookup workflow. Removed its repeated Fundamentals lesson and duplicate route lists.
+- Added three original runnable projects: controlled learning-rate comparison with metrics/scheduling/accumulation; image augmentation and frozen-backbone head training; variable-length text classification with vocabulary/offsets/class weights. Added source excerpts, complete scripts, output contracts and interactive checks; reorganized the gallery into Course 2 and foundation workflows.
+- Added offline checks and Pages integration for metrics, learning, frozen parameters/BatchNorm, real-file/class-map handling, saved contracts and pooling invariance. Strict build, 19-page content/20-page generated checks, recall checks and the four foundation smokes passed. Existing smokes ran on a disposable copy; retained visuals/results and the course archive were unchanged.
+- Desktop/phone browser checks covered orientation, project layout, accumulation invalid input, noise modes, padding/truncation, diagram rendering and full-source expansion, with no page overflow or logged errors. Default toy runs demonstrate mechanisms; pretrained quality, CUDA, full training and real-device touch were not tested. Release evidence follows after publication.
+
 ## 2026-09-30 — Course 1/2 recall library
 
 - Reviewed all 171 files in the sibling course archive, including text from eight slide decks (1,656 pages), lab/assignment exports, notebooks and support interfaces. Added internal source coverage notes; preserved the archive, course solutions and retained experiment evidence outside the public content. Recorded three missing source images and auxiliary/runtime limits.

@@ -95,6 +95,9 @@ nav:
       - 2 · Classifiers and fine-tuning: guides/text/text-classifiers.md
   - Practice with projects:
       - Choose a project: projects/index.md
+      - Controlled training comparison: projects/training-comparison.md
+      - Image augmentation and head training: projects/vision-head.md
+      - Variable-length text classifier: projects/text-bags.md
       - Nonlinear regression: projects/regression.md
       - EMNIST letters: projects/emnist.md
       - Robust image pipeline: projects/robust-image-pipeline.md

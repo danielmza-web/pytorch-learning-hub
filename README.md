@@ -30,11 +30,11 @@ The rollback snapshot is intentionally detached from `pytorch.dazu.xyz`. Do not 
 
 ## Content structure
 
-The public navigation follows a connected route: Start here → Fundamentals → Improve training → Work with vision → Work with text → projects → Quick reference → About. Each of the four guides has two pages. There are 16 maintained Markdown pages and 17 generated HTML pages including the error page.
+The public navigation follows a connected route: Start here → Fundamentals → Improve training → Work with vision → Work with text → projects → Quick reference → About. Each of the four guides has two pages. There are 19 maintained Markdown pages and 20 generated HTML pages including the error page.
 
 The maintained source pages are:
 
-- `docs/index.md`: orientation and recommended starting point.
+- `docs/index.md`: what the Hub contains, guide order, selected Course 2 examples and how to use the library; it does not repeat the Fundamentals lesson.
 - `docs/guides/<guide>/`: exactly two substantial pages per published guide.
 - `docs/projects/`: project gallery and one complete page per runnable project.
 - `docs/reference/index.md`: reminder, cheatsheet, troubleshooting, and glossary.
@@ -49,7 +49,7 @@ PyTorch Fundamentals currently uses:
 
 Do not create future-guide placeholders. Add a guide to `mkdocs.yml` only after both pages contain useful material.
 
-`examples/recall_patterns.py` contains the original, tested impulse-noise, masked-pooling, EmbeddingBag-collation and gradient-accumulation excerpts included in the guides. It uses the existing project dependencies and performs no downloads. Optional ecosystem excerpts need `optuna`, `lightning`, `torchmetrics` or `transformers`; these are not required to build the website or run the four maintained projects. On 2026-09-30, Transformers was available locally, while Optuna, Lightning and TorchMetrics were absent. Nothing was installed for this review, and those optional snippets have not been executed end to end.
+`examples/recall_patterns.py` contains the original, tested impulse-noise, masked-pooling, EmbeddingBag-collation and gradient-accumulation excerpts included in the guides. It uses the existing project dependencies and performs no downloads. Optional ecosystem excerpts need `optuna`, `lightning`, `torchmetrics` or `transformers`; these are not required to build the website or run the seven maintained projects. On 2026-09-30, Transformers was available locally, while Optuna, Lightning and TorchMetrics were absent. Nothing was installed for this review, and those optional snippets have not been executed end to end.
 
 ## Update locally
 
@@ -92,6 +92,7 @@ python -m mkdocs build --strict
 python tests/validate_content.py
 python tests/validate_built_site.py
 python tests/validate_recall_patterns.py
+python tests/validate_selected_examples.py
 python tests/smoke_examples.py
 python -m py_compile scripts/generate_concept_visuals.py examples/regression_demo.py examples/emnist_model.py examples/robust_dataset.py examples/nature_cnn.py
 node --check docs/assets/javascripts/interactions.js
@@ -133,7 +134,21 @@ After a successful workflow, verify the changed page, direct anchors, search, mo
 
 OpenCV, YOLO, and other non-PyTorch topics do not belong in this repository.
 
-## Complete projects
+## Selected Course 2 workflows
+
+Three original CPU-first examples combine mechanisms across the labs. Their default runs are small and offline:
+
+```powershell
+python examples/training_comparison.py
+python examples/vision_head.py
+python examples/text_bags.py
+```
+
+Training compares learning rates with shared initial weights/splits, macro F1, plateau scheduling and sample-correct accumulation. Vision uses impulse noise and a replacement ResNet head with fixed backbone parameters and BatchNorm statistics; the default random/synthetic run proves mechanics only. `--data my-images --pretrained` uses matching train/val class folders and may download ImageNet weights. Text builds a training-only vocabulary, collates offsets, pools embeddings and computes class weights. Each writes JSON plus a checkpoint where relevant under its selected `--output` directory. Keep ignored results separately when you need to reproduce a measured claim.
+
+`tests/validate_selected_examples.py` uses temporary outputs and checks metrics, learning, frozen backbone/buffers, real-file loading/class mismatch, saved metadata and pooling invariance without downloads or retained-image changes. It does not validate pretrained transfer quality, CUDA or a large dataset.
+
+## Complete foundation projects
 
 ```powershell
 python examples/regression_demo.py

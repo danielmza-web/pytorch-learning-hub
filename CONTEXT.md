@@ -2,7 +2,15 @@
 
 Read this before changing the detailed library. It records the current architecture and release decisions without reproducing development history.
 
-## Verified publication — 2026-09-30
+## Orientation and selected examples — 2026-09-30
+
+Replaced Start here with a Hub-specific directory: what guides/projects/reference contain, the four-topic reading order, selected Course 2 examples and how to use a page. It no longer repeats the Fundamentals training lesson. Reorganized the gallery into three selected Course 2 workflows and four foundation projects. The four two-page guides and existing project evidence stay intact.
+
+New original scripts `training_comparison.py`, `vision_head.py` and `text_bags.py` combine metrics/scheduling/accumulation, image augmentation/head-only training, and variable-length text pooling/class weights. All default to small offline CPU demonstrations. Vision optionally accepts ImageFolder train/val folders and pretrained weights; synthetic random-backbone metrics are explicitly not transfer-quality evidence. The text data consists of original toy descriptions, not a language benchmark. Complete source and shared helpers are included on the project pages, with interactive accumulation/noise/padding checks and links from the related guides.
+
+The current inventory is 19 Markdown / 20 generated HTML pages. Strict build, source/output checks, original recall-pattern checks, selected-workflow invariants and four foundation smoke examples passed. Foundation smoke runs used a disposable copy. Selected checks used temporary outputs: exact metric aggregation, trainable head changes with frozen parameters/BatchNorm buffers, offline real-image loading/class-map rejection, saved contracts and mean-pooling order/padding invariance. No packages, source-archive files or retained experiment images were changed. Browser review covered the new home/gallery/project routes at desktop/phone sizes, working controls and source expansion, a rendered text diagram, and no horizontal page overflow/logged errors. Pretrained downloads/quality, full training, GPU timing and real-device touch remain untested. Publication evidence is recorded after the release.
+
+## Previous verified publication — 2026-09-30
 
 Content commit `10cff36` was pushed to `main` after the user explicitly requested GitHub/Netlify release. GitHub Pages run `36770490711` succeeded. All sixteen public pages returned HTTPS 200. The live vision guide displayed the seeded noise comparison and responded to Gaussian/severity controls without logged errors. DaZu website commit `90a8b6b` was independently published with Netlify deploy `6abd6c46b1fd9399018fe764`; its nine routes and three new guide aliases returned 200. No Hub files were deployed to Netlify. Documentation follow-up commits trigger Pages too; verify their own run before claiming the latest head is deployed.
 
@@ -38,7 +46,7 @@ The final cleanup verification passed a fresh strict MkDocs build, content valid
 
 1. Save and synchronize this repository separately. A push to `main` triggers GitHub Pages, including maintenance changes; confirm the matching Actions run before claiming publication.
 2. Use Python 3.14 and the current requirements for future environments. Dependency ranges are not a lockfile; record versions with new experiment evidence.
-3. Build before validating links. Content validation compares navigation with every source page; generated-site validation rejects missing output. The current source/output counts are 16/17.
+3. Build before validating links. Content validation compares navigation with every source page; generated-site validation rejects missing output. The current source/output counts are 19/20.
 4. Smoke tests regenerate a maintained regression image and local results. Use a disposable copy when preserving existing website assets and evidence is required.
 5. Full dataset training, fresh dataset downloads and comprehensive browser/mobile/accessibility checks remain separate tasks. The retained Letters dataset works without the removed EMNIST variants/archive.
 6. Preserve `artifacts/`: the retained CPU experiment supports the published result. Before a release, inspect the revised pages in a local browser at desktop and phone widths and exercise the interactive controls.
@@ -60,7 +68,7 @@ Markdown under `docs/` is the source of truth. `mkdocs.yml` owns the explicit pu
 - Improve training (metrics/tuning and efficient pipelines)
 - Work with vision (transforms/noise and pretrained models)
 - Work with text (tokens/embeddings and classifiers)
-- Practice with projects (chooser and four examples)
+- Practice with projects (chooser, three selected Course 2 workflows and four foundation examples)
 - Quick reference
 - About this library
 
@@ -69,7 +77,7 @@ Each published PyTorch guide uses two substantial pages rather than many small p
 - `/guides/fundamentals/core-workflow/`
 - `/guides/fundamentals/vision-real-data/`
 
-The library also has a project gallery, four complete project pages, one combined reference, and one combined about/sources page. Preserve stable anchors when editing long pages because the four DaZu quick guides link directly to them. Each detailed page starts with a return-to-section map; keep explanations moderate and connected, with concrete function and parameter details rather than a transcript of the course.
+The library also has a project gallery, seven complete project pages, one combined reference, and one combined about/sources page. Preserve stable anchors when editing long pages because the four DaZu quick guides link directly to them. Each detailed page starts with a return-to-section map; keep explanations moderate and connected, with concrete function and parameter details rather than a transcript of the course.
 
 Future PyTorch guides follow the same two-page pattern and enter navigation only when both pages contain useful material. OpenCV, YOLO, and other non-PyTorch libraries belong in separate future hubs, not here.
 
@@ -81,6 +89,9 @@ The maintained examples are:
 - `examples/emnist_model.py`
 - `examples/robust_dataset.py`
 - `examples/nature_cnn.py`
+- `examples/training_comparison.py`
+- `examples/vision_head.py`
+- `examples/text_bags.py`
 
 Regression uses seeded synthetic data on CPU and has no CLI flags. The three image projects use small seeded configurations, download public data through TorchVision and default to `--device auto`, which selects CUDA when available. They accept `--device cpu`, `--smoke-test`, and the optional longer `--full --device cuda` mode. Seeding does not guarantee identical results across environments. Project pages explain the practical question, important excerpts, evidence or clearly labelled conceptual visuals, an interaction, run instructions, expected artifacts, and the complete included source.
 

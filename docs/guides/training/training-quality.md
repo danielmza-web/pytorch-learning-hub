@@ -167,4 +167,6 @@ Apply hard limits first: discard models that exceed required memory or latency, 
 
 Record configuration, split identity, seed, packages, validation results, time and memory. Select the checkpoint using validation, then perform the final test evaluation. Continue with [efficient training](efficient-training.md) to measure where the run spends its resources.
 
+**Run the idea:** [Controlled training comparison](../../projects/training-comparison.md) combines the same initial weights and split, two learning rates, macro F1, plateau scheduling and gradient accumulation in one small original script.
+
 **Sources:** [TorchMetrics classification](https://lightning.ai/docs/torchmetrics/stable/classification/f1_score.html), [PyTorch schedulers](https://docs.pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate), [Optuna trials and studies](https://optuna.readthedocs.io/en/stable/tutorial/10_key_features/001_first.html).
