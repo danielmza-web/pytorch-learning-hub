@@ -8,6 +8,10 @@ Read [CONTEXT.md](CONTEXT.md) before changing the information architecture, rout
 
 Use [CHANGELOG.md](CHANGELOG.md) for verifiable history and [AGENTS.md](AGENTS.md) for Codex continuity. When checked out inside DaZu, the [parent README](../README.md) is the workspace index. That relative link is only available in the combined local workspace; this library can also run as a standalone repository.
 
+## Latest verified release — 2026-09-30
+
+Content commit `10cff36` was pushed to `main`; [Pages run 36770490711](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36770490711) completed successfully. All sixteen public pages returned HTTPS 200, and the live noise comparison responded to mode/severity changes without logged browser errors. DaZu quick guides were released separately to Netlify. This verifies publication, not full model training or every optional ecosystem snippet. Documentation-only follow-ups also trigger Pages; consult the current commit/run for their status.
+
 ## Recorded hosting state
 
 The previous handoff records the GitHub Pages migration as verified on 7 August 2026. The 2026-09-03 review confirmed local source configuration, not live DNS, HTTPS, account access, workflow runs or rollback availability.
