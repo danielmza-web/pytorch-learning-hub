@@ -8,6 +8,14 @@ Read [CONTEXT.md](CONTEXT.md) before changing the information architecture, rout
 
 Use [CHANGELOG.md](CHANGELOG.md) for verifiable history and [AGENTS.md](AGENTS.md) for Codex continuity. When checked out inside DaZu, the [parent README](../README.md) is the workspace index. That relative link is only available in the combined local workspace; this library can also run as a standalone repository.
 
+## Verified recall publication — 2026-10-01
+
+Hub source `a9b734f` was pushed independently to `main`; [GitHub Pages run 36789441624](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36789441624) passed build, checks and deployment. DaZu website source `ef1ac3d` was pushed to `main` and published from `site/` only in [Netlify deploy 6abd966abd624111e6e967df](https://app.netlify.com/projects/dazu/deploys/6abd966abd624111e6e967df). Both reviewed source pushes had zero divergence.
+
+Production verification passed 68 HTTPS route/resource checks, including all 24 learning pages, the nine DaZu canonical routes and six aliases. All 34 compared resources matched their publication source: committed Git blobs for Pages (LF normalization included), working files for Netlify. Browser checks of the 24 learning routes found no page overflow at desktop/default and 390-pixel mobile widths, no broken loaded images or failed diagram labels. Live metrics rejected negative counts; padding at length 8 displayed five PAD positions and eight removed tokens (IDs 9–16); search and direct anchors opened the matching details; copied code matched the selected text. Published training curves were visually inspected. CUDA/AMP, full dataset training, pretrained downloads and physical-device touch remain unexecuted.
+
+Documentation-only follow-ups are synchronized separately. They do not change DaZu static files or require another Netlify deployment; Hub follow-ups trigger the same Pages workflow and their matching run must be checked.
+
 ## Current recall features — 2026-10-01
 
 Existing routes now show compact explanations and local diagrams first; long code/variants are expandable. Direct anchors and search results reveal the relevant details. The project gallery uses mobile cards and the reference groups functions by purpose. Start here explains how guides, projects and reference connect.
@@ -19,7 +27,7 @@ EMNIST/Nature now reserve 20% of the training pool for validation, restore the m
 
 Local browser verification on 2026-10-01 covered all 24 learning routes (19 Hub and five DaZu) at desktop 1440×900 and mobile 390×844. The four replacement diagrams displayed their real stage labels; new transform/task/metric charts were inspected as rendered images. No page overflow or broken loaded images remained; lazy Fundamentals images were checked after scrolling into view. Metrics zero/absent positives/invalid values, padding masks/truncation, keyboard disclosure activation, direct inner anchors, same-anchor search reopening and code-copy content passed. The Hub now uses the modern clipboard API: the selected folded code and DaZu code were independently compared with clipboard text, then the prior clipboard was restored. Both themes were inspected; the new matrix fits a phone column and keyboard-focus text uses dark ink on the orange background. 73 rendered guide Python excerpts parsed successfully. Formal whole-site WCAG certification and physical-device touch are not claimed.
 
-## Latest verified release — 2026-09-30
+## Previous verified release — 2026-09-30
 
 Orientation/example source `8670ca5` was pushed to `main`; [Pages run 36777275109](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36777275109) completed successfully, including the new offline workflow checks. All nineteen public pages returned HTTPS 200. Live mobile navigation reached the new comparison project; accumulation, noise and padding controls responded without logged errors. A follow-up replaces home tables with paragraphs/cards for phone readability. DaZu quick guides were released separately to Netlify. This verifies publication, not full model training or every optional ecosystem snippet. Documentation-only follow-ups also trigger Pages; consult the current commit/run for their status.
 
