@@ -18,10 +18,10 @@ At the start of the earlier documentation-only audit, DaZu was clean at `a45aee7
 
 | Area | Latest publication recorded in CHANGELOG | Current difference |
 | --- | --- | --- |
-| DaZu | Website `ef1ac3d`, [Netlify deploy 6abd966abd624111e6e967df](https://app.netlify.com/projects/dazu/deploys/6abd966abd624111e6e967df), 2026-10-01 | Lens source `a45aee7` is a later change and has no recorded Netlify release. |
-| Hub | Content `a9b734f`, [Pages run 36789441624](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36789441624), 2026-10-01 | `c470159` is a documentation follow-up; its matching Pages run was not checked in this audit. |
+| DaZu | Source `da71922`, [Netlify deploy 6abe99081f0cca60f9947ad8](https://app.netlify.com/projects/dazu/deploys/6abe99081f0cca60f9947ad8), 2026-10-01 | Lens `a45aee7` and quality improvements are published. |
+| Hub | Source `db4ea63`, [Pages run 36899971094](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36899971094), 2026-10-01 | Application publication passed; later documentation pushes have separate runs. |
 
-The approved quality improvements are now implemented and checked locally on top of audit commits `7dc33af` (DaZu) and `11661ec` (Hub). Both repositories started clean on `main`, one local commit ahead of cached `origin/main`. No remote fetch, push, provider check or publication was performed. Historical release identifiers above remain historical evidence; these application changes are unpublished.
+DaZu application source `da71922` is now published from `site/` in Netlify deploy `6abe99081f0cca60f9947ad8`, including Lens implementation `a45aee7`. Hub application source `db4ea63` is published through successful Pages run `36899971094`. Both authorized GitHub pushes succeeded. See CHANGELOG for live checks, the resolved Netlify CLI error and verification limits; documentation-only follow-ups are synchronized separately.
 
 ## Quality improvements implemented locally — 2026-10-01
 
@@ -33,7 +33,7 @@ The approved quality improvements are now implemented and checked locally on top
 
 Local acceptance: strict Hub build; source, generated-link/resource/anchor and image-dimension validators; JavaScript syntax, clipboard success/failure/label/race tests; recall numeric, example and learning-contract checks; four smoke examples on a disposable copy. Shared copy/recall JS and CSS match byte for byte. Browser checks visited all 28 routes at 1440 × 900, 820 × 1180 and 390 × 844, plus all 19 Hub routes in dark theme at those sizes (141 visits): no page overflow, broken completed images or captured warnings/errors. Representative baseline/current CV captures at all three sizes and Hub light/dark views were inspected. Lazy-image reserved space was checked before loading. Real keyboard copy success matched code text on both sites and the prior clipboard was restored; dedicated real-browser fixtures checked permission denial/missing API, selection and label restoration. Lens 6 m/min → 100 mm/s retained 1/500; phone 3× retained 69 mm, keyboard panning/recenter and CV keyboard expansion worked; landing WebGL initialized.
 
-Limits: this is local verification, not a release. Route visits do not exhaust every control or lazy image; no measured whole-page CLS/performance benchmark, physical touch, formal screen-reader/WCAG audit, live aliases/provider checks, full/pretrained/GPU training or new CV PDF was performed. Byte savings describe individual resources, not measured total page loading time. Frozen V4/V5, the personal PyTorch archive and experiment evidence were preserved. Reproducible checks are in README; ignored `tmp/quality-check/` contains optional captures/results and is not required to run the project.
+Limits of the earlier implementation checks: these were local verification; the authorized release is recorded above and in CHANGELOG. Route visits do not exhaust every control or lazy image; no measured whole-page CLS/performance benchmark, physical touch, formal screen-reader/WCAG audit, live aliases/provider checks, full/pretrained/GPU training or new CV PDF was performed. Byte savings describe individual resources, not measured total page loading time. Frozen V4/V5, the personal PyTorch archive and experiment evidence were preserved. Reproducible checks are in README; ignored `tmp/quality-check/` contains optional captures/results and is not required to run the project.
 
 ## Current implementation and evidence
 
