@@ -8,28 +8,26 @@ Read [CONTEXT.md](CONTEXT.md) before changing the information architecture, rout
 
 Use [CHANGELOG.md](CHANGELOG.md) for verifiable history and [AGENTS.md](AGENTS.md) for Codex continuity. When checked out inside DaZu, the [parent README](../README.md) is the workspace index. That relative link is only available in the combined local workspace; this library can also run as a standalone repository.
 
-## Verified recall publication — 2026-10-01
+## Git and publication policy
 
-Hub source `a9b734f` was pushed independently to `main`; [GitHub Pages run 36789441624](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36789441624) passed build, checks and deployment. DaZu website source `ef1ac3d` was pushed to `main` and published from `site/` only in [Netlify deploy 6abd966abd624111e6e967df](https://app.netlify.com/projects/dazu/deploys/6abd966abd624111e6e967df). Both reviewed source pushes had zero divergence.
+Daniel's instruction on 2026-10-01 separates local version control from external publication:
 
-Production verification passed 68 HTTPS route/resource checks, including all 24 learning pages, the nine DaZu canonical routes and six aliases. All 34 compared resources matched their publication source: committed Git blobs for Pages (LF normalization included), working files for Netlify. Browser checks of the 24 learning routes found no page overflow at desktop/default and 390-pixel mobile widths, no broken loaded images or failed diagram labels. Live metrics rejected negative counts; padding at length 8 displayed five PAD positions and eight removed tokens (IDs 9–16); search and direct anchors opened the matching details; copied code matched the selected text. Published training curves were visually inspected. CUDA/AMP, full dataset training, pretrained downloads and physical-device touch remain unexecuted.
+- Reviewed local staging and commits may happen automatically, in each repository separately.
+- A Git push sends commits to GitHub. Do not push to any remote unless Daniel explicitly requests that GitHub action; task completion is not authorization.
+- DaZu production or draft publication on Netlify requires an explicit request. Production still requires validation, review, a commit on `main` and a successful authorized GitHub push before deploying only `site/` with the explicit DaZu site ID.
+- The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
+- Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-Documentation-only follow-ups are synchronized separately. They do not change DaZu static files or require another Netlify deployment; Hub follow-ups trigger the same Pages workflow and their matching run must be checked.
+## Source and publication state — reviewed 2026-10-01
 
-## Current recall features — 2026-10-01
+At the start of this audit, DaZu was clean at `a45aee7` and the independent Hub was clean at `c470159`, both on `main` with no divergence from their locally cached `origin/main`. No remote fetch or provider check was performed, so this is local tracking evidence.
 
-Existing routes now show compact explanations and local diagrams first; long code/variants are expandable. Direct anchors and search results reveal the relevant details. The project gallery uses mobile cards and the reference groups functions by purpose. Start here explains how guides, projects and reference connect.
+| Area | Latest publication recorded in CHANGELOG | Current difference |
+| --- | --- | --- |
+| DaZu | Website `ef1ac3d`, [Netlify deploy 6abd966abd624111e6e967df](https://app.netlify.com/projects/dazu/deploys/6abd966abd624111e6e967df), 2026-10-01 | Lens source `a45aee7` is a later change and has no recorded Netlify release. |
+| Hub | Content `a9b734f`, [Pages run 36789441624](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36789441624), 2026-10-01 | `c470159` is a documentation follow-up; its matching Pages run was not checked in this audit. |
 
-The three selected Course 2 workflows have retained CPU reports and reproducible new figures under `docs/assets/data/recall-2026-10-01/`. Run `python scripts/render_recall_evidence.py` to render the new evidence charts and original transform illustration; it does not replace historical EMNIST/regression figures. Training benchmarking is optional: `python examples/training_comparison.py --benchmark --device cpu` (CPU default), `--device auto` or `--device cuda`. CUDA additionally attempts AMP and records timing, throughput, peak allocation and available CUDA memory. No CUDA run is claimed for this implementation session.
-
-EMNIST/Nature now reserve 20% of the training pool for validation, restore the minimum-loss checkpoint and evaluate official test at the end. Historical EMNIST results are explicitly retained as the original configuration. The source archive remains read-only. When editing the new shared recall CSS/JS, synchronize their copies in DaZu's `site/learn/pytorch/assets/` and validate both independent repositories.
-
-
-Local browser verification on 2026-10-01 covered all 24 learning routes (19 Hub and five DaZu) at desktop 1440×900 and mobile 390×844. The four replacement diagrams displayed their real stage labels; new transform/task/metric charts were inspected as rendered images. No page overflow or broken loaded images remained; lazy Fundamentals images were checked after scrolling into view. Metrics zero/absent positives/invalid values, padding masks/truncation, keyboard disclosure activation, direct inner anchors, same-anchor search reopening and code-copy content passed. The Hub now uses the modern clipboard API: the selected folded code and DaZu code were independently compared with clipboard text, then the prior clipboard was restored. Both themes were inspected; the new matrix fits a phone column and keyboard-focus text uses dark ink on the orange background. 73 rendered guide Python excerpts parsed successfully. Formal whole-site WCAG certification and physical-device touch are not claimed.
-
-## Previous verified release — 2026-09-30
-
-Orientation/example source `8670ca5` was pushed to `main`; [Pages run 36777275109](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36777275109) completed successfully, including the new offline workflow checks. All nineteen public pages returned HTTPS 200. Live mobile navigation reached the new comparison project; accumulation, noise and padding controls responded without logged errors. A follow-up replaces home tables with paragraphs/cards for phone readability. DaZu quick guides were released separately to Netlify. This verifies publication, not full model training or every optional ecosystem snippet. Documentation-only follow-ups also trigger Pages; consult the current commit/run for their status.
+These release identifiers are retained historical evidence, not a fresh claim about live hosting. The September releases remain in CHANGELOG. This audit changes documentation and local working rules; it does not publish either site. Local commits are allowed; external synchronization remains pending until requested.
 
 ## Recorded hosting state
 
@@ -74,7 +72,7 @@ Do not create future-guide placeholders. Add a guide to `mkdocs.yml` only after 
 
 Requirements: Python 3.14 to match `.github/workflows/pages.yml`, Git for source synchronization, and a browser. Node.js is needed for the JavaScript syntax check; the workflow uses the runner's available Node version. Documentation dependencies are pinned to MkDocs `1.6.1` and Material `9.7.7`. Project dependencies have version ranges, not a complete lockfile: Matplotlib `>=3.8,<4`, Pillow `>=12,<13`, Torch `>=2.2,<3`, and TorchVision `>=0.17,<1`.
 
-On this PC, Python 3.14.7 and all declared dependencies are installed globally. Use `py -3.14` instead of `python` in the commands below; no installation is needed for the verified environment. The moved, broken `.venv` was removed. To preview from this repository, run `py -3.14 -m mkdocs serve`.
+Python 3.14.7 was rechecked on this PC on 2026-10-01; the current build and offline project checks passed using the existing global dependencies. Use `py -3.14` instead of `python` in the commands below; no installation is needed for the verified environment. The moved, broken `.venv` was removed. To preview from this repository, run `py -3.14 -m mkdocs serve`.
 
 On another PC, clone this repository separately (the parent DaZu clone omits it), then run these commands from this repository root. The Python 3.14 Windows launcher must already be available; elsewhere use a Python 3.14 executable in place of `py -3.14`.
 
@@ -104,7 +102,7 @@ Install the project dependencies once when running smoke tests or complete examp
 python -m pip install -r requirements-projects.txt
 ```
 
-Run every check before pushing:
+Before an explicitly authorized publication, run every check below. For documentation-only edits, link/consistency checks and `git diff --check` are sufficient unless code, requirements, configuration or public content also changes:
 
 ```powershell
 python -m mkdocs build --strict
@@ -128,7 +126,7 @@ When nested inside DaZu, build here first, then run `python -B tests/validate_py
 
 ## Publish with GitHub Pages
 
-The public repository is `danielmza-web/pytorch-learning-hub`. Publishing is automatic after a successful push to `main`:
+The public repository is `danielmza-web/pytorch-learning-hub`. Local commits may happen automatically. A remote push requires Daniel’s explicit instruction; a push to `main` automatically publishes after the checks succeed, including documentation-only changes. Run this sequence only for an explicitly authorized GitHub Pages release:
 
 ```powershell
 git status --short
@@ -139,7 +137,7 @@ git push origin main
 
 `.github/workflows/pages.yml` builds and deploys the `site/` artifact. `docs/CNAME` preserves the custom domain `pytorch.dazu.xyz`.
 
-Replace `<reviewed-files>` with the intended file paths. A push to `main`, including a documentation-only push, starts publication; do it only when release is intended. GitHub write access and an enabled Pages/Actions configuration are required; the workflow uses GitHub-managed token/OIDC permissions (`pages: write`, `id-token: write`). No project API keys are needed for local use. Reauthenticate separately on another PC and do not copy credentials or historical `.netlify/` state.
+Replace `<reviewed-files>` with the intended file paths. A push to `main`, including a documentation-only push, starts publication; do it only when Daniel explicitly authorizes that publication. GitHub write access and an enabled Pages/Actions configuration are required; the workflow uses GitHub-managed token/OIDC permissions (`pages: write`, `id-token: write`). No project API keys are needed for local use. Reauthenticate separately on another PC and do not copy credentials or historical `.netlify/` state.
 
 This documentation repository no longer deploys to Netlify. Detailed-library edits therefore use no Netlify production-deploy credits. DaZu remains a separate build-free repository and is published only when its own quick-guide pages change.
 
@@ -152,7 +150,7 @@ After a successful workflow, verify the changed page, direct anchors, search, mo
 3. Replace the prompts with original explanations, examples, visuals, and relevant project links.
 4. Add both pages as one guide group under `Guides` in `mkdocs.yml`.
 5. Add a short DaZu page at `/learn/pytorch/<guide-slug>/` and list it on `/learn/pytorch/` only when ready.
-6. Validate, commit, and push.
+6. Validate and commit locally. Push only after an explicit release request.
 
 OpenCV, YOLO, and other non-PyTorch topics do not belong in this repository.
 
@@ -183,7 +181,7 @@ Regression runs on CPU with seeded synthetic data and has no command-line flags.
 
 EMNIST downloads EMNIST Letters; the robust pipeline downloads CIFAR-10; Nature CNN downloads CIFAR-100 through TorchVision. Network access and disk space are needed on first use. Outputs go under ignored `artifacts/` and downloads under ignored `data/`, except regression also writes the maintained comparison image under `docs/assets/images/`. Preserve selected metrics/checkpoints separately when transferring reproducibility evidence; they are not included in a clone. Restore caches or allow the examples to download them again.
 
-Local website preview needs no login. Package installation and dataset downloads need external access; Material's font configuration requests Google Fonts. Images, Mermaid and interactions are stored locally. The installed dependency combination was checked locally. Current DNS/HTTPS settings, dataset download availability and full training require separate verification when needed.
+Local website preview needs no login. Package installation and dataset downloads need external access; Material's font configuration requests Google Fonts. Images and interactions are stored locally. The unused Mermaid bundle is still present in source/generated output, but is not loaded or initialized. The installed dependency combination was checked locally. Current DNS/HTTPS settings, dataset download availability and full training require separate verification when needed.
 
 ## Local data and cleanup
 

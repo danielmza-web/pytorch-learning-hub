@@ -2,7 +2,17 @@
 
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
-## Verified recall publication — 2026-10-01
+
+## 2026-10-01 — full-source audit and current handoff
+
+- Reviewed all 82 tracked Hub files as part of the 136-file workspace inventory: Markdown/navigation/includes, examples/helpers/tests, workflow/dependencies/templates, JSON evidence and local image/script/style assets. Structural integrity/syntax/resource checks passed; image-file validation is distinct from reviewing every image visually.
+- Replaced accumulated dated CONTEXT snapshots with current 19-page/four-guide/seven-project architecture, source/evidence rules, reproduction limits, publication state and prioritized next work. Kept operational setup/example commands in README and important dated verification in this CHANGELOG. Corrected the old four-project publication checklist and obsolete claim that Mermaid is loaded.
+- Updated README/CONTEXT/AGENTS to allow reviewed local commits and require explicit authorization before remote pushes. Documentation pushes to `main` also activate Pages. No workflow, provider setting or Netlify target was changed.
+- Strict build, 19-source/20-generated content/link/resource/anchor validation, recall patterns, selected examples, training split/best-state/retained-report contracts and JavaScript edge cases passed. All four foundation smokes passed in a disposable copy, preserving maintained images/results. Parent anchors and identical shared recall files also passed.
+- Browser checks visited all 19 public routes at 1280×720 and 390×844 without page overflow, broken completed images or captured warnings/errors; the workspace's selected metric/disclosure controls were exercised. Proposed optimizations include the 1.55 MB logo/favicon, unused 2.57 MB copied Mermaid bundle, browser regression checks, shared-file drift and recorded dependency combinations. No bundle deletion or code optimization was performed.
+- Rebuilt ignored `site/` only. No packages, course archive, maintained assets or experiment evidence were changed. No remote push/publication occurred; the recorded `a9b734f` release remains historical and the `c470159` follow-up run was not queried. Full/pretrained/GPU runs, optional ecosystems, downloads, physical touch and current provider state remain unverified in this audit.
+
+## 2026-10-01 — verified recall publication
 
 Hub source `a9b734f` was pushed independently to `main`; [GitHub Pages run 36789441624](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36789441624) passed build, checks and deployment. DaZu website source `ef1ac3d` was pushed to `main` and published from `site/` only in [Netlify deploy 6abd966abd624111e6e967df](https://app.netlify.com/projects/dazu/deploys/6abd966abd624111e6e967df). Both reviewed source pushes had zero divergence.
 

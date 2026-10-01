@@ -1,84 +1,62 @@
 # PyTorch Learning Hub context
 
-Read this before changing the detailed library. It records the current architecture and release decisions without reproducing development history.
+Use README for commands and CHANGELOG for dated history. This file contains current architecture, evidence, decisions and next work.
 
-## Verified recall publication — 2026-10-01
+## Git and publication policy
 
-Hub source `a9b734f` was pushed independently to `main`; [GitHub Pages run 36789441624](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36789441624) passed build, checks and deployment. DaZu website source `ef1ac3d` was pushed to `main` and published from `site/` only in [Netlify deploy 6abd966abd624111e6e967df](https://app.netlify.com/projects/dazu/deploys/6abd966abd624111e6e967df). Both reviewed source pushes had zero divergence.
+Daniel's instruction on 2026-10-01 separates local version control from external publication:
 
-Production verification passed 68 HTTPS route/resource checks, including all 24 learning pages, the nine DaZu canonical routes and six aliases. All 34 compared resources matched their publication source: committed Git blobs for Pages (LF normalization included), working files for Netlify. Browser checks of the 24 learning routes found no page overflow at desktop/default and 390-pixel mobile widths, no broken loaded images or failed diagram labels. Live metrics rejected negative counts; padding at length 8 displayed five PAD positions and eight removed tokens (IDs 9–16); search and direct anchors opened the matching details; copied code matched the selected text. Published training curves were visually inspected. CUDA/AMP, full dataset training, pretrained downloads and physical-device touch remain unexecuted.
+- Reviewed local staging and commits may happen automatically, in each repository separately.
+- A Git push sends commits to GitHub. Do not push to any remote unless Daniel explicitly requests that GitHub action; task completion is not authorization.
+- DaZu production or draft publication on Netlify requires an explicit request. Production still requires validation, review, a commit on `main` and a successful authorized GitHub push before deploying only `site/` with the explicit DaZu site ID.
+- The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
+- Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-Documentation-only follow-ups are synchronized separately. They do not change DaZu static files or require another Netlify deployment; Hub follow-ups trigger the same Pages workflow and their matching run must be checked.
+## Source and publication state — reviewed 2026-10-01
 
-## Recall implementation — 2026-10-01
+At the start of this audit, DaZu was clean at `a45aee7` and the independent Hub was clean at `c470159`, both on `main` with no divergence from their locally cached `origin/main`. No remote fetch or provider check was performed, so this is local tracking evidence.
 
-Implemented the approved comprehension plan across the existing 19 public pages: visible concept/shape summaries and original local visuals, expandable long code/variants, a mobile project-card catalogue and reference groups by purpose. The sidebar/footer navigation, four two-page guides, English content, routes and previous anchors remain. Start here stays an orientation to guides, projects and reference. Direct headings, inner code anchors and search results reveal associated details, including a same-anchor link after closing the section.
+| Area | Latest publication recorded in CHANGELOG | Current difference |
+| --- | --- | --- |
+| DaZu | Website `ef1ac3d`, [Netlify deploy 6abd966abd624111e6e967df](https://app.netlify.com/projects/dazu/deploys/6abd966abd624111e6e967df), 2026-10-01 | Lens source `a45aee7` is a later change and has no recorded Netlify release. |
+| Hub | Content `a9b734f`, [Pages run 36789441624](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36789441624), 2026-10-01 | `c470159` is a documentation follow-up; its matching Pages run was not checked in this audit. |
 
-Four broken Mermaid project diagrams were replaced with responsive HTML stage cards. Mermaid is no longer initialized or loaded; its unused local bundle is retained for now. New shared `recall-visuals.js`/`.css` components support binary metrics, token/mask/truncation rows and destination expansion. The DaZu quick guides have identical copies of these files; synchronize both after edits. Illustrations, toy executions and measured results are labelled. Batch/microbatch/update, frozen parameters, best checkpoints versus early stopping, view/reshape storage and weighted class-index loss denominators are clarified.
+These release identifiers are retained historical evidence, not a fresh claim about live hosting. The September releases remain in CHANGELOG. This audit changes documentation and local working rules; it does not publish either site. Local commits are allowed; external synchronization remains pending until requested.
 
-Three small Course 2 CPU runs retain public JSON evidence under `docs/assets/data/recall-2026-10-01/`. Training includes measured validation loss/F1/counts, optional physical-versus-accumulated benchmarking (CPU default; `--device cpu|auto|cuda`, optional CUDA AMP), timing scope and available CUDA memory metadata. Vision records unchanged frozen parameters/BatchNorm buffers and a changed head; its random offline default is distinct from optional own-image/pretrained transfer learning. Text includes vocabulary, actual IDs/offsets, embedding rows, class weights, unknown input and order-invariant logits. `scripts/render_recall_evidence.py` regenerates only the new chart/transform assets from retained reports and an original scene.
+## Current implementation and evidence
 
-EMNIST and Nature CNN now split the training pool with a fixed seed, use deterministic validation transforms, select and restore minimum-validation-loss weights, and measure official test only at the end. Checkpoints save best epoch, classes, normalization and disjoint source indices. Historical EMNIST images and the original 24.4% result remain unchanged and explicitly describe their former test-during-training configuration. No new full dataset or pretrained run is claimed.
+The source contains 19 public Markdown pages and builds 20 HTML pages including 404: four two-page guides, home, project chooser/seven complete projects, reference and About. Keep English content, original explanations, stable routes/anchors, sidebar/footer navigation and the existing learning order. Long implementations/variants use disclosures; search/direct anchors must reveal the destination, including a repeated link after closing its section. The project gallery uses mobile cards, and the function finder groups by purpose.
 
-Local verification: strict build; 19 source pages/20 generated HTML pages including 404; resource/link/anchor checks; DaZu's five routes and cross-Hub links; original recall/selected-workflow checks; new split/checkpoint and retained-report integration checks; empty/absent-positive metrics, invalid inputs and truncation; incomplete 133-sample accumulation. Four foundation smokes ran in a disposable copy through `tests/smoke_in_copy.py`. CUDA is unavailable to this session: CPU benchmarks are measured, CUDA/AMP and large runs remain optional. Browser results and publication identifiers are recorded in the verified recall publication above. The personal course archive is read-only and was not modified. Real-device touch and optional external training ecosystems remain outside these checks.
+Four failed Mermaid diagrams were replaced with local responsive stage cards. Mermaid is not loaded or initialized; its old bundle/fence/style configuration remains a cleanup candidate. Shared `recall-visuals.js`/`.css` are byte-identical to the DaZu copies; update and validate both repositories if they change. Preserve invalid input/zero-denominator metrics, padding/masks/truncation and code-copy feedback in both themes. New visuals distinguish conceptual illustrations, tiny synthetic runs and retained measurements.
 
+Retained Course 2 CPU JSON reports live in `docs/assets/data/recall-2026-10-01/`; `scripts/render_recall_evidence.py` regenerates the corresponding new figures and original transform illustration without replacing historical EMNIST/regression visuals. Training compares shared starts/splits with sample-correct accumulation; optional `--benchmark --device cpu|auto|cuda` records timing/throughput and, for CUDA, AMP/memory metadata. No GPU benchmark was repeated in this audit. Vision checks frozen backbone parameters/BatchNorm buffers and head changes; the random offline default is mechanism evidence, while `--data ... --pretrained` needs own train/val data and may download weights. Text retains vocabulary/IDs/offsets/embedding/prediction contracts on original toy phrases, not a language benchmark.
 
-Local browser verification on 2026-10-01 covered all 24 learning routes (19 Hub and five DaZu) at desktop 1440×900 and mobile 390×844. The four replacement diagrams displayed their real stage labels; new transform/task/metric charts were inspected as rendered images. No page overflow or broken loaded images remained; lazy Fundamentals images were checked after scrolling into view. Metrics zero/absent positives/invalid values, padding masks/truncation, keyboard disclosure activation, direct inner anchors, same-anchor search reopening and code-copy content passed. The Hub now uses the modern clipboard API: the selected folded code and DaZu code were independently compared with clipboard text, then the prior clipboard was restored. Both themes were inspected; the new matrix fits a phone column and keyboard-focus text uses dark ink on the orange background. 73 rendered guide Python excerpts parsed successfully. Formal whole-site WCAG certification and physical-device touch are not claimed.
+EMNIST and Nature split the training pool with a fixed seed, reserve 20% for deterministic validation, restore minimum-validation-loss weights and measure official test at the end. Checkpoints retain best epoch, classes, normalization and disjoint source indices. Preserve the historical EMNIST 24.4% CPU result/images as evidence from the earlier test-during-training configuration. The archive's user-supplied Course 2 completion is study context, not a model-quality result; its earlier archive README may be stale. Coverage notes in `notes/course-coverage-2026-09-30.md` retain the original read-only archive review, gaps and limits.
 
-## Verified orientation/examples publication — 2026-09-30
+MkDocs 1.6.1 and Material 9.7.7 remain pinned; Pages targets Python 3.14. Project dependencies use ranges, not a lockfile. Optional Optuna/Lightning/TorchMetrics/Transformers snippets are not required for the seven maintained examples or website build. Prior installed-package/GPU/hosting snapshots do not establish current access or optional runtime support; recheck when that task needs them. No environment or package changes accompanied this audit.
 
-Release source `8670ca5` was pushed to `main`; GitHub Pages run `36777275109` passed both build/checks and deployment. All nineteen public routes returned HTTPS 200. Live mobile navigation reached the comparison project, and accumulation/noise/padding controls responded without logged errors. DaZu quick pages were independently published from website source `26315fc` in Netlify deploy `6abd7a02fa14784d7ae22e72`; the Hub was never sent to Netlify. A follow-up home layout uses readable paragraphs/cards instead of narrow phone tables. Follow-up pushes trigger Pages as well; inspect the matching run for the current head.
+## Audit evidence — 2026-10-01
 
-## Orientation and selected examples — 2026-09-30
+The inventory covered all 136 tracked files: 54 in DaZu and 82 in the Hub. Readable text/configuration, Python/JavaScript syntax, local HTML references/IDs, JSON and SVG parsing, and raster-image integrity were checked. This includes the frozen V4/V5 files without changing them. Across both repositories: 21 Python sources, eight standalone JavaScript files, six inline scripts, 11 source HTML files, six JSON reports, seven SVGs and 38 raster images passed their applicable structural checks. Image integrity is not a visual judgment of every asset.
 
-Replaced Start here with a Hub-specific directory: what guides/projects/reference contain, the four-topic reading order, selected Course 2 examples and how to use a page. It no longer repeats the Fundamentals training lesson. Reorganized the gallery into three selected Course 2 workflows and four foundation projects. The four two-page guides and existing project evidence stay intact.
+A fresh Hub strict build passed. Source validation checked 19 Markdown pages; generated validation checked 20 HTML pages including 404 and their links/resources/anchors. Recall patterns, selected examples, split/checkpoint/evidence contracts, JavaScript edge cases and four foundation smoke examples passed; smoke outputs stayed in a disposable copy. DaZu's five quick pages and detailed-Hub anchors passed against that fresh build. Shared recall CSS/JS copies are byte-identical.
 
-New original scripts `training_comparison.py`, `vision_head.py` and `text_bags.py` combine metrics/scheduling/accumulation, image augmentation/head-only training, and variable-length text pooling/class weights. All default to small offline CPU demonstrations. Vision optionally accepts ImageFolder train/val folders and pretrained weights; synthetic random-backbone metrics are explicitly not transfer-quality evidence. The text data consists of original toy descriptions, not a language benchmark. Complete source and shared helpers are included on the project pages, with interactive accumulation/noise/padding checks and links from the related guides.
+Current local browser checks visited all nine DaZu routes and all 19 Hub routes at 1280×720 and 390×844: no page-level horizontal overflow, broken completed images or captured warning/error logs were observed. Loaded-image checks do not prove lazy images below the viewport rendered. The Lens default and `6 m/min → 100 mm/s → 0.1 m/s` conversion kept the `1/500` camera shutter. Metrics invalid-count/preset checks and disclosure keyboard behavior were also exercised. This is a scoped browser audit, not a repetition of every earlier interaction or a full accessibility certification.
 
-The current inventory is 19 Markdown / 20 generated HTML pages. Strict build, source/output checks, original recall-pattern checks, selected-workflow invariants and four foundation smoke examples passed. Foundation smoke runs used a disposable copy. Selected checks used temporary outputs: exact metric aggregation, trainable head changes with frozen parameters/BatchNorm buffers, offline real-image loading/class-map rejection, saved contracts and mean-pooling order/padding invariance. No packages, source-archive files or retained experiment images were changed. Browser review covered the new home/gallery/project routes at desktop/phone sizes, working controls and source expansion, a rendered text diagram, and no horizontal page overflow/logged errors. Pretrained downloads/quality, full training, GPU timing and real-device touch remain untested. Release evidence is recorded above; the final home layout was also checked locally at phone width.
+No packages, website source, maintained assets, course-archive files or hosting settings were changed. Generated ignored Hub `site/` was rebuilt. Full dataset/pretrained/GPU runs, fresh downloads, physical-device touch, exhaustive visual/offline testing, optional ecosystem runtimes, CV PDF generation/layout, external URLs, live DNS/redirects/account access and provider workflow status were not checked. Use the earlier CHANGELOG entries for historical verification only.
 
-## Previous verified publication — 2026-09-30
+## Improvements identified and next work
 
-Content commit `10cff36` was pushed to `main` after the user explicitly requested GitHub/Netlify release. GitHub Pages run `36770490711` succeeded. All sixteen public pages returned HTTPS 200. The live vision guide displayed the seeded noise comparison and responded to Gaussian/severity controls without logged errors. DaZu website commit `90a8b6b` was independently published with Netlify deploy `6abd6c46b1fd9399018fe764`; its nine routes and three new guide aliases returned 200. No Hub files were deployed to Netlify. Documentation follow-up commits trigger Pages too; verify their own run before claiming the latest head is deployed.
+| Priority | Evidence / affected files | Proposed improvement and acceptance check |
+| --- | --- | --- |
+| High | `docs/assets/images/dz-pytorch-mark.png` is 1,555,146 bytes and is configured as both logo and favicon. | Separate optimized logo and small icon assets; rebuild and compare appearance in both themes and phone navigation. Coordinate the matching DaZu icon opportunity independently. |
+| Medium | `docs/assets/javascripts/mermaid.min.js` is 2,571,900 bytes, absent from `extra_javascript` and no longer initialized; MkDocs copies it to generated output. | Confirm no current Markdown/JS/config references need the bundle, then remove it and obsolete Mermaid fence/style support if appropriate. It is copied payload, not a current browser download. Rebuild and verify every diagram before deletion. |
+| Medium | CI tests syntax/numeric contracts but does not exercise a real browser. | Add focused desktop/mobile checks for disclosure reveal through search/direct anchors, mobile navigation, code copy and metrics/padding controls. Avoid assuming syntax or a strict build proves interactions. |
+| Medium | Shared recall files are byte-identical today; project dependency versions use broad ranges. | Add cross-repository drift verification and a recorded compatible experiment environment. Test upgrades in isolation; do not replace the current global environment by default. |
+| Low | Current source has seven projects; older context described four. | Keep inventory-derived counts and one current state section; move dated results into CHANGELOG rather than appending competing snapshots. Corrected by this documentation review. |
+| Low | Optional Optuna/Lightning/TorchMetrics/Transformers explanations exceed the tested default projects. | Keep optional dependencies and evidence limits explicit. Execute representative optional snippets only when that work is requested; do not claim benchmark quality from tiny synthetic runs. |
 
-## Course coverage — 2026-09-30
-
-Reviewed the complete sibling `Pytorch` archive as a read-only source: 171 files, eight slide decks (1,656 pages), lab/assignment exports, two notebooks including stored outputs, four support scripts, all 111 stored images/plots, dataset/checkpoint inventory and its README. The user's completion of Course 2 is a supplied fact; the archive README still describes it as pending. [Coverage notes](notes/course-coverage-2026-09-30.md) map every module and teaching export, identify three missing image references and explain missing auxiliary files. Binary datasets/checkpoints were inventoried and hashed, not executed or deserialized. Only representative PDF pages were visually inspected; all slide text was extracted and reviewed.
-
-Added three two-page guides: Training (metrics/search and efficient pipelines), Vision (transforms/noise and pretrained models), Text (tokens/embeddings and classifiers). Expanded the two Fundamentals pages with Course 1 tensor/storage operations, loss contracts, model introspection and separate train/validation transforms. Home, reference function finder and About connect all eight modules. Original tested snippets live in `examples/recall_patterns.py`; interactive illustrations show noise, accumulation and padding. The actual lab noise is salt and pepper; Gaussian/read-noise and photon-noise comparisons are explicitly explanatory extensions. No course assessments or solutions were copied into the public library.
-
-The current source has 16 Markdown pages and produces 17 HTML pages. Content checks derive the inventory from navigation and enforce two pages per guide; built-site checks reject missing output. The Pages workflow also checks the new recall examples. Optuna, Lightning and TorchMetrics are absent from the global environment; optional ecosystem snippets are source-checked explanations, not claimed end-to-end runs. Nothing was installed. The archive and retained experiment images/results remain unchanged. The initial content review did not commit or publish; the later authorized release is recorded above.
-
-Local checks passed the strict build, 16/17 source/output validators, four-guide DaZu links, shared JavaScript syntax, 68 guide Python excerpt syntax checks, original recall-pattern tests and all four existing smoke examples on a disposable copy. Offline tiny random DistilBERT checked module paths, zero-block/head-only freezing, logits and external weighted loss; a random ResNet checked head replacement and frozen BatchNorm mode. No pretrained downloads or accuracy claims result from those checks. CUDA was unavailable to this process, so the AMP excerpt was not run on a GPU. Browser checks at 1440×900 and 390×844 covered new-page layout, noise controls, accumulation/padding including invalid input, search results, mobile guide navigation and code-copy success feedback. No horizontal page overflow was observed. Initial local checks did not verify real-device touch, full training, optional ecosystem runtime, CI/hosting or Netlify aliases. Publication and route checks are recorded above; the training/runtime/touch limits still apply.
-
-## Previous local review — 2026-09-27
-
-A later local learning pass expanded the two Fundamentals guides with shape traces, ReLU's exact behavior, data-split cautions, CNN block reasoning, and short self-checks. All four project pages gained a focused question, and the home page now routes directly to ReLU and the compact Course 2 reference. The reference documents metrics, epoch-based learning-rate scheduling, and a frozen-backbone transfer-learning starting point from the organized labs studied so far. This does not mark Course 2 complete. The separate `Pytorch` archive was not edited. DaZu's two entry pages were revised in the parent repository and require their own release.
-
-The ten maintained pages were revised for clearer orientation, shorter page introductions, and consistent section, table, card, and focus styling. The top tab bar was removed; the sidebar now leads from Start here through two numbered Fundamentals pages, a project chooser, a quick reference, and About. Stable page routes and DaZu-linked anchors remain unchanged. The reference now has a brief decision table connecting second-course topics without publishing an incomplete second guide or course exercises. Project copy distinguishes the small default run from its automatic CPU/CUDA device selection. Two interactive inputs now show errors for invalid numbers instead of silently substituting `1`.
-
-The strict local build, ten-page content validation, eleven-page generated link/anchor validation, JavaScript syntax check, and DaZu cross-site link check passed. The browser tool rejected opening the generated local file under its URL policy. A later live check of the initial Pages deployment confirmed the narrow-screen menu, guide route, project gallery, reference, and invalid tensor-input message. It led to moving the project chooser above explanatory text and removing a repeated home heading. Confirm the final release commit's workflow and live page separately. The separate `Pytorch` course archive was read only and remains unchanged.
-
-## Latest verified point — 2026-09-03
-
-The library is an independent repository on `main`. GitHub authentication and the remote branch were checked before the authorized cleanup. Use current Git status and the matching Actions run for synchronization/deployment state; the parent repository cannot save this library.
-
-This Windows PC has global Python 3.14.7, MkDocs 1.6.1, Material 9.7.7, Matplotlib 3.11.1, Pillow 12.3.0, Torch 2.14.0+cu130 and TorchVision 0.29.0+cu130. All declared requirements are satisfied and `pip check` passed. Torch/TorchVision imports, a CUDA operation on the RTX 5070 Laptop GPU and retained EMNIST Letters train/test data were verified. The workflow now targets Python 3.14. Use `py -3.14` on this PC; README retains isolated-environment setup for another machine.
-
-The broken moved `.venv`, obsolete `.netlify` metadata, bytecode caches, unused EMNIST splits/archive and empty CIFAR-10 archive were removed. Four EMNIST Letters files, all experiment artifacts and generated `site/` output remain. The preview helper selects an existing Windows virtual environment or installed Python and does not install packages. No public Markdown content, example code or maintained images changed during cleanup.
-
-The final cleanup verification passed a fresh strict MkDocs build, content validation (10 Markdown pages), generated-link validation (11 HTML pages), all four smoke examples and the JavaScript syntax check on a disposable source copy. Maintained website images and experiment artifacts were not regenerated in this checkout. Full training and comprehensive browser checks were not part of this maintenance.
-
-## Known gaps and next steps
-
-1. Save and synchronize this repository separately. A push to `main` triggers GitHub Pages, including maintenance changes; confirm the matching Actions run before claiming publication.
-2. Use Python 3.14 and the current requirements for future environments. Dependency ranges are not a lockfile; record versions with new experiment evidence.
-3. Build before validating links. Content validation compares navigation with every source page; generated-site validation rejects missing output. The current source/output counts are 19/20.
-4. Smoke tests regenerate a maintained regression image and local results. Use a disposable copy when preserving existing website assets and evidence is required.
-5. Full dataset training, fresh dataset downloads and comprehensive browser/mobile/accessibility checks remain separate tasks. The retained Letters dataset works without the removed EMNIST variants/archive.
-6. Preserve `artifacts/`: the retained CPU experiment supports the published result. Before a release, inspect the revised pages in a local browser at desktop and phone widths and exercise the interactive controls.
-
-See README for commands, CHANGELOG for verified milestones and AGENTS for working rules.
+The existing automatic Pages trigger was inspected and left unchanged. Explicit publication authorization is enforced by withholding remote pushes until requested.
 
 ## Purpose and boundaries
 
@@ -134,7 +112,7 @@ From this repository:
 py -3.14 -m mkdocs serve
 ```
 
-The current PC already has the documentation and project dependencies. On another machine, follow README to create an environment and install the appropriate requirement files. Before pushing, run the checks listed in `README.md`; the GitHub workflow repeats them and publishes only after success.
+The current build and offline tests passed on this PC with Python 3.14.7 and existing dependencies on 2026-10-01. On another machine, follow README to create an environment and install the appropriate requirement files. Before pushing, run the checks listed in `README.md`; the GitHub workflow repeats them and publishes only after success.
 
 ## Publishing and hosting
 
@@ -148,7 +126,7 @@ Production state recorded as verified in the previous handoff on 7 August 2026; 
 - The former Netlify project is detached from the custom domain.
 - `https://dazu-pytorch.netlify.app/` remains a rollback snapshot only.
 
-Never publish this repository with `netlify deploy`. Historical `.netlify/` metadata was removed; do not recreate it as a release mechanism. Ordinary detailed-library updates require only validation, commit, and push and consume no Netlify production-deploy credits.
+Never publish this repository with `netlify deploy`. Historical `.netlify/` metadata was removed; do not recreate it as a release mechanism. Ordinary detailed-library updates require validation and a local commit. Remote pushes require explicit authorization and activate Pages on `main`; they consume no Netlify production-deploy credits.
 
 DaZu is independent. Update `../site/learn/pytorch/` only when the short guide index, quick explanation, copied visual, or link set changes. That parent site has its own explicit, manual Netlify release gate.
 
@@ -157,14 +135,10 @@ DaZu is independent. Update `../site/learn/pytorch/` only when the short guide i
 Confirm the GitHub Actions run succeeded, then check:
 
 - the homepage and both pages of every affected guide;
-- all four project pages and complete-source inclusions;
+- the project chooser, all seven project pages and complete-source inclusions;
 - direct anchors used by DaZu;
 - search, mobile navigation, images, and code-copy controls;
 - affected keyboard interactions and reduced-motion behavior;
 - HTTPS responses for direct routes.
 
 Keep README operational and this file decision-oriented. Replace stale statements instead of appending a transcript.
-
-## Python 3.14 compatibility update (2026-09-03)
-
-The previous Pillow <12 bound applied to runnable examples and was not required by the image APIs they use. The local dependency declarations now allow Pillow 12 and use Python 3.14 for setup and the Pages workflow. Material is pinned to 9.7.7; MkDocs remains 1.6.1. On a disposable copy, Python 3.14.7 with Pillow 12.3.0, Torch 2.14.0+cu130 and TorchVision 0.29.0+cu130 passed the strict documentation build, content/link validators and all four existing smoke examples. Generated images/results were confined to that copy. Complete dataset training, browser rendering and the updated CI job were not tested. That compatibility review did not commit or publish. Earlier recorded checks remain historical evidence; consult the latest Git/Actions state for subsequent releases.
