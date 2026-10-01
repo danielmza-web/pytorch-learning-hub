@@ -20,14 +20,26 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 
 ## Source and publication state — reviewed 2026-10-01
 
-At the start of this audit, DaZu was clean at `a45aee7` and the independent Hub was clean at `c470159`, both on `main` with no divergence from their locally cached `origin/main`. No remote fetch or provider check was performed, so this is local tracking evidence.
+At the start of the earlier documentation-only audit, DaZu was clean at `a45aee7` and the independent Hub was clean at `c470159`, both on `main` with no divergence from their locally cached `origin/main`. No remote fetch or provider check was performed, so this is local tracking evidence.
 
 | Area | Latest publication recorded in CHANGELOG | Current difference |
 | --- | --- | --- |
 | DaZu | Website `ef1ac3d`, [Netlify deploy 6abd966abd624111e6e967df](https://app.netlify.com/projects/dazu/deploys/6abd966abd624111e6e967df), 2026-10-01 | Lens source `a45aee7` is a later change and has no recorded Netlify release. |
 | Hub | Content `a9b734f`, [Pages run 36789441624](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36789441624), 2026-10-01 | `c470159` is a documentation follow-up; its matching Pages run was not checked in this audit. |
 
-These release identifiers are retained historical evidence, not a fresh claim about live hosting. The September releases remain in CHANGELOG. This audit changes documentation and local working rules; it does not publish either site. Local commits are allowed; external synchronization remains pending until requested.
+The approved quality improvements are now implemented and checked locally on top of audit commits `7dc33af` (DaZu) and `11661ec` (Hub). Both repositories started clean on `main`, one local commit ahead of cached `origin/main`. No remote fetch, push, provider check or publication was performed. Historical release identifiers above remain historical evidence; these application changes are unpublished.
+
+## Quality improvements implemented locally — 2026-10-01
+
+- Landing and CV select lossless WebP through CSS `image-set`, with the original PNG fallback retained. Each 1672 × 941 background is 1,519,998 bytes instead of 2,007,954: 487,956 bytes (24.3%) less when WebP is selected. Decoded RGBA pixels and dimensions are identical; gradients, cover positioning and animation code are unchanged. Keeping both formats increases source storage; it does not make a browser fetch both backgrounds.
+- Each full-size visible logo is 1,356,611 bytes instead of 1,555,146 (198,535 bytes / 12.8% saved). Compared against the pre-change copy: all decoded pixels, alpha and PNG metadata are identical. Separate transparent 128 px favicon (19,432 bytes) and 180 px touch icon (36,267 bytes) retain the contained logo proportions and colour metadata. Icon downsampling is deliberate; full-size logos remain available.
+- Intrinsic dimensions reserve space for the five quick-guide images and all 18 educational Hub images. Responsive proportions and existing lazy-loading behavior remain. The phone photograph, its 6688 × 3762 resolution, zoom/panning implementation, calculator formulas, examples and retained training evidence are unchanged.
+- Shared copy handling announces success/failure using a polite accessible status. Denied or missing clipboard access selects the exact code and gives Ctrl+C / Command+C instructions. Original button text/title/accessible label return after 1.8 seconds; rapid retries cannot let an older failure replace a newer success. Hub icon buttons retain their icons.
+- Removed the unused 2,571,900-byte Mermaid bundle and its exclusive fence/style configuration after checking active source references. Existing diagrams are local images/stage cards. This reduces generated Hub payload, not current browser execution or download time.
+
+Local acceptance: strict Hub build; source, generated-link/resource/anchor and image-dimension validators; JavaScript syntax, clipboard success/failure/label/race tests; recall numeric, example and learning-contract checks; four smoke examples on a disposable copy. Shared copy/recall JS and CSS match byte for byte. Browser checks visited all 28 routes at 1440 × 900, 820 × 1180 and 390 × 844, plus all 19 Hub routes in dark theme at those sizes (141 visits): no page overflow, broken completed images or captured warnings/errors. Representative baseline/current CV captures at all three sizes and Hub light/dark views were inspected. Lazy-image reserved space was checked before loading. Real keyboard copy success matched code text on both sites and the prior clipboard was restored; dedicated real-browser fixtures checked permission denial/missing API, selection and label restoration. Lens 6 m/min → 100 mm/s retained 1/500; phone 3× retained 69 mm, keyboard panning/recenter and CV keyboard expansion worked; landing WebGL initialized.
+
+Limits: this is local verification, not a release. Route visits do not exhaust every control or lazy image; no measured whole-page CLS/performance benchmark, physical touch, formal screen-reader/WCAG audit, live aliases/provider checks, full/pretrained/GPU training or new CV PDF was performed. Byte savings describe individual resources, not measured total page loading time. Frozen V4/V5, the personal PyTorch archive and experiment evidence were preserved. Reproducible checks are in README; ignored `tmp/quality-check/` contains optional captures/results and is not required to run the project.
 
 ## Recorded hosting state
 
@@ -90,6 +102,8 @@ The helper below uses `.venv/Scripts/python.exe` when present, otherwise `py -3.
 .\scripts\preview.ps1
 ```
 
+The `overrides/main.html` template adds the touch icon; MkDocs uses the separate favicon while keeping the full-size visible logo. Declare real width/height on new teaching images, preserve responsive/lazy behavior, and run the presentation validator after building. `copy-code.js`, `recall-visuals.js` and `recall-visuals.css` must match the independent DaZu copies; the parent asset validator checks them when both repositories exist. Icon/logo regeneration is available through the optional parent `scripts/optimize_site_assets.py`; the standalone Hub has all required committed assets.
+
 Write educational content in Markdown, include `last_reviewed` metadata, store local images under `docs/assets/images/`, and keep interactions in the shared JavaScript and stylesheet.
 
 A local compatibility check on 2026-09-03 used Python 3.14.7, Pillow 12.3.0, Torch 2.14.0+cu130, TorchVision 0.29.0+cu130 and Material 9.7.7. The strict build, content/link validators and all four existing smoke examples passed on a disposable copy. This does not validate complete dataset training or a GitHub Actions run. The local workflow target is now 3.14. Check the Actions run for the current commit separately; local validation does not establish deployment success.
@@ -108,6 +122,9 @@ Before an explicitly authorized publication, run every check below. For document
 python -m mkdocs build --strict
 python tests/validate_content.py
 python tests/validate_built_site.py
+python tests/validate_presentation.py
+node tests/validate_copy_code.cjs
+node --check docs/assets/javascripts/copy-code.js
 python tests/validate_recall_patterns.py
 python tests/validate_selected_examples.py
 python tests/validate_learning_contracts.py
@@ -181,7 +198,7 @@ Regression runs on CPU with seeded synthetic data and has no command-line flags.
 
 EMNIST downloads EMNIST Letters; the robust pipeline downloads CIFAR-10; Nature CNN downloads CIFAR-100 through TorchVision. Network access and disk space are needed on first use. Outputs go under ignored `artifacts/` and downloads under ignored `data/`, except regression also writes the maintained comparison image under `docs/assets/images/`. Preserve selected metrics/checkpoints separately when transferring reproducibility evidence; they are not included in a clone. Restore caches or allow the examples to download them again.
 
-Local website preview needs no login. Package installation and dataset downloads need external access; Material's font configuration requests Google Fonts. Images and interactions are stored locally. The unused Mermaid bundle is still present in source/generated output, but is not loaded or initialized. The installed dependency combination was checked locally. Current DNS/HTTPS settings, dataset download availability and full training require separate verification when needed.
+Local website preview needs no login. Package installation and dataset downloads need external access; Material's font configuration requests Google Fonts. Images and interactions are stored locally. The unused Mermaid bundle and exclusive configuration have been removed; no current diagram needs it. The installed dependency combination was checked locally. Current DNS/HTTPS settings, dataset download availability and full training require separate verification when needed.
 
 ## Local data and cleanup
 

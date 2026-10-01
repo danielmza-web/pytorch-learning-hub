@@ -209,7 +209,7 @@ Neural-network inputs are normally floating point; single-label class targets fo
 
 ## Dataset, transforms, and DataLoader
 
-![Conceptual path from image file through transforms and Dataset to a DataLoader batch tensor](../../assets/images/data-pipeline-visual.png)
+![Conceptual path from image file through transforms and Dataset to a DataLoader batch tensor](../../assets/images/data-pipeline-visual.png){ width="1570" height="534" }
 
 The diagram is structural, not a measured experiment. It shows where a file becomes a tensor and where samples become a batch.
 
@@ -366,7 +366,7 @@ Nonlinear activations let stacked layers represent curves and more complex decis
 
     In the course's delivery-time lab, a single line could not follow a curved relationship; adding hidden units and an activation let the model express bends. If you remove `ReLU`, consecutive `Linear` layers collapse to one affine map, however many you stack. `Tanh` is another nonlinear choice, with a smooth output between −1 and 1. **Check yourself:** in this model, which layer can make the final prediction negative? The last `Linear` layer.
 
-    ![Measured comparison from the retained regression script: a line misses a curved pattern while the nonlinear network follows it](../../assets/images/regression-comparison.png)
+    ![Measured comparison from the retained regression script: a line misses a curved pattern while the nonlinear network follows it](../../assets/images/regression-comparison.png){ width="1852" height="708" }
 
     This chart is reproduced by the retained regression script with a fixed seed. It demonstrates model capacity, not a general benchmark.
 
@@ -402,7 +402,7 @@ Choose the loss from the task, then match its required output and target shapes 
 
 ## Loss, autograd, and optimizers
 
-![Conceptual update cycle from batch to model, logits, loss, gradients, and optimizer step](../../assets/images/training-cycle-visual.png)
+![Conceptual update cycle from batch to model, logits, loss, gradients, and optimizer step](../../assets/images/training-cycle-visual.png){ width="1500" height="604" }
 
 Loss turns model behavior into one differentiable scalar. Autograd follows the operations that produced it, and the optimizer uses the resulting gradients to update parameters.
 

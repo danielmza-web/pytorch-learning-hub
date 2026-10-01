@@ -5,9 +5,10 @@ repo_name: danielmza-web/pytorch-learning-hub
 
 theme:
   name: material
+  custom_dir: overrides
   language: en
   logo: assets/images/dz-pytorch-mark.png
-  favicon: assets/images/dz-pytorch-mark.png
+  favicon: assets/images/favicon.png
   features:
     - navigation.sections
     - navigation.top
@@ -41,6 +42,7 @@ extra_css:
   - assets/stylesheets/recall-visuals.css
 
 extra_javascript:
+  - assets/javascripts/copy-code.js
   - assets/javascripts/interactions.js
   - assets/javascripts/recall-visuals.js
 
@@ -70,11 +72,7 @@ markdown_extensions:
       base_path:
         - .
       check_paths: true
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:

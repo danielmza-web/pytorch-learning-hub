@@ -46,11 +46,11 @@ The included full project downloads the public EMNIST Letters split through Torc
 
 Historical evidence: the images below come from the original CPU configuration, which evaluated test at each epoch: seed `42`, 4,000 training examples, 1,000 test examples, and three epochs. It reached `24.4%` test accuracy. This intentionally small configuration demonstrates the full workflow and its artifacts; it is not presented as a strong handwriting benchmark.
 
-![Letter predictions from the retained CPU-first EMNIST run; green titles are correct and red titles are incorrect](../assets/images/emnist-cpu-predictions.png)
+![Letter predictions from the retained CPU-first EMNIST run; green titles are correct and red titles are incorrect](../assets/images/emnist-cpu-predictions.png){ width="1280" height="960" }
 
-![Training and test loss plus accuracy curves from the retained CPU-first EMNIST run](../assets/images/emnist-cpu-training-curves.png)
+![Training and test loss plus accuracy curves from the retained CPU-first EMNIST run](../assets/images/emnist-cpu-training-curves.png){ width="1440" height="544" }
 
-![Confusion matrix from the retained CPU-first EMNIST run](../assets/images/emnist-cpu-confusion-matrix.png)
+![Confusion matrix from the retained CPU-first EMNIST run](../assets/images/emnist-cpu-confusion-matrix.png){ width="1440" height="1120" }
 
 <div class="recall-flow" role="group" aria-label="Input to output">
 <div><b>Letter batch</b><code>[8,1,28,28]</code><small>8 grayscale images</small></div>

@@ -74,11 +74,11 @@ This seeded synthetic problem demonstrates controlled comparison. Its scores are
 
 These are measured outputs of the small synthetic run on 2026-10-01: PyTorch 2.14.0+cu130, seed 17, two CPU threads, 133 training and 48 validation samples, eight epochs. They demonstrate the mechanism, not real-world classifier quality.
 
-![Validation loss for the two controlled learning rates](../assets/images/training-loss.png)
+![Validation loss for the two controlled learning rates](../assets/images/training-loss.png){ width="720" height="576" }
 
-![Validation macro F1 for the same trials](../assets/images/training-f1.png)
+![Validation macro F1 for the same trials](../assets/images/training-f1.png){ width="720" height="576" }
 
-![Actual validation confusion matrix for the selected LR](../assets/images/training-confusion.png)
+![Actual validation confusion matrix for the selected LR](../assets/images/training-confusion.png){ width="800" height="640" }
 
 The lower final validation loss selects initial LR **0.1**: loss **0.9382**, accuracy **66.7%**, macro F1 **0.5486**. The matrix includes all 48 validation predictions; rows are truth and columns predictions. Both trials keep their initial LR during this short run: the plateau condition is not reached.
 

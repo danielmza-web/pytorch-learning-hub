@@ -39,7 +39,7 @@ Read [Fundamentals — core workflow](core-workflow.md) first if Dataset, logits
 
 A dense layer sees one long list of pixels. A convolution keeps the spatial layout and applies the same small kernel at many positions. Reusing weights makes it efficient and allows one learned pattern to be recognized in different locations.
 
-![Conceptual example of a vertical-edge kernel sliding over an image and producing a feature map](../../assets/images/convolution-visual.png)
+![Conceptual example of a vertical-edge kernel sliding over an image and producing a feature map](../../assets/images/convolution-visual.png){ width="1488" height="643" }
 
 The pictured filter is hand-designed to make its response visible. A trained CNN learns its kernel values through backpropagation.
 
@@ -109,7 +109,7 @@ A `3 × 3` convolution with padding `1`, stride `1`, and dilation `1` preserves 
 
 ## CNN architecture and shapes
 
-![Conceptual CNN path showing how image shapes change after convolution, pooling, and classification](../../assets/images/cnn-shape-visual.png)
+![Conceptual CNN path showing how image shapes change after convolution, pooling, and classification](../../assets/images/cnn-shape-visual.png){ width="1570" height="534" }
 
 The values in the diagram are an illustrative shape trace. Always inspect the real input and real model.
 

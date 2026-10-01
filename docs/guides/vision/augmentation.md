@@ -64,7 +64,7 @@ With `ImageFolder`, inspect `.classes`, `.class_to_idx` and one sample before tr
 
 ## Build the transform pipeline in order
 
-<figure><img src="../../../assets/images/vision-transforms.png" alt="Original geometric target processed by crop, colour jitter and impulse noise"><figcaption>Same original target through actual TorchVision transforms; seed 71. Variation is for inspection, not a model-quality result.</figcaption></figure>
+<figure><img src="../../../assets/images/vision-transforms.png" alt="Original geometric target processed by crop, colour jitter and impulse noise" width="960" height="880"><figcaption>Same original target through actual TorchVision transforms; seed 71. Variation is for inspection, not a model-quality result.</figcaption></figure>
 <div class="recall-flow" role="group" aria-label="Input to output">
 <div><b>PIL RGB</b><code>(width,height); bytes 0..255</code><small>spatial and color augmentation</small></div>
 <div><b>ToTensor</b><code>[3,H,W]; float 0..1</code><small>add tensor noise here</small></div>

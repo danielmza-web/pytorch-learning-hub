@@ -40,9 +40,9 @@ Older course code uses `pretrained=True`; the maintained examples here use the w
 ## Classification, detection and segmentation
 
 <div class="task-views">
-<figure><img src="../../../assets/images/inspection-class.svg" alt="Illustrative scratched panel classified as scratched"><figcaption>Classification: one class for the image · [N,K]</figcaption></figure>
-<figure><img src="../../../assets/images/inspection-boxes.svg" alt="Illustrative panel with boxes locating its two scratches"><figcaption>Detection: boxes, labels and scores per image</figcaption></figure>
-<figure><img src="../../../assets/images/inspection-mask.svg" alt="Illustrative panel with colored masks covering scratch pixels"><figcaption>Segmentation: class per pixel · [N,K,H,W]</figcaption></figure>
+<figure><img src="../../../assets/images/inspection-class.svg" alt="Illustrative scratched panel classified as scratched" width="220" height="180"><figcaption>Classification: one class for the image · [N,K]</figcaption></figure>
+<figure><img src="../../../assets/images/inspection-boxes.svg" alt="Illustrative panel with boxes locating its two scratches" width="220" height="180"><figcaption>Detection: boxes, labels and scores per image</figcaption></figure>
+<figure><img src="../../../assets/images/inspection-mask.svg" alt="Illustrative panel with colored masks covering scratch pixels" width="220" height="180"><figcaption>Segmentation: class per pixel · [N,K,H,W]</figcaption></figure>
 </div>
 <p class="visual-caption">Original illustrative annotations, not predictions from a trained model.</p>
 

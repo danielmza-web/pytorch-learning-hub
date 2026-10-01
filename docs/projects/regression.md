@@ -45,7 +45,7 @@ This is a reproduced result from the retained script, using its synthetic datase
 | Linear | 0.40296 |
 | Nonlinear network | 0.00755 |
 
-![Reproduced chart of the same curved samples with a poor linear fit on the left and a flexible nonlinear-network fit on the right](../assets/images/regression-comparison.png)
+![Reproduced chart of the same curved samples with a poor linear fit on the left and a flexible nonlinear-network fit on the right](../assets/images/regression-comparison.png){ width="1852" height="708" }
 
 ## Interactive check
 

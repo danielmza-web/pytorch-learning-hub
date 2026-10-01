@@ -94,7 +94,7 @@ Try a small logarithmic LR range first, for example `1e-4`, `1e-3`, `1e-2`. Thes
 
 ## Learning-rate schedulers
 
-![Learning rates used by step, cosine and plateau schedules in a toy execution](../../assets/images/training-schedules.svg)
+![Learning rates used by step, cosine and plateau schedules in a toy execution](../../assets/images/training-schedules.svg){ width="432" height="288" }
 
 Toy execution: StepLR halves LR every four calls; cosine spans 12 epochs; plateau responds to the declared validation-loss signal `[1, .8, .8, .8, .7, .7, .7, .7, .7, .7, .7, .7]` with patience 1. The chart shows LR used before each end-of-epoch scheduler call. This is a schedule comparison, not measured model training. [Calls and values](../../assets/data/recall-2026-10-01/schedules.json).
 

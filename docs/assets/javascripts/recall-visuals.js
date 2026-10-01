@@ -95,26 +95,6 @@
   function init() {
     document.querySelectorAll("[data-metrics-lab]").forEach(initMetrics);
     document.querySelectorAll("[data-padding-lab]").forEach(initPadding);
-    // Copy the target's actual text and report success only after the clipboard promise.
-    document.addEventListener("click", event => {
-        const button = event.target.closest("button[data-clipboard-target]");
-        if (!button) return;
-        if (!navigator.clipboard || !navigator.clipboard.writeText) return;
-        const code = document.querySelector(button.getAttribute("data-clipboard-target"));
-        if (!code) return;
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        const previous = button.title;
-        navigator.clipboard.writeText(code.textContent).then(() => {
-          button.title = "Copied to clipboard";
-          button.setAttribute("aria-label", "Copied to clipboard");
-        }).catch(() => {
-          button.title = "Copy unavailable: select the code and copy manually";
-          button.setAttribute("aria-label", button.title);
-        }).finally(() => {
-          setTimeout(() => { button.title = previous; button.removeAttribute("aria-label"); }, 1800);
-        });
-    }, true);
     revealDestination();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
