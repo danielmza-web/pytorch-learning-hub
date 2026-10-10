@@ -1,17 +1,35 @@
 ---
-title: Model memory, checkpoints and tracking
+title: 6.1 · Memory, checkpoints and tracking
 tags:
   - deployment
   - serialization
+guide_id: "6.1"
 last_reviewed: 2026-10-10
 ---
 
-# Model memory, checkpoints and tracking
+# 6.1 · Model memory, checkpoints and tracking {#model-memory-checkpoints-and-tracking}
 
 A trained model is a computation with learned numbers. To use it tomorrow, preserve those numbers and the information needed to interpret them. To continue training, preserve the update process too.
 { .page-lead }
 
-This continues [pretrained models](../vision/pretrained-models.md) and [efficient training](../training/efficient-training.md). Read this before [compression and deployment](optimization-serving.md); the same lifecycle applies to CNNs, embeddings and transformers.
+<div class="learning-context" data-guide-id="6.1" markdown="1">
+
+**Guide 6.1 · Save and deploy models**
+{ .learning-location }
+
+**You will learn:** Choose what to retain for inference, component reuse or continuing training.
+
+**Before you start:** Read [1.1 · Build and train](../fundamentals/core-workflow.md); [3.2 · Pretrained models](../vision/pretrained-models.md) explains backbone/head reuse.
+
+**Practice:** [P8 · Model lifecycle and pruning](../../projects/model-lifecycle.md)
+
+</div>
+
+**Terms:** random-access memory (RAM) holds live tensors while the process runs. A persistent buffer is saved module state that is not an optimizer-trained parameter. A checkpoint is a saved training state; inference uses a model to predict. FP32/FP16/INT8 use 32-bit float, 16-bit float and 8-bit integer representations. A mebibyte (MiB) is 1,048,576 bytes; a decimal megabyte (MB) is 1,000,000 bytes.
+
+The same lifecycle applies to CNNs, embeddings and transformers. [2.2 · Efficient training](../training/efficient-training.md) explains runtime memory; this page explains what persists after a run.
+
+**Code key:** self-contained toys declare their imports and inputs. Other snippets are implementation excerpts; use the model, loader or tokenizer named in the section. Optional packages and downloads are stated beside their code.
 
 ## From code to memory to disk
 
@@ -41,6 +59,13 @@ For a dense tensor, payload bytes are `numel() * element_size()`. Ten million FP
 FP32 training with Adam commonly has weights, gradients and two moment tensors: roughly 16 bytes per parameter just for those four components. This is an estimate, not peak memory: activations depend on batch/sequence/image size, optimizer initialization can be lazy, mixed precision can retain additional copies, and allocators reserve extra memory. Inference avoids optimizer state and backward graphs; it still needs weights, activations and temporary workspaces. [Adam state](https://docs.pytorch.org/docs/stable/generated/torch.optim.Adam.html) and [CUDA memory](https://docs.pytorch.org/docs/stable/notes/cuda.html#memory-management) describe the implementation limits.
 
 ## Choose what to save
+
+<div class="learning-comparison" role="group" aria-label="Live memory, an inference artifact and a resume checkpoint">
+<div><b>Live process</b><code>architecture + tensors in RAM</code><small>Training changes the live values; closing the process loses unsaved state.</small></div>
+<div><b>Inference artifact</b><code>model state + input contract</code><small>Reconstruct compatible architecture, restore state and predict.</small></div>
+<div><b>Resume checkpoint</b><code>model + optimizer + run state</code><small>Also restore the update process and any scheduler/scaler/data position needed.</small></div>
+</div>
+<p class="visual-caption">Conceptual storage choices. A model state dictionary includes persistent buffers; file size and peak process memory are different quantities.</p>
 
 | Artifact | What belongs in it | Use |
 | --- | --- | --- |
@@ -145,3 +170,5 @@ MLflow connects a run ID to settings, step-indexed metrics and artifacts. Record
 You close Python after training. The checkpoint survives, but the model object in RAM does not. To reproduce a prediction, reconstruct the architecture, restore state, use the saved preprocessing/class order and evaluate. To resume Adam, weights alone are insufficient because the optimizer's moments are missing.
 
 Run [the original lifecycle project](../../projects/model-lifecycle.md) to test a weight round trip, encoder-only reuse, an independent snapshot and unchanged dense shapes after pruning. Then continue to [compression, export and deployment](optimization-serving.md).
+
+**Continue reading:** [6.2 · Compression, export and deployment](optimization-serving.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

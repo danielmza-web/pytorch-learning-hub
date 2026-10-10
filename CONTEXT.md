@@ -12,7 +12,15 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-## Source and publication state — verified 2026-10-10
+## Current local state — 2026-10-10
+
+The approved navigation/clarity plan is implemented locally in the independent Hub. Keep the six topic numbers 1–6, page numbers 1.1–6.2 and project numbers P1–P8 consistent across sidebar, home, headings, gallery and footer. Projects follow regression, EMNIST, robust pipeline, Nature CNN, controlled training, vision head, text bags and model lifecycle. `tests/validate_navigation.py`, also invoked by content validation, rejects numbering/order drift and missing reciprocal guide/project connections.
+
+All twelve guides and eight project pages have explicit goals, prerequisites and code requirements. Essential distinctions remain visible; longer implementations and variants use disclosures. Architecture practice points to its own visual checks/runnable toys, since the eight projects do not implement transformer or diffusion training. Preserve old home/gallery section IDs when changing visible labels. Home now has one six-topic chooser, a compact reading map and practice spanning the complete route, with no progress tracking.
+
+Local strict build, content/navigation, built links/resources/anchors and presentation checks passed. All 24 routes were visited in desktop/mobile and light/dark (96 visits); sidebar active states and footer ordering matched. Search, repeated disclosure reveal, mobile menu, 18 representative page disclosures and attention/memory controls worked. Source examples, maintained images and retained reports are unchanged. No publication or complete training accompanied this review; dated evidence and limits are in CHANGELOG.
+
+## Last verified publication — 2026-10-10
 
 The Course 3 expansion and Course 1/2 improvements are published after Daniel explicitly requested GitHub synchronization and Netlify production publication. Source pushes `49186c2` (DaZu) and `ee71ba4` (Hub) completed with zero divergence in each independent repository. No hosting trigger, DNS or provider configuration was changed.
 
@@ -81,13 +89,13 @@ The content is original. The three-course *PyTorch for Deep Learning Professiona
 Markdown under `docs/` is the source of truth. `mkdocs.yml` owns the explicit public navigation:
 
 - Start here
-- Learn the fundamentals (two numbered pages)
-- Improve training (metrics/tuning and efficient pipelines)
-- Work with vision (transforms/noise and pretrained models)
-- Work with text (tokens/embeddings and classifiers)
-- Explore advanced architectures (vision/generative models and transformers)
-- Save and deploy models (lifecycle and optimization/serving)
-- Practice with projects (chooser, one Course 3 lifecycle example, three selected Course 2 workflows and four foundation examples)
+- 1 · Learn the fundamentals (1.1–1.2)
+- 2 · Improve training (2.1–2.2)
+- 3 · Work with vision (3.1–3.2)
+- 4 · Work with text (4.1–4.2)
+- 5 · Explore advanced architectures (5.1–5.2)
+- 6 · Save and deploy models (6.1–6.2)
+- Practice with projects (chooser, P1–P4 foundations, P5–P7 training/vision/text, P8 lifecycle)
 - Quick reference
 - About this library
 

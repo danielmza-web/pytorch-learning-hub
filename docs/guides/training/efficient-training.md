@@ -1,13 +1,29 @@
 ---
-title: Training — efficient pipelines
+title: 2.2 · Efficient pipelines
 tags: [dataloader, profiling, lightning, mixed-precision]
+guide_id: "2.2"
 last_reviewed: 2026-10-10
 ---
 
-# Training — efficient pipelines
+# 2.2 · Training — efficient pipelines {#training-efficient-pipelines}
 
 Keep the learning objective fixed while reducing wasted loading time, computation and memory. First locate the bottleneck; then change the setting that can affect it.
 { .page-lead }
+
+<div class="learning-context" data-guide-id="2.2" markdown="1">
+
+**Guide 2.2 · Improve training**
+{ .learning-location }
+
+**You will learn:** Locate a loading, compute or memory bottleneck before changing the training pipeline.
+
+**Before you start:** Read [2.1 · Metrics and tuning](training-quality.md) so efficiency comparisons keep the same objective and split.
+
+**Practice:** [P5 · Controlled training comparison](../../projects/training-comparison.md)
+
+</div>
+
+**Terms:** throughput is samples processed per unit time; latency is time for one declared operation or request. Automatic mixed precision (AMP) mixes numerical formats. FP32, FP16 and BF16 refer to 32-bit float, 16-bit float and bfloat16. Host memory is CPU RAM; device memory is accelerator memory. `[N,C,H,W]` names image batch, channels, height and width.
 
 ```text
 storage → decode / transform on CPU → batch → transfer → GPU work → update
@@ -296,6 +312,8 @@ Training efficiency and deployment efficiency have different goals: a frozen bac
 
 **Check yourself:** using accumulation halves the microbatch and preserves the effective batch. Should training become twice as fast? No: there are more forward/backward calls, and BatchNorm still uses the smaller batch. Measure time, memory and validation together.
 
-Next, connect data variation with [image augmentation](../vision/augmentation.md), or see why [dynamic text padding](../text/tokens-embeddings.md#padding-truncation-and-attention-masks) is another efficiency decision.
+Related application: connect data variation with [image augmentation](../vision/augmentation.md), or see why [dynamic text padding](../text/tokens-embeddings.md#padding-truncation-and-attention-masks) is another efficiency decision.
 
 **Sources:** [PyTorch DataLoader](https://docs.pytorch.org/docs/stable/data.html), [Lightning Trainer](https://lightning.ai/docs/pytorch/stable/common/trainer.html), [Lightning optimization](https://lightning.ai/docs/pytorch/stable/common/optimization.html), [PyTorch profiler](https://docs.pytorch.org/docs/stable/profiler.html).
+
+**Continue reading:** [3.1 · Data, transforms and noise](../vision/augmentation.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

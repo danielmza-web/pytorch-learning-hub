@@ -1,17 +1,33 @@
 ---
-title: Fundamentals — core workflow
+title: 1.1 · Build and train
 study_context: PyTorch Fundamentals
 tags:
   - fundamentals
   - tensors
   - training
+guide_id: "1.1"
 last_reviewed: 2026-10-10
 ---
 
-# Fundamentals — core workflow
+# 1.1 · Fundamentals — core workflow {#fundamentals-core-workflow}
 
 Follow one path from values in memory to a model you can evaluate. Read it in order once; later, jump straight to the step you need to debug.
 { .page-lead }
+
+<div class="learning-context" data-guide-id="1.1" markdown="1">
+
+**Guide 1.1 · Learn the fundamentals**
+{ .learning-location }
+
+**You will learn:** Follow tensors through a model, loss, gradients and a trustworthy evaluation.
+
+**Before you start:** Basic Python functions and lists are enough to begin.
+
+**Practice:** [P1 · Nonlinear regression](../../projects/regression.md) · [P3 · Robust image pipeline](../../projects/robust-image-pipeline.md)
+
+</div>
+
+**Notation:** `N` is samples in a batch, `F` input features, `C` image channels, `H/W` image height/width, `L` sequence length, `E` embedding width and `K` classes. CPU means central processing unit; GPU means graphics processing unit. Autograd is PyTorch’s automatic differentiation system. Mean squared error (MSE) is a regression loss; cross-entropy (CE) is a classification loss.
 
 **Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
@@ -70,15 +86,15 @@ print(x.device)  # cpu
 
 A batch keeps one row per sample; image tensors add channel, height and width axes.
 
-??? note "Code and details"
-    | Data | Typical shape | Meaning |
-    | --- | --- | --- |
-    | Tabular batch | `[N, F]` | samples, features |
-    | Image batch | `[N, C, H, W]` | samples, channels, height, width |
-    | Sequence batch | `[N, L, E]` | samples, sequence length, embedding size |
-    | Class logits | `[N, K]` | samples, classes |
-    | Segmentation logits | `[N, K, H, W]` | samples, classes, spatial prediction |
+| Data | Typical shape | Meaning |
+| --- | --- | --- |
+| Tabular batch | `[N, F]` | samples, features |
+| Image batch | `[N, C, H, W]` | samples, channels, height, width |
+| Sequence batch | `[N, L, E]` | samples, sequence length, embedding size |
+| Class logits | `[N, K]` | samples, classes |
+| Segmentation logits | `[N, K, H, W]` | samples, classes, spatial prediction |
 
+??? note "Code and details"
     For example, `[32, 3, 224, 224]` means 32 RGB images at 224 × 224 pixels. The first dimension is the batch; it must survive when features are flattened.
 
     <div class="tensor-lab interactive-panel" data-tensor-lab>
@@ -185,7 +201,7 @@ result = batch + bias  # [4, 3]
     scaled = (features - mean) / std
     ```
 
-    Fit feature statistics on training data and reuse them for new inputs. A engineered feature expresses a hypothesis; validation must show whether it helps. There is no general `torch.from_dataframe` API: convert the selected numeric columns to an array, then use `from_numpy` or `tensor` with the intended dtype.
+    Fit feature statistics on training data and reuse them for new inputs. An engineered feature expresses a hypothesis; validation must show whether it helps. There is no general `torch.from_dataframe` API: convert the selected numeric columns to an array, then use `from_numpy` or `tensor` with the intended dtype.
 
     **Shape trap:** predictions `[N,1]` and targets `[N]` can broadcast to an unintended `[N,N]` regression error. Match both to `[N,1]` before MSE. `squeeze()` without a dimension can also remove the batch axis when `N=1`; use `squeeze(1)` when only that axis should disappear.
 
@@ -334,7 +350,7 @@ class Classifier(nn.Module):
 
 ### Architecture, tensors and execution are different
 
-Calling `Classifier(...)` creates a Python object and normally allocates its initialized parameters in CPU RAM. It does not train the model or create a weight file. Moving it with `.to("cuda")` places its tensors in accelerator memory; the Python program still controls execution.
+Calling `Classifier(...)` creates a Python object and normally allocates its initialized parameters in CPU random-access memory (RAM). It does not train the model or create a weight file. Moving it with `.to("cuda")` places its tensors in accelerator memory; the Python program still controls execution.
 
 | Moment | What exists | What changes it |
 | --- | --- | --- |
@@ -386,6 +402,14 @@ Nonlinear activations let stacked layers represent curves and more complex decis
 
 ### Logits, probabilities, and predictions
 
+
+<div class="learning-comparison" role="group" aria-label="Raw scores, probabilities and a chosen class">
+<div><b>Logits</b><code>[2, 0]</code><small>Two raw scores for one sample; no sum-to-one requirement.</small></div>
+<div><b>Probabilities</b><code>softmax → [0.881, 0.119]</code><small>Normalize across classes for interpretation.</small></div>
+<div><b>Prediction</b><code>argmax → class 0</code><small>The index with the highest score; not a new learned value.</small></div>
+</div>
+<p class="visual-caption">Exact softmax arithmetic rounded to three decimals. CrossEntropyLoss receives the raw logits; the chosen class is the same before and after softmax.</p>
+
 For single-label multiclass classification:
 
 ```python
@@ -395,7 +419,7 @@ predictions = logits.argmax(dim=1)    # [batch]
 probabilities = logits.softmax(dim=1) # only when probabilities are needed
 ```
 
-Do not apply softmax before `CrossEntropyLoss`; the loss already combines the stable operations it needs.
+Do not apply softmax before `CrossEntropyLoss`; the loss already combines the stable operations it needs. [Official cross-entropy contract](https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html).
 
 ### Match the output, target and loss
 
@@ -499,6 +523,13 @@ Advanced variations keep this basic order: gradient clipping goes after `backwar
 
 ## Validation and metrics
 
+<div class="learning-comparison" role="group" aria-label="Three separate roles for held-out evaluation">
+<div><b>Training</b><code>loss → backward → update</code><small>Use these samples to fit model parameters.</small></div>
+<div><b>Validation</b><code>compare → choose checkpoint</code><small>Select settings and thresholds without gradient updates on these samples.</small></div>
+<div><b>Final test</b><code>freeze choices → evaluate</code><small>Assess the selected workflow on untouched samples.</small></div>
+</div>
+<p class="visual-caption">Conceptual evaluation roles. Split at the correct independent unit (for example subject or source image); random row splitting alone cannot prevent related samples leaking between sets.</p>
+
 Evaluation uses the same model without updating its parameters.
 
 ??? note "Implementation excerpt · requires the objects described above"
@@ -567,3 +598,5 @@ Before trusting a run, answer these questions:
 8. Can the pipeline overfit one tiny batch?
 
 Continue with [Fundamentals — vision and real data](vision-real-data.md), where the same workflow is applied to images, CNNs, imperfect files, and generalization. Once that path is clear, [metrics and tuning](../training/training-quality.md) explains the next choices without changing the loop's purpose.
+
+**Continue reading:** [1.2 · Images and CNNs](vision-real-data.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

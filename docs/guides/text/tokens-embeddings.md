@@ -1,21 +1,35 @@
 ---
-title: Text — tokens, embeddings and batches
+title: 4.1 · Tokens and embeddings
 tags: [text, tokenizer, embeddings, padding]
+guide_id: "4.1"
 last_reviewed: 2026-10-10
 ---
 
-# Text — tokens, embeddings and batches
+# 4.1 · Text — tokens, embeddings and batches {#text-tokens-embeddings-and-batches}
 
 Text has no built-in numeric representation. Tokenization supplies discrete IDs; embeddings supply vectors; batching supplies a consistent input shape. These are separate operations.
 { .page-lead }
+
+<div class="learning-context" data-guide-id="4.1" markdown="1">
+
+**Guide 4.1 · Work with text**
+{ .learning-location }
+
+**You will learn:** Separate token IDs, embedding vectors, padding and context before building a text classifier.
+
+**Before you start:** Read [1.1 · Build and train](../fundamentals/core-workflow.md) for tensor axes and classification outputs.
+
+**Practice:** [P7 · Variable-length text classifier](../../projects/text-bags.md)
+
+</div>
+
+**Notation:** `N` is batch size, `L` token positions, `V` vocabulary size and `E` embedding width. A vocabulary maps tokens to integer IDs; an embedding table maps those IDs to learned vectors. PAD marks padding, UNK an unknown token, and BOS/EOS the beginning/end of a sequence. Each tokenizer defines its own special tokens.
 
 ```text
 raw text → tokens → integer IDs [N,L] → embeddings [N,L,E]
                   + mask                    ↓
                                     pooling or contextual model
 ```
-
-Start here before [text classifiers](text-classifiers.md).
 
 **Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
@@ -59,7 +73,7 @@ Lowercasing, punctuation removal and whitespace splitting are baseline choices. 
 
 ### Special tokens
 
-`<pad>` fills unused positions; `<unk>` represents unrecognized input. Beginning/end tokens mark boundaries when required. BERT-style `[CLS]` and `[SEP]` are part of that model's input convention; the tokenizer normally inserts them. Subword vocabularies reduce the unknown-word problem but do not guarantee that every input is understood.
+`<pad>` fills unused positions; `<unk>` represents unrecognized input. Beginning/end tokens mark boundaries when required. BERT (Bidirectional Encoder Representations from Transformers) uses `[CLS]` for a classification token and `[SEP]` for a separator; the tokenizer normally inserts them. Subword vocabularies reduce the unknown-word problem but do not guarantee that every input is understood.
 
 ## Use the matching pretrained tokenizer
 
@@ -144,7 +158,7 @@ The vectors start from initialization unless pretrained values are loaded. Gradi
 
 ### Alternative representations
 
-Counts, TF-IDF, learned word vectors and contextual encoders retain different information about text.
+Counts, term frequency–inverse document frequency (TF-IDF), learned word vectors and contextual encoders retain different information about text.
 
 ??? note "Code and details"
     | Representation | What it captures | What it loses / costs |
@@ -152,12 +166,19 @@ Counts, TF-IDF, learned word vectors and contextual encoders retain different in
     | One-hot | identity in a vocabulary-sized vector | sparse; no learned similarity |
     | Bag of words | token occurrence/count | word order |
     | TF-IDF | counts weighted down for common terms | context and order; fit on training data |
-    | Static vectors: GloVe, Word2Vec, FastText | learned distributional relationships | a fixed vector per token, with model-specific OOV behavior |
+    | Static vectors: GloVe, Word2Vec, FastText | learned distributional relationships | a fixed vector per token, with model-specific out-of-vocabulary (OOV) behavior |
     | Contextual model: BERT/DistilBERT | representations influenced by surrounding tokens | more computation and memory |
 
     A small learned embedding can be sufficient for a short-label task. A pretrained language model can help with context, but validation must establish that benefit for your data.
 
 ## Similarity, context and visualization
+
+<div class="learning-comparison" role="group" aria-label="Lookup vectors, pooled vectors and contextual vectors">
+<div><b>Embedding lookup</b><code>bank → one table row</code><small>The same ID selects the same row in “river bank” and “bank loan”.</small></div>
+<div><b>Mean pooling</b><code>token rows → one mean</code><small>Summarizes the bag; changing word order preserves the mean.</small></div>
+<div><b>Contextual model</b><code>token + positions + neighbors</code><small>Can give “bank” different representations in different sequences.</small></div>
+</div>
+<p class="visual-caption">Conceptual distinction, not a measured semantic result. A contextual model must be trained; vector coordinates do not have universal human-readable meanings.</p>
 
 Cosine similarity compares direction, not vector length:
 
@@ -172,7 +193,7 @@ GloVe returns the same stored vector for a word regardless of sentence. A contex
 
 The studied toy embedding exercise predicts context words from a centre word. Repeated co-occurrence and cross-entropy updates shape the lookup table. A tiny toy corpus demonstrates the mechanism; it does not establish broad semantic knowledge. Vector analogies are illustrative relationships, not guaranteed facts.
 
-PCA (`PCA(n_components=2).fit_transform(vectors)`) projects onto two directions of high variance; t-SNE emphasizes local neighborhoods. Both distort the original space. A nearby pair in a two-dimensional plot is not sufficient evidence of semantic accuracy. Check similarity in the full vector space and evaluate the downstream task.
+Principal component analysis (PCA, `PCA(n_components=2).fit_transform(vectors)`) projects onto two directions of high variance; t-distributed stochastic neighbor embedding (t-SNE) emphasizes local neighborhoods. Both distort the original space. A nearby pair in a two-dimensional plot is not sufficient evidence of semantic accuracy. Check similarity in the full vector space and evaluate the downstream task. See the official [PCA](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html) and [t-SNE](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html) references.
 
 ## Remember and apply
 
@@ -183,3 +204,5 @@ Continue with [pooled and pretrained text classifiers](text-classifiers.md), whe
 Then [transformers and sequence models](../architectures/transformers.md) explains how positions, attention and encoder/decoder objectives turn token vectors into context-dependent representations.
 
 **Sources:** [Hugging Face tokenizers](https://huggingface.co/docs/transformers/en/main_classes/tokenizer), [padding collator](https://huggingface.co/docs/transformers/en/main_classes/data_collator), [PyTorch Embedding](https://docs.pytorch.org/docs/stable/generated/torch.nn.Embedding.html), [GloVe](https://nlp.stanford.edu/projects/glove/).
+
+**Continue reading:** [4.2 · Classifiers and fine-tuning](text-classifiers.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

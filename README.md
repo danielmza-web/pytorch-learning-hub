@@ -18,7 +18,13 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-## Source and publication state — verified 2026-10-10
+## Current local review — 2026-10-10
+
+The navigation and explanation review is local and awaits a separately authorized publication. All twelve guides now use topic/page numbers 1.1–6.2; eight projects follow P1–P8 in the sidebar, gallery and footer. Home combines six topic cards, a compact reading map and “Practice as you learn”. Goals, prerequisites, notation, snippet requirements and reciprocal practice links connect the route. Six visible comparisons clarify outputs, evaluation splits, transfer learning, context, saved state and compression. The 24 public page routes and existing section IDs remain available.
+
+Strict build, content/navigation, generated-link/resource/anchor and presentation checks passed. Browser review covered all 24 pages at 1440 × 900 and 390 × 844 in both themes (96 route visits), plus mobile navigation, project footer links, search/disclosure reveal and representative attention/memory controls. Examples, retained reports and image bytes were preserved; complete training was not repeated. See CHANGELOG for the exact checks and limits. Temporary review captures belong under ignored `tmp/`.
+
+## Last verified publication — 2026-10-10
 
 The Course 3 expansion and Course 1/2 improvements are published after Daniel explicitly requested GitHub synchronization and Netlify production publication. Source pushes `49186c2` (DaZu) and `ee71ba4` (Hub) completed with zero divergence in each independent repository. No hosting trigger, DNS or provider configuration was changed.
 
@@ -65,7 +71,7 @@ The public navigation follows a connected route: Start here → Fundamentals →
 
 The maintained source pages are:
 
-- `docs/index.md`: what the Hub contains, guide order, selected Course 2 examples and how to use the library; it does not repeat the Fundamentals lesson.
+- `docs/index.md`: all six numbered topics, the reading map, connected practice and how to use the library; it does not repeat the Fundamentals lesson.
 - `docs/guides/<guide>/`: exactly two substantial pages per published guide.
 - `docs/projects/`: project gallery and one complete page per runnable project.
 - `docs/reference/index.md`: reminder, cheatsheet, troubleshooting, and glossary.
@@ -123,6 +129,7 @@ Before an explicitly authorized publication, run every check below. For document
 ```powershell
 python -m mkdocs build --strict
 python tests/validate_content.py
+python tests/validate_navigation.py
 python tests/validate_built_site.py
 python tests/validate_presentation.py
 node tests/validate_copy_code.cjs
@@ -180,7 +187,7 @@ OpenCV, YOLO, and other non-PyTorch topics do not belong in this repository.
 
 Run `python -B examples/model_lifecycle.py` for a tiny CPU-only example with original synthetic data. It writes weights, a resumable checkpoint, an encoder-only file, pruning evidence and a JSON report under ignored `artifacts/model-lifecycle/`. No download or optional dependency is required. `tests/validate_model_lifecycle.py` checks exact restore, component reuse, optimizer continuation and pruning serialization; the browser tools illustrate attention visibility and exact weight payload rather than measured runtime memory.
 
-The four new pages under `docs/guides/{architectures,deployment}/` explain modular networks, CNN families, Siamese/triplet learning, saliency/Grad-CAM, diffusion, transformer shapes/masks/generation, RAM versus disk, snapshots/checkpoints, restricted loading, component transfer, memory-efficient loading, MLflow, pruning, quantization, distillation, ONNX and serving contracts. The original ONNX CPU toy passed numerical parity for batches 1, 3 and 16 using locally available optional packages. MLflow end-to-end, torchao quantization and physical-device benchmarks are not claimed. Current PyTorch docs move quantization toward torchao and deprecate TorchScript; legacy course APIs are identified as such.
+The four pages under `docs/guides/{architectures,deployment}/` explain modular networks, CNN families, Siamese/triplet learning, saliency/Grad-CAM, diffusion, transformer shapes/masks/generation, RAM versus disk, snapshots/checkpoints, restricted loading, component transfer, memory-efficient loading, MLflow, pruning, quantization, distillation, ONNX and serving contracts. The original ONNX CPU toy passed numerical parity for batches 1, 3 and 16 using locally available optional packages. MLflow end-to-end, torchao quantization and physical-device benchmarks are not claimed. Current PyTorch docs move quantization toward torchao and deprecate TorchScript; legacy course APIs are identified as such.
 
 If Windows temporary-directory permissions prevent disposable-copy tests, set `TMP` and `TEMP` for that shell to an existing ignored `tmp/test-runs/` directory inside this checkout. Do not change machine-wide environment settings or run the underlying smoke suite over maintained images.
 

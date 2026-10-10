@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 import yaml
+from validate_navigation import check_navigation
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -80,6 +81,7 @@ def main() -> None:
 
     # Navigation is the published inventory; every source page must be reachable.
     config = yaml.load((ROOT / "mkdocs.yml").read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+    errors.extend(check_navigation(config))
     def nav_paths(value):
         if isinstance(value, str):
             return [value]

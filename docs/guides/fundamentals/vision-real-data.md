@@ -1,17 +1,33 @@
 ---
-title: Fundamentals — vision and real data
+title: 1.2 · Images and CNNs
 study_context: PyTorch Fundamentals
 tags:
   - fundamentals
   - cnn
   - data-quality
+guide_id: "1.2"
 last_reviewed: 2026-10-10
 ---
 
-# Fundamentals — vision and real data
+# 1.2 · Fundamentals — vision and real data {#fundamentals-vision-and-real-data}
 
 Apply the core workflow to images: trace shapes through a CNN, check the files before training, then decide whether validation evidence supports the model.
 { .page-lead }
+
+<div class="learning-context" data-guide-id="1.2" markdown="1">
+
+**Guide 1.2 · Learn the fundamentals**
+{ .learning-location }
+
+**You will learn:** Trace a convolutional neural network (CNN), check real image data and interpret generalization.
+
+**Before you start:** Read [1.1 · Build and train](core-workflow.md) for batches, logits and the training loop.
+
+**Practice:** [P2 · EMNIST letters](../../projects/emnist.md) · [P3 · Robust image pipeline](../../projects/robust-image-pipeline.md) · [P4 · Nature CNN](../../projects/nature-cnn.md)
+
+</div>
+
+**Notation:** a convolutional neural network (CNN) preserves spatial structure while learning filters. `[N,C,H,W]` means batch, channels, height and width; class scores `[N,K]` have one row per image and one column per class. ReLU is the rectified linear unit activation; BatchNorm (BN) is batch normalization.
 
 **Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
@@ -439,4 +455,6 @@ Use the [project gallery](../../projects/index.md) to move from these patterns t
 
 For the next layer of the same workflow, study [noise and augmentation](../vision/augmentation.md) and [pretrained vision models](../vision/pretrained-models.md). Both rely on the shape, split and evaluation checks above.
 
-Then continue to [advanced vision and generative models](../architectures/vision-generative.md): skip connections, segmentation and reconstruction change the architecture or objective while preserving these data and evaluation contracts.
+Related architecture: [advanced vision and generative models](../architectures/vision-generative.md): skip connections, segmentation and reconstruction change the architecture or objective while preserving these data and evaluation contracts.
+
+**Continue reading:** [2.1 · Metrics and tuning](../training/training-quality.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

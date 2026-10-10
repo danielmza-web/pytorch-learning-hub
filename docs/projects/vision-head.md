@@ -1,14 +1,28 @@
 ---
-title: Image augmentation and head training
+title: P6 · Image augmentation and head training
 study_context: Course 2 vision workflows
 tags: [project, vision, transfer-learning]
-last_reviewed: 2026-10-01
+project_id: P6
+last_reviewed: 2026-10-10
 ---
 
-# Project: image augmentation and head training
+# P6 · Image augmentation and head training {#project-image-augmentation-and-head-training}
 
 Connect image variation, impulse noise and a replacement classification head while keeping the backbone fixed.
 { .page-lead }
+
+<div class="learning-context" data-project-id="P6" markdown="1">
+
+**P6 · Image augmentation and head training**
+{ .learning-location }
+
+**You will practice:** Inspect transform order, frozen backbone state and a changing classifier head.
+
+**Read first:** [3.1 · Data, transforms and noise](../guides/vision/augmentation.md) · [3.2 · Pretrained models](../guides/vision/pretrained-models.md)
+
+**Data and setup:** Generated images and random ResNet weights by default; offline CPU. Own image folders plus --pretrained are optional.
+
+</div>
 
 ## What to remember
 
@@ -16,7 +30,11 @@ Transfer learning reuses pretrained features; head-only training learns a new ou
 
 The default run uses synthetic images and a **random** ResNet backbone, so it demonstrates the mechanics without downloads. The optional `--data … --pretrained` run uses ImageNet weights and your own image folders for actual transfer learning.
 
+A backbone extracts features; the head maps them to the new classes. BN means batch normalization. Freezing gradients and selecting evaluation mode are separate operations. **Common trap:** calling `model.train()` can put the frozen backbone back into training mode; the script deliberately restores its evaluation behavior.
+
 ## Important code
+
+**Code key:** the short snippets are excerpts from the maintained script, not standalone programs. The complete source below supplies imports, classes, data and helper functions; run that script from the repository root.
 
 ```python
 model = resnet18(weights=weights)
@@ -125,3 +143,7 @@ API reference: [ResNet18 and its weight preprocessing](https://docs.pytorch.org/
     ```
 
 Run `python scripts/render_recall_evidence.py` from the repository root to regenerate these new explanatory charts and transform panels. It reads the public retained reports and leaves the legacy regression and EMNIST images intact.
+
+**Inspect after running:** Inspect transform panels, unchanged backbone/buffers and changed head weights; the default demonstrates mechanics, not transfer quality.
+
+**Connect the result:** [3.1 · Data, transforms and noise](../guides/vision/augmentation.md) · [3.2 · Pretrained models](../guides/vision/pretrained-models.md). [Choose another project](index.md).

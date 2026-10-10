@@ -1,17 +1,35 @@
 ---
-title: Compression, export and deployment
+title: 6.2 · Compression, export and deployment
 tags:
   - deployment
   - quantization
+guide_id: "6.2"
 last_reviewed: 2026-10-10
 ---
 
-# Compression, export and deployment
+# 6.2 · Compression, export and deployment {#compression-export-and-deployment}
 
 A model that works on a training computer still needs to fit the target's memory, latency and quality budget. Preserve a tested baseline, change one mechanism at a time, and measure the complete prediction path on the device that will run it.
 { .page-lead }
 
-Start with [model memory and checkpoints](model-lifecycle.md). [Efficient architectures](../architectures/vision-generative.md) reduce work by design; this page explains what to do with a model you already trained.
+<div class="learning-context" data-guide-id="6.2" markdown="1">
+
+**Guide 6.2 · Save and deploy models**
+{ .learning-location }
+
+**You will learn:** Distinguish smaller tensors from fewer bits, then validate a candidate on its deployment target.
+
+**Before you start:** Read [6.1 · Memory, checkpoints and tracking](model-lifecycle.md) so the baseline and its input contract can be restored.
+
+**Practice:** [P8 · Model lifecycle and pruning](../../projects/model-lifecycle.md)
+
+</div>
+
+**Terms:** pruning removes or masks selected connections; quantization changes numerical representation; distillation trains a smaller student. INT8 means 8-bit integers; FP32 means 32-bit float. Quantization-aware training (QAT) simulates conversion effects during training. Open Neural Network Exchange (ONNX) is a model representation for compatible runtimes, not a running service.
+
+[Efficient architectures](../architectures/vision-generative.md) reduce work by design; this page explains what to do with a model you already trained.
+
+**Code key:** self-contained toys declare their imports and inputs. Other snippets are implementation excerpts; use the model, loader or tokenizer named in the section. Optional packages and downloads are stated beside their code.
 
 ## Choose a mechanism for the actual bottleneck
 
@@ -33,6 +51,13 @@ Start with [model memory and checkpoints](model-lifecycle.md). [Efficient archit
 Training on a GPU does not oblige you to infer on a GPU. Compatible weights can be loaded on CPU, but a large model may still be too slow or too large. Reducing **training** activation memory with gradient accumulation does not compress the inference model. [PyTorch CPU example](https://docs.pytorch.org/tutorials/intermediate/realtime_rpi.html).
 
 ## Pruning: zeros are not smaller tensor shapes
+
+<div class="learning-comparison" role="group" aria-label="Zero values, fewer bits and fewer dense entries">
+<div><b>Masked dense weights</b><code>8 × 4 FP32 → 128 bytes</code><small>32 stored slots remain even if 16 are zero.</small></div>
+<div><b>Hypothetical INT8 weights</b><code>8 × 4 INT8 → 32 bytes</code><small>Same 32 slots, fewer bits per value; metadata and support matter.</small></div>
+<div><b>Smaller dense layer</b><code>4 × 4 FP32 → 64 bytes</code><small>16 slots; connected layers must be adapted and the new model evaluated.</small></div>
+</div>
+<p class="visual-caption">Exact hypothetical weight payloads, excluding bias, metadata and other layers. Neither these byte counts nor a pruning mask establish a runtime speedup.</p>
 
 Unstructured pruning chooses individual weights. Structured pruning masks groups such as output channels. Global pruning distributes a sparsity budget across chosen layers. A mask-based PyTorch operation normally retains the original dimensions: a dense matrix multiplication still processes the dense tensor unless the selected backend has a suitable sparse kernel.
 
@@ -127,3 +152,5 @@ Deployment can be a local process, a device application or a service. Exporting 
 ## Check your understanding
 
 You mask half of a dense FP32 matrix and save it. Its shape and value dtype remain the same, so do not claim a half-sized model or faster dense CPU inference. Quantization may reduce supported weight payloads; calibration, conversion, target timing and held-out task evaluation decide whether the result is useful. Return to [checkpoints](model-lifecycle.md) when deciding what to retain for retraining versus inference.
+
+**Apply the route:** [P8 · Model lifecycle and pruning](../../projects/model-lifecycle.md), or [choose a project](../../projects/index.md). Return to [the learning map](../../index.md#choose-a-guide) for another topic.

@@ -1,16 +1,30 @@
 ---
-title: Robust image pipeline
+title: P3 · Robust image pipeline
 study_context: PyTorch Fundamentals
 tags:
   - project
   - data-pipeline
-last_reviewed: 2026-10-01
+project_id: P3
+last_reviewed: 2026-10-10
 ---
 
-# Project: robust image pipeline
+# P3 · Robust image pipeline {#project-robust-image-pipeline}
 
 Make the input contract visible before training: class order, readable files, rejected samples, and stable validation data.
 { .page-lead }
+
+<div class="learning-context" data-project-id="P3" markdown="1">
+
+**P3 · Robust image pipeline**
+{ .learning-location }
+
+**You will practice:** Make readable files, rejected samples and stable class IDs explicit before training.
+
+**Read first:** [1.1 · Build and train](../guides/fundamentals/core-workflow.md) · [1.2 · Images and CNNs](../guides/fundamentals/vision-real-data.md)
+
+**Data and setup:** Public CIFAR-10, materialized into five class folders with a deliberate corrupt file. The smoke check uses local temporary files.
+
+</div>
 
 ## The question
 
@@ -20,7 +34,11 @@ How can a dataset tell you about bad input before a training run turns it into a
 
 Data quality is part of model quality. Define class ids deterministically, inspect files when indexing, record failures, and keep random augmentation outside validation.
 
+Here `[N,3,32,32]` means N RGB images, three channels and a 32-pixel square; RGB means red/green/blue. File validation detects damaged input, not incorrect labels. **Common trap:** a folder scan can be valid while a label is wrong, or a file changes after indexing; inspect rejections and verify the sample again when loading fails.
+
 ## Key code
+
+**Code key:** the short snippets are excerpts from the maintained script, not standalone programs. The complete source below supplies imports, classes, data and helper functions; run that script from the repository root.
 
 ```python
 self.class_names = sorted(path.name for path in self.root.iterdir() if path.is_dir())
@@ -85,3 +103,7 @@ Use `--smoke-test` to verify corrupt-file handling without downloading data.
     ```python
     --8<-- "examples/robust_dataset.py"
     ```
+
+**Inspect after running:** Inspect the rejected-file report, saved class mapping and predictions in artifacts/robust-pipeline/.
+
+**Connect the result:** [1.1 · Build and train](../guides/fundamentals/core-workflow.md) · [1.2 · Images and CNNs](../guides/fundamentals/vision-real-data.md). [Choose another project](index.md).

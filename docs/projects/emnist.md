@@ -1,17 +1,31 @@
 ---
-title: EMNIST letter classifier
+title: P2 · EMNIST letters
 study_context: PyTorch Fundamentals
 tags:
   - project
   - emnist
   - cnn
-last_reviewed: 2026-10-01
+project_id: P2
+last_reviewed: 2026-10-10
 ---
 
-# Project: EMNIST letter classifier
+# P2 · EMNIST letters {#project-emnist-letter-classifier}
 
 Follow a letter from a one-channel image through convolution to 26 class scores, then inspect the model's mistakes.
 { .page-lead }
+
+<div class="learning-context" data-project-id="P2" markdown="1">
+
+**P2 · EMNIST letters**
+{ .learning-location }
+
+**You will practice:** Trace grayscale images through a CNN and inspect class-level mistakes.
+
+**Read first:** [1.1 · Build and train](../guides/fundamentals/core-workflow.md) · [1.2 · Images and CNNs](../guides/fundamentals/vision-real-data.md)
+
+**Data and setup:** Public EMNIST Letters through TorchVision; full runs download missing data. The smoke check needs no download.
+
+</div>
 
 ## The question
 
@@ -21,7 +35,11 @@ Why does keeping an image as a grid usually give a model more useful structure t
 
 A dense baseline can classify pixels, but it loses the explicit neighbor relationship between strokes. A convolutional model reuses small local detectors across the image before turning the result into 26 logits.
 
+Here `N` is batch size; one grayscale channel differs from 26 output classes. EMNIST means Extended MNIST; its Letters split labels start at 1, so the script maps them to 0–25 for cross-entropy. **Common trap:** relabeling the historical test curves as current validation results would change their meaning; keep the two execution configurations separate.
+
 ## Key code
+
+**Code key:** the short snippets are excerpts from the maintained script, not standalone programs. The complete source below supplies imports, classes, data and helper functions; run that script from the repository root.
 
 ```python
 self.features = nn.Sequential(
@@ -106,3 +124,7 @@ The script imports the shared checkpoint/split helper from `examples/validation_
     ```python
     --8<-- "examples/validation_patterns.py"
     ```
+
+**Inspect after running:** Inspect predictions, curves, confusion matrix and the selected checkpoint in artifacts/emnist/.
+
+**Connect the result:** [1.1 · Build and train](../guides/fundamentals/core-workflow.md) · [1.2 · Images and CNNs](../guides/fundamentals/vision-real-data.md). [Choose another project](index.md).

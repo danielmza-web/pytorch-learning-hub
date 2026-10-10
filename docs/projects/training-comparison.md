@@ -1,14 +1,28 @@
 ---
-title: Controlled training comparison
+title: P5 · Controlled training comparison
 study_context: Course 2 training workflows
 tags: [project, training, metrics]
-last_reviewed: 2026-10-01
+project_id: P5
+last_reviewed: 2026-10-10
 ---
 
-# Project: controlled training comparison
+# P5 · Controlled training comparison {#project-controlled-training-comparison}
 
 Run two learning rates fairly and inspect the validation loss, accuracy, macro F1 and per-class recall after each epoch.
 { .page-lead }
+
+<div class="learning-context" data-project-id="P5" markdown="1">
+
+**P5 · Controlled training comparison**
+{ .learning-location }
+
+**You will practice:** Compare two learning rates with matched starts, splits, schedules and accumulation.
+
+**Read first:** [2.1 · Metrics and tuning](../guides/training/training-quality.md) · [2.2 · Efficient pipelines](../guides/training/efficient-training.md)
+
+**Data and setup:** Small generated classification dataset; offline CPU default.
+
+</div>
 
 ## What to remember
 
@@ -16,7 +30,11 @@ A comparison is useful only when the split, starting model and training budget a
 
 It connects Course 2 metrics, schedules, search discipline and accumulation. The comparison is deliberately a two-value search using ordinary PyTorch; Optuna is useful for larger searches, but is not needed to understand the objective.
 
+LR means learning rate, and macro F1 is the equally weighted mean of per-class F1 scores. Read each trial against the same split and starting weights before comparing its final number. **Common trap:** changing batch order or initialization as well as LR makes it harder to identify what caused a difference; do not average batch F1 values into dataset F1.
+
 ## Important code
+
+**Code key:** the short snippets are excerpts from the maintained script, not standalone programs. The complete source below supplies imports, classes, data and helper functions; run that script from the repository root.
 
 ```python
 model.load_state_dict(initial)
@@ -119,3 +137,7 @@ The shared `train_accumulated` helper comes from `examples/recall_patterns.py`:
     ```
 
 API reference: [ReduceLROnPlateau](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html).
+
+**Inspect after running:** Inspect per-epoch validation metrics and the comparison JSON; a short toy run does not choose a universal learning rate.
+
+**Connect the result:** [2.1 · Metrics and tuning](../guides/training/training-quality.md) · [2.2 · Efficient pipelines](../guides/training/efficient-training.md). [Choose another project](index.md).

@@ -1,14 +1,28 @@
 ---
-title: Variable-length text classifier
+title: P7 · Variable-length text classifier
 study_context: Course 2 text workflows
 tags: [project, text, embeddings]
-last_reviewed: 2026-10-01
+project_id: P7
+last_reviewed: 2026-10-10
 ---
 
-# Project: variable-length text classifier
+# P7 · Variable-length text classifier {#project-variable-length-text-classifier}
 
 Train a small classifier from original image-description phrases. Follow vocabulary → token IDs → offsets → mean embeddings → class scores.
 { .page-lead }
+
+<div class="learning-context" data-project-id="P7" markdown="1">
+
+**P7 · Variable-length text classifier**
+{ .learning-location }
+
+**You will practice:** Build a training-only vocabulary and batch different lengths with IDs and offsets.
+
+**Read first:** [4.1 · Tokens and embeddings](../guides/text/tokens-embeddings.md) · [4.2 · Classifiers and fine-tuning](../guides/text/text-classifiers.md)
+
+**Data and setup:** Original tiny phrases included in the script; offline CPU, no pretrained download.
+
+</div>
 
 ## What to remember
 
@@ -16,7 +30,11 @@ Different-length sentences do not require a fixed padded matrix. `EmbeddingBag` 
 
 This is an inexpensive baseline, not a contextual language model. It combines the course's tokenization, vocabulary, collation, pooling and class-weight ideas without external course helpers or pretrained downloads.
 
+Here `[2,12]` is two sentence vectors with 12 features each, and `[2,2]` is two samples with two class logits each. **Common trap:** offsets count positions in the concatenated IDs, not sentence lengths. The order-invariance check is a property of mean pooling, not evidence that word order is unimportant to language.
+
 ## Important code
+
+**Code key:** the short snippets are excerpts from the maintained script, not standalone programs. The complete source below supplies imports, classes, data and helper functions; run that script from the repository root.
 
 ```python
 ids = torch.tensor([2, 3, 4, 5, 6], dtype=torch.long)
@@ -125,3 +143,7 @@ Labels: `0 = poor-image-description`, `1 = good-image-description`. Unknown inpu
     ```
 
 API reference: [EmbeddingBag inputs, offsets and padding](https://docs.pytorch.org/docs/stable/generated/torch.nn.EmbeddingBag.html).
+
+**Inspect after running:** Inspect vocabulary, predictions and the saved text contract; reversing word order demonstrates the pooling limit.
+
+**Connect the result:** [4.1 · Tokens and embeddings](../guides/text/tokens-embeddings.md) · [4.2 · Classifiers and fine-tuning](../guides/text/text-classifiers.md). [Choose another project](index.md).

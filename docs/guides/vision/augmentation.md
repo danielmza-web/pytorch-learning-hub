@@ -1,15 +1,31 @@
 ---
-title: Vision — data, transforms and noise
+title: 3.1 · Data, transforms and noise
 tags: [torchvision, augmentation, noise, datasets]
+guide_id: "3.1"
 last_reviewed: 2026-10-10
 ---
 
-# Vision — data, transforms and noise
+# 3.1 · Vision — data, transforms and noise {#vision-data-transforms-and-noise}
 
 An image model learns from the tensors it receives, not the files you intended to give it. TorchVision connects loading, datasets, transformations and visual inspection.
 { .page-lead }
 
-Build on [images and CNNs](../fundamentals/vision-real-data.md). This page explains the inputs; [pretrained vision models](pretrained-models.md) explains what to do with them.
+<div class="learning-context" data-guide-id="3.1" markdown="1">
+
+**Guide 3.1 · Work with vision**
+{ .learning-location }
+
+**You will learn:** Prepare image tensors in the right order and inspect whether each transform preserves the label.
+
+**Before you start:** Read [1.2 · Images and CNNs](../fundamentals/vision-real-data.md) for channels, image shapes and stable splits.
+
+**Practice:** [P6 · Image augmentation and head training](../../projects/vision-head.md) · [P3 · Robust image pipeline](../../projects/robust-image-pipeline.md)
+
+</div>
+
+**Notation:** `N/C/H/W` mean batch, channels, height and width. RGB means red, green and blue channels; PIL refers to the image interface supplied by Pillow. Decode reads pixel values, augmentation deliberately varies an input, and normalization rescales it using a fixed rule. These are separate steps.
+
+This page explains image inputs; [3.2 · Pretrained models](pretrained-models.md) connects them to task outputs.
 
 
 
@@ -202,3 +218,5 @@ display_image = (image * std_tensor + mean_tensor).clamp(0, 1)
 Pick a real-world variation → choose a mild transform → inspect several outputs → train on the same split → compare clean and relevant corrupted inputs. Continue with [pretrained models and transfer learning](pretrained-models.md).
 
 **Sources:** [TorchVision transforms](https://docs.pytorch.org/vision/stable/transforms.html), [datasets](https://docs.pytorch.org/vision/stable/datasets.html), [image utilities](https://docs.pytorch.org/vision/stable/utils.html).
+
+**Continue reading:** [3.2 · Pretrained models](pretrained-models.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

@@ -1,17 +1,31 @@
 ---
-title: Nature CNN
+title: P4 · Nature CNN
 study_context: PyTorch Fundamentals
 tags:
   - project
   - cifar100
   - overfitting
-last_reviewed: 2026-10-01
+project_id: P4
+last_reviewed: 2026-10-10
 ---
 
-# Project: Nature CNN and overfitting
+# P4 · Nature CNN {#project-nature-cnn-and-overfitting}
 
 Use one image model to connect reusable blocks, learning curves, and the difference between fitting and generalizing.
 { .page-lead }
+
+<div class="learning-context" data-project-id="P4" markdown="1">
+
+**P4 · Nature CNN**
+{ .learning-location }
+
+**You will practice:** Connect reusable CNN blocks with training/validation curves and checkpoint selection.
+
+**Read first:** [1.2 · Images and CNNs](../guides/fundamentals/vision-real-data.md)
+
+**Data and setup:** Public CIFAR-100 filtered to 15 nature classes; full runs download missing data. The shape smoke check is offline.
+
+</div>
 
 ## The question
 
@@ -21,7 +35,11 @@ How do reusable CNN blocks and validation curves help you separate genuine learn
 
 Regularization is not one setting. It is the combination of a stable data split, training-only augmentation, model capacity, weight decay, dropout, and selecting a checkpoint by validation behavior.
 
+CNN means convolutional neural network; BN means batch normalization and ReLU is the rectified linear unit activation. The logits `[N,15]` have one score per selected nature class. **Common trap:** moving the regularization slider draws an illustrative curve; it does not run CIFAR-100 training or prove a better hyperparameter.
+
 ## Key code
+
+**Code key:** the short snippets are excerpts from the maintained script, not standalone programs. The complete source below supplies imports, classes, data and helper functions; run that script from the repository root.
 
 ```python
 class CNNBlock(nn.Module):
@@ -94,3 +112,7 @@ The script imports the shared checkpoint/split helper from `examples/validation_
     ```python
     --8<-- "examples/validation_patterns.py"
     ```
+
+**Inspect after running:** Inspect the validation-selected checkpoint and final test report in artifacts/nature-cnn/; the slider is an illustration.
+
+**Connect the result:** [1.2 · Images and CNNs](../guides/fundamentals/vision-real-data.md). [Choose another project](index.md).

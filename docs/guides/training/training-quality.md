@@ -1,13 +1,29 @@
 ---
-title: Training — metrics and tuning
+title: 2.1 · Metrics and tuning
 tags: [training, metrics, schedulers, optuna]
+guide_id: "2.1"
 last_reviewed: 2026-10-10
 ---
 
-# Training — metrics and tuning
+# 2.1 · Training — metrics and tuning {#training-metrics-and-tuning}
 
 Once the [basic training loop](../fundamentals/core-workflow.md#the-complete-training-loop) works, the question changes: which settings improve the result, and what evidence makes the comparison fair?
 { .page-lead }
+
+<div class="learning-context" data-guide-id="2.1" markdown="1">
+
+**Guide 2.1 · Improve training**
+{ .learning-location }
+
+**You will learn:** Compare settings fairly using validation evidence, then choose a configuration within a budget.
+
+**Before you start:** Read [1.1 · Build and train](../fundamentals/core-workflow.md); know the difference between loss and a prediction.
+
+**Practice:** [P5 · Controlled training comparison](../../projects/training-comparison.md)
+
+</div>
+
+**Terms:** a learning rate (LR) controls update size; stochastic gradient descent (SGD) and Adam are optimizer choices. True/false positives (TP/FP) and false/true negatives (FN/TN) count predictions against labels. F1 is the harmonic mean of precision and recall. In tables, support means the number of real examples of a class.
 
 **Read in order:** choose a metric → establish a baseline → tune the learning rate → schedule it → search a few settings → compare quality and cost. For faster execution of the same experiment, continue with [efficient training](efficient-training.md).
 
@@ -184,7 +200,7 @@ The structure below requires Optuna and your own `fit_and_validate` function. Ea
 
 `suggest_int` chooses discrete integers; `suggest_float(log=True)` searches orders of magnitude; `suggest_categorical` chooses named options. If the objective is loss, use `direction="minimize"`.
 
-Grid search exhausts listed combinations; random search samples without learning from scores; TPE uses earlier trials to guide later proposals. A short search has noisy evidence. `optuna.visualization.plot_optimization_history(study)`, `plot_param_importances(study)` and `plot_parallel_coordinate(study)` help explore completed trials; their plotting dependencies are optional. Those plots do not establish causation or a global optimum. Recheck promising settings across seeds.
+Grid search exhausts listed combinations; random search samples without learning from scores; the tree-structured Parzen estimator (TPE) uses earlier trials to guide later proposals. A short search has noisy evidence. `optuna.visualization.plot_optimization_history(study)`, `plot_param_importances(study)` and `plot_parallel_coordinate(study)` help explore completed trials; their plotting dependencies are optional. Those plots do not establish causation or a global optimum. Recheck promising settings across seeds. See the official [TPE sampler](https://optuna.readthedocs.io/en/stable/reference/samplers/generated/optuna.samplers.TPESampler.html).
 
 **Search can overfit validation too.** Testing more configurations repeatedly against the same holdout can select a lucky result. Keep the test isolated; use additional folds or a separate selection split when the search budget and data justify them. An Optuna **pruner** ends an unpromising training trial using reported intermediate validation scores; it does not remove neural-network weights. Model pruning belongs to [deployment optimization](../deployment/optimization-serving.md). [Optuna pruning](https://optuna.readthedocs.io/en/stable/tutorial/10_key_features/003_efficient_optimization_algorithms.html).
 
@@ -209,3 +225,5 @@ Record configuration, split identity, seed, packages, validation results, time a
 **Run the idea:** [Controlled training comparison](../../projects/training-comparison.md) combines the same initial weights and split, two learning rates, macro F1, plateau scheduling and gradient accumulation in one small original script.
 
 **Sources:** [TorchMetrics classification](https://lightning.ai/docs/torchmetrics/stable/classification/f1_score.html), [PyTorch schedulers](https://docs.pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate), [Optuna trials and studies](https://optuna.readthedocs.io/en/stable/tutorial/10_key_features/001_first.html).
+
+**Continue reading:** [2.2 · Efficient pipelines](efficient-training.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

@@ -1,15 +1,29 @@
 ---
-title: Text — classifiers and fine-tuning
+title: 4.2 · Classifiers and fine-tuning
 tags: [text, embeddingbag, distilbert, fine-tuning]
+guide_id: "4.2"
 last_reviewed: 2026-10-10
 ---
 
-# Text — classifiers and fine-tuning
+# 4.2 · Text — classifiers and fine-tuning {#text-classifiers-and-fine-tuning}
 
 Compare a cheap pooled-embedding baseline with a pretrained contextual model. Both still use batches, logits, cross-entropy, gradients and validation.
 { .page-lead }
 
-Read [tokens and embeddings](tokens-embeddings.md) first.
+<div class="learning-context" data-guide-id="4.2" markdown="1">
+
+**Guide 4.2 · Work with text**
+{ .learning-location }
+
+**You will learn:** Compare pooled word vectors with a contextual model and retain the complete text input contract.
+
+**Before you start:** Read [4.1 · Tokens and embeddings](tokens-embeddings.md); [3.2 · Pretrained models](../vision/pretrained-models.md) explains the same freeze/adapt principle.
+
+**Practice:** [P7 · Variable-length text classifier](../../projects/text-bags.md)
+
+</div>
+
+**Notation:** `[N,L,E]` means batch, token positions and embedding width; pooled `[N,E]` has one vector per input; logits `[N,K]` have `K` class scores. An offset is a start index into concatenated token IDs. Macro F1 averages the per-class precision/recall score equally, so rare classes remain visible.
 
 **Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
@@ -188,3 +202,5 @@ For the next experiment, compare one baseline, one partial fine-tune and one ful
 After selecting the model, use [model lifecycle](../deployment/model-lifecycle.md) to package its input contract, then [optimization and serving](../deployment/optimization-serving.md) to measure CPU latency and check that a smaller artifact preserves acceptable predictions.
 
 **Sources:** [EmbeddingBag](https://docs.pytorch.org/docs/stable/generated/torch.nn.EmbeddingBag.html), [DistilBERT](https://huggingface.co/docs/transformers/en/model_doc/distilbert), [Hugging Face text classification](https://huggingface.co/docs/transformers/en/tasks/sequence_classification).
+
+**Continue reading:** [5.1 · Vision, similarity and generation](../architectures/vision-generative.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

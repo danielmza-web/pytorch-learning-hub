@@ -82,34 +82,34 @@ markdown_extensions:
 
 nav:
   - Start here: index.md
-  - Learn the fundamentals:
-      - 1 · Build and train: guides/fundamentals/core-workflow.md
-      - 2 · Images and CNNs: guides/fundamentals/vision-real-data.md
-  - Improve training:
-      - 1 · Metrics and tuning: guides/training/training-quality.md
-      - 2 · Efficient pipelines: guides/training/efficient-training.md
-  - Work with vision:
-      - 1 · Data, transforms and noise: guides/vision/augmentation.md
-      - 2 · Pretrained models: guides/vision/pretrained-models.md
-  - Work with text:
-      - 1 · Tokens and embeddings: guides/text/tokens-embeddings.md
-      - 2 · Classifiers and fine-tuning: guides/text/text-classifiers.md
-  - Explore advanced architectures:
-      - 1 · Vision, similarity and generation: guides/architectures/vision-generative.md
-      - 2 · Attention and transformers: guides/architectures/transformers.md
-  - Save and deploy models:
-      - 1 · Memory, checkpoints and tracking: guides/deployment/model-lifecycle.md
-      - 2 · Compression, export and deployment: guides/deployment/optimization-serving.md
+  - 1 · Learn the fundamentals:
+      - 1.1 · Build and train: guides/fundamentals/core-workflow.md
+      - 1.2 · Images and CNNs: guides/fundamentals/vision-real-data.md
+  - 2 · Improve training:
+      - 2.1 · Metrics and tuning: guides/training/training-quality.md
+      - 2.2 · Efficient pipelines: guides/training/efficient-training.md
+  - 3 · Work with vision:
+      - 3.1 · Data, transforms and noise: guides/vision/augmentation.md
+      - 3.2 · Pretrained models: guides/vision/pretrained-models.md
+  - 4 · Work with text:
+      - 4.1 · Tokens and embeddings: guides/text/tokens-embeddings.md
+      - 4.2 · Classifiers and fine-tuning: guides/text/text-classifiers.md
+  - 5 · Explore advanced architectures:
+      - 5.1 · Vision, similarity and generation: guides/architectures/vision-generative.md
+      - 5.2 · Attention and transformers: guides/architectures/transformers.md
+  - 6 · Save and deploy models:
+      - 6.1 · Memory, checkpoints and tracking: guides/deployment/model-lifecycle.md
+      - 6.2 · Compression, export and deployment: guides/deployment/optimization-serving.md
   - Practice with projects:
       - Choose a project: projects/index.md
-      - Model lifecycle and pruning: projects/model-lifecycle.md
-      - Controlled training comparison: projects/training-comparison.md
-      - Image augmentation and head training: projects/vision-head.md
-      - Variable-length text classifier: projects/text-bags.md
-      - Nonlinear regression: projects/regression.md
-      - EMNIST letters: projects/emnist.md
-      - Robust image pipeline: projects/robust-image-pipeline.md
-      - Nature CNN: projects/nature-cnn.md
+      - P1 · Nonlinear regression: projects/regression.md
+      - P2 · EMNIST letters: projects/emnist.md
+      - P3 · Robust image pipeline: projects/robust-image-pipeline.md
+      - P4 · Nature CNN: projects/nature-cnn.md
+      - P5 · Controlled training comparison: projects/training-comparison.md
+      - P6 · Image augmentation and head training: projects/vision-head.md
+      - P7 · Variable-length text classifier: projects/text-bags.md
+      - P8 · Model lifecycle and pruning: projects/model-lifecycle.md
   - Quick reference: reference/index.md
   - About this library: about/index.md
 

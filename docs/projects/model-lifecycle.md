@@ -1,14 +1,28 @@
 ---
-title: Model lifecycle on CPU
+title: P8 · Model lifecycle and pruning
 study_context: Course 3 model deployment workflows
 tags: [project, deployment, checkpoints, pruning]
+project_id: P8
 last_reviewed: 2026-10-10
 ---
 
-# Project: model lifecycle on CPU
+# P8 · Model lifecycle and pruning {#project-model-lifecycle-on-cpu}
 
 Follow one tiny model from a live object in RAM to saved weights, a resumable checkpoint, a reusable encoder and a pruned state. Every comparison runs offline on CPU.
 { .page-lead }
+
+<div class="learning-context" data-project-id="P8" markdown="1">
+
+**P8 · Model lifecycle and pruning**
+{ .learning-location }
+
+**You will practice:** Restore weights, resume one update, reuse an encoder and inspect pruning state.
+
+**Read first:** [6.1 · Memory, checkpoints and tracking](../guides/deployment/model-lifecycle.md) · [6.2 · Compression, export and deployment](../guides/deployment/optimization-serving.md)
+
+**Data and setup:** Six generated feature rows and a tiny model; offline CPU, no downloads.
+
+</div>
 
 ## What this experiment answers
 
@@ -25,6 +39,8 @@ The encoder maps four input features to eight hidden features. The head maps tho
 </div>
 <p class="visual-caption">Conceptual lifecycle with this example's exact tensor dimensions; not measured performance.</p>
 
+CPU means central processing unit; RAM is the process’s working memory. The encoder weight `[8,4]` maps four input features to eight outputs; its dense slots survive pruning. **Common trap:** `weights_only=True` restricts deserialization rather than selecting only the model entry. Inspect equality and file-byte fields separately from quality or speed claims.
+
 ## Choose what to save
 
 | Artifact | Contents | What it enables |
@@ -35,7 +51,9 @@ The encoder maps four input features to eight hidden features. The head maps tho
 | `pruned-folded.pt` | Full model state after folding a pruning mask | Restore zeroed dense weights without pruning hooks. |
 | `report.json` | Equality checks, tensor shapes, zero counts and measured file sizes | Inspect evidence independently of any model-quality claim. |
 
-An application checkpoint may also need scheduler/scaler states, RNG state, dataset order or sampler position and library versions. This demonstration repeats the same CPU batch and optimizer configuration; it does not promise exact resumption of arbitrary training runs.
+An application checkpoint may also need scheduler/scaler states, random-number generator (RNG) state, dataset order or sampler position and library versions. This demonstration repeats the same CPU batch and optimizer configuration; it does not promise exact resumption of arbitrary training runs.
+
+**Code key:** the short snippets are excerpts from the maintained script, not standalone programs. The complete source below supplies imports, classes, data and helper functions; run that script from the repository root.
 
 ```python
 checkpoint = torch.load(path, map_location="cpu", weights_only=True)
@@ -114,3 +132,7 @@ Continue with [model memory, state and restoration](../guides/deployment/model-l
     ```python
     --8<-- "examples/model_lifecycle.py"
     ```
+
+**Inspect after running:** Inspect equality checks, shapes, zero counts and actual file bytes in report.json; the script does not benchmark speed.
+
+**Connect the result:** [6.1 · Memory, checkpoints and tracking](../guides/deployment/model-lifecycle.md) · [6.2 · Compression, export and deployment](../guides/deployment/optimization-serving.md). [Choose another project](index.md).

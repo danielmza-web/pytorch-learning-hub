@@ -1,15 +1,31 @@
 ---
-title: Advanced vision — architectures, similarity and generation
+title: 5.1 · Vision, similarity and generation
 tags: [architectures, siamese, resnet, densenet, interpretability, diffusion]
+guide_id: "5.1"
 last_reviewed: 2026-10-10
 ---
 
-# Advanced vision — architectures, similarity and generation
+# 5.1 · Advanced vision — architectures, similarity and generation {#advanced-vision-architectures-similarity-and-generation}
 
 A classifier chooses a label. An embedding model compares inputs. A generative model creates a new input. Understanding these different outputs makes architecture, loss and evaluation choices easier to connect.
 { .page-lead }
 
-Read [pretrained models](../vision/pretrained-models.md) first for normalization, freezing and task heads. This page develops the Course 3 vision themes through original explanations and examples; [transformers](transformers.md) continues the architecture story for sequences.
+<div class="learning-context" data-guide-id="5.1" markdown="1">
+
+**Guide 5.1 · Explore advanced architectures**
+{ .learning-location }
+
+**You will learn:** Match an architecture and objective to classification, similarity or generation.
+
+**Before you start:** Read [3.2 · Pretrained models](../vision/pretrained-models.md) for encoders, heads and preprocessing.
+
+**Practice:** Use the visual checks and runnable toys on this page, then [check your understanding](#remember-and-apply). These are architecture demonstrations; the existing projects do not train a diffusion or transformer model.
+
+</div>
+
+**Terms:** an encoder maps inputs to features; a Siamese design reuses an encoder to compare inputs. A residual path adds features; a dense connection concatenates them. A class activation map (CAM), or gradient-weighted CAM (Grad-CAM), highlights locations related to a selected score. A variational autoencoder (VAE) maps images to and from latent representations; latent means an internal representation, not a class label.
+
+The examples develop architecture choices for different outputs. [5.2 · Attention and transformers](transformers.md) continues the same information-flow story for sequences.
 
 **Code key:** “Runnable toy” needs only installed PyTorch and uses synthetic inputs. An “excerpt” needs the objects named in its section. The diagrams illustrate mechanisms; they are not training results or copied course figures.
 
@@ -54,7 +70,7 @@ A Python condition in `forward()` builds the eager graph for the path actually e
 
 ## Learn similarity instead of a fixed class list
 
-Suppose an inspection system retrieves panels with similar surface defects. A classifier returns class logits `[N,C]`; an encoder returns feature vectors `[N,D]`. The latter lets a query be compared with a gallery without changing the output head whenever a new gallery item arrives. Useful similarity for unseen items must still be demonstrated on held-out identities or acquisition groups.
+Suppose an inspection system retrieves panels with similar surface defects. A classifier returns class logits `[N,K]`; an encoder returns feature vectors `[N,D]`. Here `N` is batch size, `K` is the number of classes and `D` is feature width. Image feature maps instead use `[N,C,H,W]`: batch, channels, height and width. Feature vectors let a query be compared with a gallery without changing the output head whenever a new gallery item arrives. Useful similarity for unseen items must still be demonstrated on held-out identities or acquisition groups.
 
 <div class="recall-flow" role="group" aria-label="Shared encoder and similarity learning">
 <div><b>Anchor</b><code>panel A, view 1</code><small>reference image</small></div>
@@ -224,3 +240,5 @@ Validate prompt adherence, artifacts and representative failure cases over multi
 **Check yourself:** if two encoders have the same class definition, are their weights shared? Only if you reuse the same module object or deliberately tie parameters. Can a distance tell whether a change was an increase? A symmetric distance gives magnitude, so directional prediction needs more information. Is a sharper heatmap necessarily more faithful? No; display resolution and explanation validity are different.
 
 Continue with [attention and transformer architectures](transformers.md), then follow [model lifecycle](../deployment/model-lifecycle.md) to preserve the learned state and [optimization and serving](../deployment/optimization-serving.md) to test resource constraints.
+
+**Continue reading:** [5.2 · Attention and transformers](transformers.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

@@ -1,15 +1,31 @@
 ---
-title: Transformers — attention, encoders and generation
+title: 5.2 · Attention and transformers
 tags: [transformers, attention, encoder, decoder, masking, generation]
+guide_id: "5.2"
 last_reviewed: 2026-10-10
 ---
 
-# Transformers — attention, encoders and generation
+# 5.2 · Transformers — attention, encoders and generation {#transformers-attention-encoders-and-generation}
 
 Tokenization chooses discrete IDs, embeddings turn IDs into vectors, and attention lets those vectors exchange information. Masks and output heads determine whether the result serves classification, next-token generation or sequence transformation.
 { .page-lead }
 
-Start with [tokens, embeddings and batches](../text/tokens-embeddings.md), then read this page in order. [Advanced vision](vision-generative.md) introduces shared modules and residual paths; those same ideas reappear here. These are original Course 3 explanations and synthetic examples, not course assignments or reproduced benchmark results.
+<div class="learning-context" data-guide-id="5.2" markdown="1">
+
+**Guide 5.2 · Explore advanced architectures**
+{ .learning-location }
+
+**You will learn:** Trace positions, attention, masks and output heads through encoder and generation workflows.
+
+**Before you start:** Read [4.1 · Tokens and embeddings](../text/tokens-embeddings.md); [5.1 · Vision, similarity and generation](vision-generative.md) introduces shared modules and residual paths.
+
+**Practice:** Use the visual checks and runnable toys on this page, then [check your understanding](#remember-and-apply). These are architecture demonstrations; the existing projects do not train a diffusion or transformer model.
+
+</div>
+
+**Terms:** scaled dot-product attention (SDPA) mixes value vectors using query–key scores. A feed-forward network (FFN) transforms each position; GELU is the Gaussian error linear unit activation. BOS/EOS mark sequence boundaries, PAD marks padding. “Encoder”, “decoder” and “memory” below describe computation roles, rather than saved files.
+
+Shared modules and residual paths from [5.1 · Advanced vision](vision-generative.md) reappear here. Follow one token position through each calculation; the synthetic examples demonstrate information flow, not language quality.
 
 **Code key:** runnable toys include imports and inputs and use only installed PyTorch. Excerpts depend on the objects explicitly named in their section. No pretrained download or language-quality result is implied.
 
@@ -261,3 +277,5 @@ Keep source and target tokenizers/vocabularies with their proper heads. Evaluate
 **Check yourself:** which dimension gets softmax in `[N,H,T,S]`? The source/key dimension `S`. Does `True` always block attention? No; SDPA uses the reverse boolean convention. Why allow the causal diagonal? The current input predicts the next target. Is transformer “memory” the model's weights? No; it is the encoded source activation for this input.
 
 Use [model lifecycle](../deployment/model-lifecycle.md) next to save weights together with architecture and tokenizer contracts, then [optimization and serving](../deployment/optimization-serving.md) to measure the model on the intended CPU or other deployment target.
+
+**Continue reading:** [6.1 · Memory, checkpoints and tracking](../deployment/model-lifecycle.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.

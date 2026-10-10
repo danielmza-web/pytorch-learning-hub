@@ -1,15 +1,31 @@
 ---
-title: Vision — pretrained models and transfer learning
+title: 3.2 · Pretrained models
 tags: [torchvision, transfer-learning, detection, segmentation]
+guide_id: "3.2"
 last_reviewed: 2026-10-10
 ---
 
-# Vision — pretrained models and transfer learning
+# 3.2 · Vision — pretrained models and transfer learning {#vision-pretrained-models-and-transfer-learning}
 
 A pretrained model provides learned features and an input contract. First use that contract correctly; then decide which parts of the model need to change for your task.
 { .page-lead }
 
-Read [transforms and noise](augmentation.md) first if pixel ranges or image preparation are unclear. Return here for [weights and labels](#weights-preprocessing-and-class-names), [task outputs](#classification-detection-and-segmentation), [freezing](#three-transfer-learning-strategies) or [training stages](#train-the-head-then-fine-tune).
+<div class="learning-context" data-guide-id="3.2" markdown="1">
+
+**Guide 3.2 · Work with vision**
+{ .learning-location }
+
+**You will learn:** Separate a reusable feature extractor from a task head, then choose what to freeze or adapt.
+
+**Before you start:** Read [3.1 · Data, transforms and noise](augmentation.md) for ranges, normalization and paired targets.
+
+**Practice:** [P6 · Image augmentation and head training](../../projects/vision-head.md)
+
+</div>
+
+**Terms:** the backbone extracts reusable features; the head maps them to the task’s output. Transfer learning starts from learned weights, while fine-tuning updates some or all of those weights. Image batches `[N,C,H,W]` mean batch, channels, height and width; class logits `[N,K]` mean batch and classes. Intersection over union (IoU) measures overlap between a predicted region and its target.
+
+Return here for [weights and labels](#weights-preprocessing-and-class-names), [task outputs](#classification-detection-and-segmentation), [freezing](#three-transfer-learning-strategies) or [training stages](#train-the-head-then-fine-tune).
 
 **Code key:** “Runnable toy” includes imports and inputs. Other snippets are excerpts: reuse `torch`, `nn`, and the model, loader, tokenizer or helper named in the section. Projects contain the complete runnable scripts.
 
@@ -101,6 +117,13 @@ Intersection over union is `overlap area / union area`. If a predicted region an
 
 ## Three transfer-learning strategies
 
+<div class="learning-comparison" role="group" aria-label="Feature extraction and task-specific prediction">
+<div><b>Prepared images</b><code>[N,3,H,W]</code><small>Use the selected weights’ input preparation.</small></div>
+<div><b>Backbone</b><code>[N,D] features</code><small>D learned features per image after pooling; frozen parameters still occupy memory and run.</small></div>
+<div><b>New head</b><code>[N,K] logits</code><small>K scores for your classes; train the replacement head and save its class order.</small></div>
+</div>
+<p class="visual-caption">Conceptual classification boundary. Some backbones return spatial feature maps before pooling; detection and segmentation use different heads.</p>
+
 <div class="recall-flow" role="group" aria-label="Input to output">
 <div><b>Head only</b><code>backbone frozen / new head learns</code><small>keep backbone BatchNorm statistics fixed</small></div>
 <div><b>Partial fine-tuning</b><code>late block + head learn</code><small>include newly unfrozen parameters in optimizer</small></div>
@@ -180,8 +203,10 @@ Save weights, architecture, class order, chosen pretrained weight version, prepr
 
 **Run the idea:** [Image augmentation and head training](../../projects/vision-head.md) combines impulse noise, a replacement ResNet head, frozen backbone statistics and saved class/preprocessing metadata. Its default is an offline mechanism demo; an optional run uses your images and pretrained weights.
 
-Next, [text transfer learning](../text/text-classifiers.md#fine-tune-a-pretrained-text-model) reuses the same freeze/adapt/evaluate idea with a tokenizer and attention mask.
+Related application: [text transfer learning](../text/text-classifiers.md#fine-tune-a-pretrained-text-model) reuses the same freeze/adapt/evaluate idea with a tokenizer and attention mask.
 
 For architecture choices beyond a classification backbone, continue with [advanced vision and generative models](../architectures/vision-generative.md). For shipping the selected backbone and head, follow [saving and restoring the model contract](../deployment/model-lifecycle.md).
 
 **Sources:** [TorchVision weights and models](https://docs.pytorch.org/vision/stable/models.html), [transfer-learning tutorial](https://docs.pytorch.org/tutorials/beginner/transfer_learning_tutorial.html), [visualization utilities](https://docs.pytorch.org/vision/stable/utils.html).
+
+**Continue reading:** [4.1 · Tokens and embeddings](../text/tokens-embeddings.md). Return to [the learning map](../../index.md#choose-a-guide) to choose another topic.
