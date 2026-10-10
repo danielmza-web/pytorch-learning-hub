@@ -3,6 +3,16 @@
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
 
+## 2026-10-10 — authorized Course 3 GitHub and production release
+
+Daniel requested GitHub synchronization and Netlify publication. Reviewed application sources `49186c2` (DaZu) and `ee71ba4` (independent Hub) were pushed separately to `main`; both had zero divergence after push. Netlify published only DaZu `site/` in [Netlify deploy 6aca8184f7fe4f6033f3740e](https://app.netlify.com/projects/dazu/deploys/6aca8184f7fe4f6033f3740e). The Hub published through successful [Pages run 38075215577](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38075215577), retaining its separate GitHub Pages path.
+
+Before publication, the strict Hub build and all documented content/link/resource/presentation, recall, selected-example, learning-contract, lifecycle, widget/copy and disposable-copy smoke checks passed. DaZu assets/anchors/copy, 1,980 phone-lens combinations, source syntax and diff checks passed. Maintained figures and the Course 3 source materials were preserved.
+
+Live HTTPS checks passed: DaZu 61 (50 exact route/resource byte matches and 11 aliases, including the two new guide aliases); Hub 56 (24 routes and 32 resource matches against committed blobs). Five new Hub routes contained the new content markers. Generated Hub HTML was not compared byte for byte across build environments. Browser checks visited all 35 canonical routes at 1440/390 px (70 visits) without observed overflow, broken completed images or captured warnings/errors; new exact-byte/invalid-input memory states and the mobile eight-position causal table passed. Published views were inspected.
+
+Limits: no exhaustive interaction/lazy-image audit, native zoom, physical touch, formal screen-reader certification, full/pretrained/GPU training or physical edge-device benchmark. The earlier local-only expansion entry below describes implementation before publication; its changes are now included in this release. Documentation completion commits do not require another DaZu deploy. A Hub documentation push starts another Pages run, which must be checked separately.
+
 ## 2026-10-10 — complete certificate learning route (local)
 
 - Reviewed the official three-course syllabus and local Course 3 inventory: four decks (948 pages), 13 lab exports, four assignment exports and 83 supporting image files. Published explanations are original; no protected labs, assessments, slides or solutions were copied. Daniel confirmed full certificate completion; the archive README was corrected without inventing an issue date or changing the CV.

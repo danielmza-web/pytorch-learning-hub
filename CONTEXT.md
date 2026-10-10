@@ -12,16 +12,18 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-## Source and publication state — reviewed 2026-10-10
+## Source and publication state — verified 2026-10-10
 
-This review started with clean local repositories: DaZu `8f5c471` and Hub `d35ee79`. The Course 3 expansion and Course 1/2 improvements are local work; no remote fetch, push or provider check accompanied this review. A future push to Hub `main` publishes Pages and requires explicit authorization.
+The Course 3 expansion and Course 1/2 improvements are published after Daniel explicitly requested GitHub synchronization and Netlify production publication. Source pushes `49186c2` (DaZu) and `ee71ba4` (Hub) completed with zero divergence in each independent repository. No hosting trigger, DNS or provider configuration was changed.
 
-| Area | Last application publication recorded | Current difference |
+| Area | Verified application publication | Scope |
 | --- | --- | --- |
-| DaZu | Source `8587005`, Netlify deploy `6ac0eb44de313698ff50e372`, 2026-10-03 | Two new quick guides and connected navigation are local only. |
-| Hub | Source `db4ea63`, [Pages run 36899971094](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36899971094), 2026-10-01 | Four Course 3 pages, an eighth project and Course 1/2 revisions are local only. |
+| DaZu | Source `49186c2`, [Netlify deploy 6aca8184f7fe4f6033f3740e](https://app.netlify.com/projects/dazu/deploys/6aca8184f7fe4f6033f3740e), 2026-10-10 | Only DaZu `site/`; six quick guides and connected navigation. |
+| Hub | Source `ee71ba4`, [Pages run 38075215577](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38075215577), 2026-10-10 | Six two-page guides, 24 source pages and eight projects through GitHub Pages. |
 
-Daniel confirmed completion of the whole certificate on 2026-10-10. Preserve that confirmation as private study context; do not invent a credential issue date, change the CV or add public progress/status UI. The archive README was corrected, but its Course 3 materials remain unchanged. [Coverage notes](notes/course-coverage-2026-10-10.md) record the primary sources, syllabus/material mapping, current API caveats and verification limits. Earlier live evidence in CHANGELOG remains historical.
+Live verification passed 61 DaZu HTTPS checks and 56 Hub checks, plus 70 desktop/mobile canonical-route visits. New memory/attention controls initialized correctly; no page overflow, broken completed images or captured warnings/errors were observed. See CHANGELOG for exact scope and limits. Documentation follow-ups have separate commits; Hub documentation pushes start additional Pages runs and their outcome must be verified separately.
+
+Daniel confirmed completion of the whole certificate on 2026-10-10. Preserve that confirmation as private study context; do not invent a credential issue date, change the CV or add public progress/status UI. The archive README was corrected, but its Course 3 materials remain unchanged. [Coverage notes](notes/course-coverage-2026-10-10.md) record the primary sources, syllabus/material mapping, current API caveats and original local verification limits.
 
 ## Quality improvements implemented locally — 2026-10-01
 
