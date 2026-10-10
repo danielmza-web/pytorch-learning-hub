@@ -3,6 +3,12 @@
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
 
+## 2026-10-10 — authorized navigation review publication
+
+Daniel requested the GitHub push. Application commit `420c3d5` was pushed to `main` and published by successful [Pages run 38079506200](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38079506200). The complete workflow passed its content/build/resource/presentation, numeric/example/lifecycle, JavaScript and disposable smoke checks. Live HTTPS verification confirmed all 24 canonical routes, every locally generated ID, the six home topics and the gallery's P1–P8 order. This release uses the existing GitHub Pages configuration; DaZu and Netlify were untouched.
+
+The entry below records the preceding local review; its application changes are now published. Browser interaction evidence comes from that local review; release verification checked live HTTPS content/IDs, not another exhaustive live browser audit. This documentation follow-up records the verified application release; its push triggers a separate Pages run.
+
 ## 2026-10-10 — numbered reading route and connected practice (local)
 
 - Implemented the approved six-topic route: matching 1.1–6.2 labels in navigation, home, headings and orientation; P1–P8 learning order in navigation, gallery and footer. Integrated all six cards under “Choose a guide”, replaced the Course 2-only highlight with “Practice as you learn”, and added a compact responsive reading map. Previous home/gallery section IDs and all page routes remain available.

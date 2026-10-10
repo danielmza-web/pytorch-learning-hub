@@ -18,13 +18,13 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-## Current local review — 2026-10-10
+## Current published review — 2026-10-10
 
-The navigation and explanation review is local and awaits a separately authorized publication. All twelve guides now use topic/page numbers 1.1–6.2; eight projects follow P1–P8 in the sidebar, gallery and footer. Home combines six topic cards, a compact reading map and “Practice as you learn”. Goals, prerequisites, notation, snippet requirements and reciprocal practice links connect the route. Six visible comparisons clarify outputs, evaluation splits, transfer learning, context, saved state and compression. The 24 public page routes and existing section IDs remain available.
+Daniel authorized the GitHub push of the navigation and explanation review. Application commit `420c3d5` published through successful [Pages run 38079506200](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38079506200). Live HTTPS checks confirmed all 24 routes, their generated IDs, six home topics and the P1–P8 gallery order. All twelve guides now use topic/page numbers 1.1–6.2; eight projects follow P1–P8 in the sidebar, gallery and footer. Home combines six topic cards, a compact reading map and “Practice as you learn”. Goals, prerequisites, notation, snippet requirements and reciprocal practice links connect the route. Six visible comparisons clarify outputs, evaluation splits, transfer learning, context, saved state and compression. The 24 public page routes and existing section IDs remain available.
 
 Strict build, content/navigation, generated-link/resource/anchor and presentation checks passed. Browser review covered all 24 pages at 1440 × 900 and 390 × 844 in both themes (96 route visits), plus mobile navigation, project footer links, search/disclosure reveal and representative attention/memory controls. Examples, retained reports and image bytes were preserved; complete training was not repeated. See CHANGELOG for the exact checks and limits. Temporary review captures belong under ignored `tmp/`.
 
-## Last verified publication — 2026-10-10
+## Previous Course 3 publication — 2026-10-10
 
 The Course 3 expansion and Course 1/2 improvements are published after Daniel explicitly requested GitHub synchronization and Netlify production publication. Source pushes `49186c2` (DaZu) and `ee71ba4` (Hub) completed with zero divergence in each independent repository. No hosting trigger, DNS or provider configuration was changed.
 
