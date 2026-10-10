@@ -3,7 +3,7 @@ title: About and sources
 tags:
   - about
   - sources
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-10
 ---
 
 # About and sources
@@ -24,7 +24,7 @@ Daniel Zurita's public PyTorch learning reference connects explanations, visual 
 
 ## How the library grows
 
-Each PyTorch guide uses two substantial pages: mechanisms and applied decisions. Four guides connect Fundamentals, Training, Vision and Text. The same concepts recur deliberately: shape contracts, split quality, optimizer ownership, evaluation and resource measurements. The function finder provides a direct route back to code.
+Each PyTorch guide uses two substantial pages: mechanisms and applied decisions. Six guides connect Fundamentals, Training, Vision, Text, Advanced architectures and Deployment. The same concepts recur deliberately: shape contracts, split quality, optimizer ownership, evaluation and resource measurements. The function finder provides a direct route back to code.
 
 The compact guide index and short reviews live at [dazu.xyz/learn/pytorch/](https://dazu.xyz/learn/pytorch/). This detailed library remains separate so it can grow without adding a build process to DaZu.
 
@@ -36,6 +36,10 @@ The compact guide index and short reviews live at [dazu.xyz/learn/pytorch/](http
 - [Optuna](https://optuna.readthedocs.io/en/stable/)
 - [Lightning](https://lightning.ai/docs/pytorch/stable/)
 - [TorchMetrics](https://lightning.ai/docs/torchmetrics/stable/)
+- [MLflow tracking](https://mlflow.org/docs/latest/ml/tracking/)
+- [ONNX Runtime](https://onnxruntime.ai/docs/)
+- [torchao quantization](https://docs.pytorch.org/ao/stable/index.html)
+- [Diffusers](https://huggingface.co/docs/diffusers/index)
 - [Material for MkDocs documentation](https://squidfunk.github.io/mkdocs-material/)
 - [EMNIST Letters dataset](https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.EMNIST.html)
 - [CIFAR-10 dataset](https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html)
@@ -43,7 +47,7 @@ The compact guide index and short reviews live at [dazu.xyz/learn/pytorch/](http
 
 ## Study context and content boundary
 
-The topic sequence is informed by DeepLearning.AI's [PyTorch for Deep Learning certificate](https://www.coursera.org/professional-certificates/pytorch-for-deep-learning), especially its first two courses. The 2026-09-30 content review considered the local presentations, lab exports, notebooks and assessment topic outlines. The guides synthesize mechanisms with original examples; they do not redistribute those source files.
+The topic sequence is informed by DeepLearning.AI's [PyTorch for Deep Learning certificate](https://www.coursera.org/professional-certificates/pytorch-for-deep-learning), covering all three courses. The 2026-09-30 review covered Course 1/2 sources; the 2026-10-10 review added all four local Course 3 slide decks and 17 lab/assignment exports, and checked the three public course syllabi online. The guides synthesize mechanisms with original examples; they do not redistribute those source files.
 
 This site does not reproduce Coursera assessments, protected notebooks, quizzes, or graded solutions. Explanations, diagrams, examples, and project structures are original. Course names belong to their respective owners and are used descriptively.
 
@@ -61,8 +65,12 @@ Use the course/module names only as an orientation to topics. The public library
 | Techniques and Ecosystem Tools · module 2 | TorchVision datasets/utilities, transforms, impulse noise, task outputs, transfer | [Transforms and noise](../guides/vision/augmentation.md) |
 | Techniques and Ecosystem Tools · module 3 | tokenization, representations, GloVe/context, pooled classifiers, imbalance, DistilBERT | [Tokens and embeddings](../guides/text/tokens-embeddings.md) |
 | Techniques and Ecosystem Tools · module 4 | loader settings, Lightning, profiling, AMP, accumulation, callbacks | [Efficient pipelines](../guides/training/efficient-training.md) |
+| Advanced Architectures and Deployment · module 1 | shared encoders, similarity/retrieval, ResNet, DenseNet and efficient backbones | [Advanced vision](../guides/architectures/vision-generative.md) |
+| Advanced Architectures and Deployment · module 2 | hooks, features, saliency, CAM/Grad-CAM and diffusion | [Interpretability and generation](../guides/architectures/vision-generative.md#look-inside-features-receptive-fields-and-hooks) |
+| Advanced Architectures and Deployment · module 3 | attention, positional information, encoder/decoder, masks and sequence generation | [Transformers](../guides/architectures/transformers.md) |
+| Advanced Architectures and Deployment · module 4 | model state, MLflow, export, pruning, static/dynamic quantization and QAT | [Model lifecycle](../guides/deployment/model-lifecycle.md) · [Deployment](../guides/deployment/optimization-serving.md) |
 
-Detection and segmentation are covered as pretrained inference and output interpretation. Broader deployment and advanced-architecture topics need their own source review before adding a guide. Extra comparisons such as Gaussian versus impulse noise are labelled as explanatory extensions.
+Detection and segmentation are covered as pretrained inference and output interpretation. Advanced architectures and deployment now have two connected pages each. Extra comparisons such as Gaussian versus impulse noise are labelled as explanatory extensions.
 
 ## Visuals and measurements
 

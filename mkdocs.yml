@@ -40,11 +40,13 @@ theme:
 extra_css:
   - assets/stylesheets/extra.css
   - assets/stylesheets/recall-visuals.css
+  - assets/stylesheets/course3-visuals.css
 
 extra_javascript:
   - assets/javascripts/copy-code.js
   - assets/javascripts/interactions.js
   - assets/javascripts/recall-visuals.js
+  - assets/javascripts/course3-visuals.js
 
 plugins:
   - search
@@ -92,8 +94,15 @@ nav:
   - Work with text:
       - 1 · Tokens and embeddings: guides/text/tokens-embeddings.md
       - 2 · Classifiers and fine-tuning: guides/text/text-classifiers.md
+  - Explore advanced architectures:
+      - 1 · Vision, similarity and generation: guides/architectures/vision-generative.md
+      - 2 · Attention and transformers: guides/architectures/transformers.md
+  - Save and deploy models:
+      - 1 · Memory, checkpoints and tracking: guides/deployment/model-lifecycle.md
+      - 2 · Compression, export and deployment: guides/deployment/optimization-serving.md
   - Practice with projects:
       - Choose a project: projects/index.md
+      - Model lifecycle and pruning: projects/model-lifecycle.md
       - Controlled training comparison: projects/training-comparison.md
       - Image augmentation and head training: projects/vision-head.md
       - Variable-length text classifier: projects/text-bags.md

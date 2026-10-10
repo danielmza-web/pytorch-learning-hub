@@ -1,7 +1,7 @@
 ---
 title: Text — tokens, embeddings and batches
 tags: [text, tokenizer, embeddings, padding]
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # Text — tokens, embeddings and batches
@@ -107,6 +107,12 @@ Use `padding=True` for the longest sequence in the current tokenizer call, or `p
 
 An **attention mask** identifies valid positions, usually with 1, and padding with 0. It is not a class label. For manual embedding pooling, you must exclude padding yourself. For transformer batches, pass it to the model.
 
+### A padding mask and a causal mask answer different questions
+
+For token IDs `[5, 8, 0, 0]`, a Hugging Face padding mask is `[1, 1, 0, 0]`: it distinguishes content from padding. A causal mask instead prevents a position from using future positions when learning to predict the next token. An encoder classifier can use surrounding valid tokens; an autoregressive decoder needs the future hidden.
+
+Read the API's convention before reusing a mask. In PyTorch `nn.MultiheadAttention`, boolean `key_padding_mask=True` means **ignore this key**, so the equivalent padding mask is `[False, False, True, True]`. Do not pass a Hugging Face 1/0 validity mask unchanged and assume it has the same meaning. Mask shapes and meanings also vary across attention APIs. [MultiheadAttention mask contract](https://docs.pytorch.org/docs/2.14/generated/torch.nn.MultiheadAttention.html).
+
 ### Pad at collation time
 
 ```python
@@ -173,5 +179,7 @@ PCA (`PCA(n_components=2).fit_transform(vectors)`) projects onto two directions 
 **Check yourself:** does zero-padding reduce an unmasked mean embedding? Yes: dividing by total padded length changes the vector's magnitude. The mask must determine both the sum and its denominator.
 
 Continue with [pooled and pretrained text classifiers](text-classifiers.md), where the same IDs and masks connect to logits, loss and fine-tuning.
+
+Then [transformers and sequence models](../architectures/transformers.md) explains how positions, attention and encoder/decoder objectives turn token vectors into context-dependent representations.
 
 **Sources:** [Hugging Face tokenizers](https://huggingface.co/docs/transformers/en/main_classes/tokenizer), [padding collator](https://huggingface.co/docs/transformers/en/main_classes/data_collator), [PyTorch Embedding](https://docs.pytorch.org/docs/stable/generated/torch.nn.Embedding.html), [GloVe](https://nlp.stanford.edu/projects/glove/).

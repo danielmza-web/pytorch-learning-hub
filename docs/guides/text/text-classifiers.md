@@ -1,7 +1,7 @@
 ---
 title: Text — classifiers and fine-tuning
 tags: [text, embeddingbag, distilbert, fine-tuning]
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # Text — classifiers and fine-tuning
@@ -21,6 +21,20 @@ subword IDs + attention mask → pretrained transformer → head → [N,K]
 ```
 
 The first is fast and useful as a baseline, but pooling discards token order. The second can use context and order, with a higher resource cost. Classification assigns a label; it is not text generation, named-entity tagging or a conversation model.
+
+### Follow one batch through both models
+
+For two texts, four token positions after padding, embedding width eight and three classes:
+
+| Stage | Pooled baseline | Contextual classifier |
+| --- | --- | --- |
+| Token input | IDs `[2,4]` plus padding mask | matching checkpoint IDs/mask `[2,4]` |
+| Representation | lookup vectors `[2,4,8]` | contextual hidden states `[2,4,E]` |
+| One vector per text | masked pool `[2,8]` | architecture-specific summary `[2,E]` |
+| Class output | linear head `[2,3]` | classification head `[2,3]` |
+| Training target | class IDs `[2]` | class IDs `[2]` |
+
+Dimensions are illustrative; `E` comes from the chosen checkpoint. The contextual model combines token information before summarizing the text. `AutoModel` normally returns representations, while `AutoModelForSequenceClassification` adds the task head. Neither turns a class ID into a sentence. Return to [transformers and sequence models](../architectures/transformers.md) when the encoder's internal computation is the missing link. [Hugging Face classification guide](https://huggingface.co/docs/transformers/en/tasks/sequence_classification).
 
 ## EmbeddingBag with offsets
 
@@ -89,6 +103,8 @@ loss_fn = nn.CrossEntropyLoss(weight=weights.to(device))
 Here `train_labels` is a CPU long tensor. Weight order must match class IDs. `compute_class_weight("balanced", classes=..., y=...)` is the corresponding scikit-learn utility. Weighting emphasizes errors in rare classes; it does not create missing examples or guarantee better calibration. Avoid combining oversampling and weighting blindly.
 
 Use validation macro F1 and per-class precision/recall alongside accuracy. A rare class can fail while weighted averages remain high. Evaluate new phrasing and the environment where inputs will originate.
+
+When reporting **weighted cross-entropy** for class-index targets, PyTorch's mean reduction divides by the sum of selected target weights, excluding ignored labels. Average epoch loss with that denominator, rather than giving short batches equal weight or multiplying each weighted mean by batch size. Use the same weights and reduction for comparisons. Accuracy/F1 still count the actual predictions and labels; a weighted loss does not automatically make those metrics weighted. [CrossEntropyLoss reductions](https://docs.pytorch.org/docs/2.14/generated/torch.nn.CrossEntropyLoss.html).
 
 ## Fine-tune a pretrained text model
 
@@ -168,5 +184,7 @@ Interpret the ID with your saved class map. Save model and tokenizer with `save_
 **Run the baseline:** [Variable-length text classifier](../../projects/text-bags.md) shows a training-only vocabulary, offsets, mean pooling, class weights and saved predictions in one original script with no downloads.
 
 For the next experiment, compare one baseline, one partial fine-tune and one full fine-tune using quality, time and memory. [Efficient pipelines](../training/efficient-training.md) explains the measurement and accumulation choices.
+
+After selecting the model, use [model lifecycle](../deployment/model-lifecycle.md) to package its input contract, then [optimization and serving](../deployment/optimization-serving.md) to measure CPU latency and check that a smaller artifact preserves acceptable predictions.
 
 **Sources:** [EmbeddingBag](https://docs.pytorch.org/docs/stable/generated/torch.nn.EmbeddingBag.html), [DistilBERT](https://huggingface.co/docs/transformers/en/model_doc/distilbert), [Hugging Face text classification](https://huggingface.co/docs/transformers/en/tasks/sequence_classification).

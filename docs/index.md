@@ -2,19 +2,19 @@
 title: Start here
 tags:
   - home
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # PyTorch Learning Hub
 
-A library of explanations, visual checks and runnable examples for learning PyTorch or remembering how to use it. It covers the foundations from Course 1 and the training, vision and text workflows from Course 2.
+A library of explanations, visual checks and runnable examples for learning PyTorch or remembering how to use it. Follow all three courses: foundations; training, vision and text; then advanced architectures and deployment.
 { .page-lead }
 
 ## What you will find here
 
-**Guides:** understand a concept and connect its steps. Four topics, two pages each, with shapes, functions, parameters and common mistakes.
+**Guides:** understand a concept and connect its steps. Six topics, two pages each, with shapes, functions, parameters and common mistakes.
 
-[**Projects**](projects/index.md): run the code and inspect the result. Seven original scripts with important excerpts, run commands, output explanations and complete source.
+[**Projects**](projects/index.md): run the code and inspect the result. Eight original scripts with important excerpts, run commands, output explanations and complete source.
 
 [**Quick reference**](reference/index.md): look up a function or error. Use the function finder, training cheatsheet, shape reminders and troubleshooting.
 
@@ -66,7 +66,32 @@ Tokenization, embeddings, variable lengths and text classification.
 
 </div>
 
-**If you are starting again:** read Fundamentals first. Training explains how to compare and improve the same loop; Vision and Text show how different inputs and pretrained models fit into it. You can jump directly to a topic when reviewing.
+## Continue into Course 3 topics
+
+<div class="topic-grid" markdown="1">
+<div class="topic-card" markdown="1">
+
+**5 · Advanced architectures**
+
+Shared encoders, residual and dense paths, efficient backbones, explanations, diffusion and contextual attention.
+
+[Vision, similarity and generation](guides/architectures/vision-generative.md) · [Attention and transformers](guides/architectures/transformers.md)
+
+</div>
+<div class="topic-card" markdown="1">
+
+**6 · Model lifecycle and deployment**
+
+RAM versus disk, reusable components, checkpoints, tracking, pruning, quantization and validated export.
+
+[Memory, checkpoints and tracking](guides/deployment/model-lifecycle.md) · [Compression, export and deployment](guides/deployment/optimization-serving.md)
+
+</div>
+</div>
+
+**If you are starting again:** read Fundamentals first. Training explains how to compare and improve the same loop; Vision and Text show how different inputs and pretrained models fit into it. Advanced architectures change information flow; Deployment preserves the learned state and checks whether it fits a real target. You can jump directly to a topic when reviewing.
+
+**One end-to-end example:** train an image classifier, reuse its encoder for similarity search, version its features and preprocessing, save its state, then compare a deployment candidate against the baseline. The [CPU lifecycle project](projects/model-lifecycle.md) makes saving, snapshots, component reuse and pruning behavior directly inspectable.
 
 ## Selected Course 2 examples
 

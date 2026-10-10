@@ -1,7 +1,7 @@
 ---
 title: Vision — data, transforms and noise
 tags: [torchvision, augmentation, noise, datasets]
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # Vision — data, transforms and noise
@@ -110,6 +110,24 @@ validation_transform = transforms.Compose([
 ```
 
 The crop size and noise amount are illustrative choices. A pretrained model should instead use its weight-specific [preprocessing contract](pretrained-models.md#weights-preprocessing-and-class-names). Start mildly, display repeated versions of the same sample, and compare validation with a no-augmentation baseline.
+
+### Current transforms and paired targets
+
+The course-style examples above use the familiar `torchvision.transforms` API. For new pipelines, TorchVision recommends `torchvision.transforms.v2`, including joint support for images, boxes and masks. A conversion excerpt for a PIL image or byte tensor is:
+
+```python
+import torch
+from torchvision.transforms import v2
+
+prepare = v2.Compose([
+    v2.ToImage(),                         # tensor image; no 0..1 scaling yet
+    v2.Resize((96, 96), antialias=True),
+    v2.ToDtype(torch.float32, scale=True), # byte pixels become 0..1
+    v2.Normalize(mean, std),              # chosen training/pretrained statistics
+])
+```
+
+This deterministic example deliberately resizes to a square; choose aspect-ratio-preserving resize/crop when distortion would change the task. For segmentation, a horizontal flip must flip both the image and its target mask with the **same** sampled decision. For detection, crops/resizing must update boxes and remove invalid targets. Use typed `tv_tensors.Mask` / `BoundingBoxes` or a paired functional transform; two independent random pipelines can silently misalign labels. Image normalization does not apply to integer class masks. This is the input bridge to [segmentation and generative models](../architectures/vision-generative.md). [TorchVision v2 conventions](https://docs.pytorch.org/vision/stable/transforms.html).
 
 ## Noise as a controlled augmentation
 

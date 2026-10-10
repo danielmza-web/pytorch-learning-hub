@@ -5,7 +5,7 @@ tags:
   - fundamentals
   - tensors
   - training
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # Fundamentals — core workflow
@@ -332,6 +332,20 @@ class Classifier(nn.Module):
 - `model(x)` is the normal call; it preserves hooks and PyTorch internals.
 - The output is raw **logits**, one score per class.
 
+### Architecture, tensors and execution are different
+
+Calling `Classifier(...)` creates a Python object and normally allocates its initialized parameters in CPU RAM. It does not train the model or create a weight file. Moving it with `.to("cuda")` places its tensors in accelerator memory; the Python program still controls execution.
+
+| Moment | What exists | What changes it |
+| --- | --- | --- |
+| Construction | registered layers, initialized parameters and buffers | constructor and initialization |
+| Forward pass | outputs and intermediate activations | current inputs and weights |
+| Backward pass | accumulated gradients | differentiable loss |
+| Optimizer step | updated trainable parameters | optimizer rule and gradients |
+| Saving | a serialized snapshot on storage | explicit `torch.save(...)` |
+
+A `state_dict` contains registered parameters **and persistent buffers**, such as BatchNorm running statistics. It does not describe an arbitrary Python `forward` implementation. This distinction explains why loading weights normally starts by rebuilding a compatible architecture. Follow [the model lifecycle](../deployment/model-lifecycle.md) after the basic workflow; it covers saving whole state, individual modules and resuming training. [Official saving/loading guide](https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html).
+
 ### Why activations matter
 
 Nonlinear activations let stacked layers represent curves and more complex decision boundaries.
@@ -419,6 +433,8 @@ Gradients accumulate by default. That is why each independent update clears old 
 In the scalar example, `w.grad` is 36: `d(9w²)/dw = 18w` at `w=2`. `backward()` calculates this derivative; it does not change `w`. Plain SGD subsequently performs `w ← w - lr × gradient`. Momentum uses an accumulated direction, while Adam adapts updates using gradient statistics; neither chooses a suitable learning rate for you.
 
 PyTorch builds the autograd graph from the operations actually executed during a forward pass. Ordinary Python branches and loops can participate. `nn.Sequential` is a registered ordered chain, not a separate static-graph framework; inspect its children or attach hooks when you need intermediate values.
+
+`loss.item()` produces a number for logging; that number cannot be backpropagated. `tensor.detach()` disconnects gradient history while sharing storage. If you need an independent saved tensor, use `tensor.detach().clone()`. For ordinary batch training, call `backward()` once on that batch's loss; `retain_graph=True` is not needed just because the next batch uses the same model. Its forward pass builds a new graph. [Autograd basics](https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html).
 
 ### The complete training loop
 

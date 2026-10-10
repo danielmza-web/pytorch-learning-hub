@@ -12,16 +12,16 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-## Source and publication state — reviewed 2026-10-01
+## Source and publication state — reviewed 2026-10-10
 
-At the start of the earlier documentation-only audit, DaZu was clean at `a45aee7` and the independent Hub was clean at `c470159`, both on `main` with no divergence from their locally cached `origin/main`. No remote fetch or provider check was performed, so this is local tracking evidence.
+This review started with clean local repositories: DaZu `8f5c471` and Hub `d35ee79`. The Course 3 expansion and Course 1/2 improvements are local work; no remote fetch, push or provider check accompanied this review. A future push to Hub `main` publishes Pages and requires explicit authorization.
 
-| Area | Latest publication recorded in CHANGELOG | Current difference |
+| Area | Last application publication recorded | Current difference |
 | --- | --- | --- |
-| DaZu | Source `da71922`, [Netlify deploy 6abe99081f0cca60f9947ad8](https://app.netlify.com/projects/dazu/deploys/6abe99081f0cca60f9947ad8), 2026-10-01 | Lens `a45aee7` and quality improvements are published. |
-| Hub | Source `db4ea63`, [Pages run 36899971094](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36899971094), 2026-10-01 | Application publication passed; later documentation pushes have separate runs. |
+| DaZu | Source `8587005`, Netlify deploy `6ac0eb44de313698ff50e372`, 2026-10-03 | Two new quick guides and connected navigation are local only. |
+| Hub | Source `db4ea63`, [Pages run 36899971094](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36899971094), 2026-10-01 | Four Course 3 pages, an eighth project and Course 1/2 revisions are local only. |
 
-DaZu application source `da71922` is now published from `site/` in Netlify deploy `6abe99081f0cca60f9947ad8`, including Lens implementation `a45aee7`. Hub application source `db4ea63` is published through successful Pages run `36899971094`. Both authorized GitHub pushes succeeded. See CHANGELOG for live checks, the resolved Netlify CLI error and verification limits; documentation-only follow-ups are synchronized separately.
+Daniel confirmed completion of the whole certificate on 2026-10-10. Preserve that confirmation as private study context; do not invent a credential issue date, change the CV or add public progress/status UI. The archive README was corrected, but its Course 3 materials remain unchanged. [Coverage notes](notes/course-coverage-2026-10-10.md) record the primary sources, syllabus/material mapping, current API caveats and verification limits. Earlier live evidence in CHANGELOG remains historical.
 
 ## Quality improvements implemented locally — 2026-10-01
 
@@ -37,15 +37,15 @@ Limits of the earlier implementation checks: these were local verification; the 
 
 ## Current implementation and evidence
 
-The source contains 19 public Markdown pages and builds 20 HTML pages including 404: four two-page guides, home, project chooser/seven complete projects, reference and About. Keep English content, original explanations, stable routes/anchors, sidebar/footer navigation and the existing learning order. Long implementations/variants use disclosures; search/direct anchors must reveal the destination, including a repeated link after closing its section. The project gallery uses mobile cards, and the function finder groups by purpose.
+The source contains 24 public Markdown pages and builds 25 HTML pages including 404: six two-page guides, home, project chooser/eight complete projects, reference and About. Keep English content, original explanations, stable routes/anchors, sidebar/footer navigation and the existing learning order. Long implementations/variants use disclosures; search/direct anchors must reveal the destination, including a repeated link after closing its section. The project gallery uses mobile cards, and the function finder groups by purpose.
 
 Four failed Mermaid diagrams were replaced with local responsive stage cards. The unused Mermaid bundle and exclusive fence/style configuration were removed; current diagrams use local images/stage cards. Shared `recall-visuals.js`/`.css` are byte-identical to the DaZu copies; update and validate both repositories if they change. Preserve invalid input/zero-denominator metrics, padding/masks/truncation and code-copy feedback in both themes. New visuals distinguish conceptual illustrations, tiny synthetic runs and retained measurements.
 
 Retained Course 2 CPU JSON reports live in `docs/assets/data/recall-2026-10-01/`; `scripts/render_recall_evidence.py` regenerates the corresponding new figures and original transform illustration without replacing historical EMNIST/regression visuals. Training compares shared starts/splits with sample-correct accumulation; optional `--benchmark --device cpu|auto|cuda` records timing/throughput and, for CUDA, AMP/memory metadata. No GPU benchmark was repeated in this audit. Vision checks frozen backbone parameters/BatchNorm buffers and head changes; the random offline default is mechanism evidence, while `--data ... --pretrained` needs own train/val data and may download weights. Text retains vocabulary/IDs/offsets/embedding/prediction contracts on original toy phrases, not a language benchmark.
 
-EMNIST and Nature split the training pool with a fixed seed, reserve 20% for deterministic validation, restore minimum-validation-loss weights and measure official test at the end. Checkpoints retain best epoch, classes, normalization and disjoint source indices. Preserve the historical EMNIST 24.4% CPU result/images as evidence from the earlier test-during-training configuration. The archive's user-supplied Course 2 completion is study context, not a model-quality result; its earlier archive README may be stale. Coverage notes in `notes/course-coverage-2026-09-30.md` retain the original read-only archive review, gaps and limits.
+EMNIST and Nature split the training pool with a fixed seed, reserve 20% for deterministic validation, restore minimum-validation-loss weights and measure official test at the end. Checkpoints retain best epoch, classes, normalization and disjoint source indices. Preserve the historical EMNIST 24.4% CPU result/images as evidence from the earlier test-during-training configuration. The archive's user-supplied certificate completion is study context, not a model-quality result; its README was corrected on 2026-10-10. Coverage notes in `notes/course-coverage-2026-09-30.md` retain the original read-only archive review, gaps and limits.
 
-MkDocs 1.6.1 and Material 9.7.7 remain pinned; Pages targets Python 3.14. Project dependencies use ranges, not a lockfile. Optional Optuna/Lightning/TorchMetrics/Transformers snippets are not required for the seven maintained examples or website build. Prior installed-package/GPU/hosting snapshots do not establish current access or optional runtime support; recheck when that task needs them. No environment or package changes accompanied this audit.
+MkDocs 1.6.1 and Material 9.7.7 remain pinned; Pages targets Python 3.14. Project dependencies use ranges, not a lockfile. Optional Optuna/Lightning/TorchMetrics/Transformers snippets are not required for the eight maintained examples or website build. Prior installed-package/GPU/hosting snapshots do not establish current access or optional runtime support; recheck when that task needs them. No environment or package changes accompanied this audit.
 
 ## Audit evidence — 2026-10-01
 
@@ -63,7 +63,7 @@ During that earlier documentation-only audit, no packages, website source, maint
 | --- | --- | --- |
 | Medium | CI tests syntax/numeric contracts but does not exercise a real browser. | Add focused desktop/mobile checks for disclosure reveal through search/direct anchors, mobile navigation, code copy and metrics/padding controls. Avoid assuming syntax or a strict build proves interactions. |
 | Medium | Shared recall files are byte-identical today; project dependency versions use broad ranges. | Cross-repository drift verification is implemented in the parent asset validator; maintain a recorded compatible experiment environment. Test upgrades in isolation; do not replace the current global environment by default. |
-| Low | Current source has seven projects; older context described four. | Keep inventory-derived counts and one current state section; move dated results into CHANGELOG rather than appending competing snapshots. Corrected by this documentation review. |
+| Low | Current source has eight projects; preserve inventory-derived counts when extending the library. | Keep inventory-derived counts and one current state section; move dated results into CHANGELOG rather than appending competing snapshots. Corrected by this documentation review. |
 | Low | Optional Optuna/Lightning/TorchMetrics/Transformers explanations exceed the tested default projects. | Keep optional dependencies and evidence limits explicit. Execute representative optional snippets only when that work is requested; do not claim benchmark quality from tiny synthetic runs. |
 
 The existing automatic Pages trigger was inspected and left unchanged. Explicit publication authorization is enforced by withholding remote pushes until requested.
@@ -72,7 +72,7 @@ The existing automatic Pages trigger was inspected and left unchanged. Explicit 
 
 `pytorch.dazu.xyz` is a practical PyTorch learning and recall library. It should be useful to someone learning a topic for the first time and to someone returning later to remember shapes, training logic, debugging, or project structure. It is not a course interface: do not add progress, completion, status, accounts, analytics, personal history, graded questions, or empty future-guide placeholders.
 
-The content is original. The Coursera course *PyTorch: Fundamentals* may appear as study context in sources, but the library must not reproduce assessments, protected notebooks, quizzes, or graded solutions.
+The content is original. The three-course *PyTorch for Deep Learning Professional Certificate* may appear as study context in sources, but the library must not reproduce assessments, protected notebooks, quizzes, or graded solutions.
 
 ## Source and public structure
 
@@ -83,7 +83,9 @@ Markdown under `docs/` is the source of truth. `mkdocs.yml` owns the explicit pu
 - Improve training (metrics/tuning and efficient pipelines)
 - Work with vision (transforms/noise and pretrained models)
 - Work with text (tokens/embeddings and classifiers)
-- Practice with projects (chooser, three selected Course 2 workflows and four foundation examples)
+- Explore advanced architectures (vision/generative models and transformers)
+- Save and deploy models (lifecycle and optimization/serving)
+- Practice with projects (chooser, one Course 3 lifecycle example, three selected Course 2 workflows and four foundation examples)
 - Quick reference
 - About this library
 
@@ -92,7 +94,7 @@ Each published PyTorch guide uses two substantial pages rather than many small p
 - `/guides/fundamentals/core-workflow/`
 - `/guides/fundamentals/vision-real-data/`
 
-The library also has a project gallery, seven complete project pages, one combined reference, and one combined about/sources page. Preserve stable anchors when editing long pages because the four DaZu quick guides link directly to them. Use the sidebar and page contents rather than repeated return-to-section maps; keep explanations moderate and connected, with concrete function and parameter details rather than a transcript of the course.
+The library also has a project gallery, eight complete project pages, one combined reference, and one combined about/sources page. Preserve stable anchors when editing long pages because the six DaZu quick guides link directly to them. Use the sidebar and page contents rather than repeated return-to-section maps; keep explanations moderate and connected, with concrete function and parameter details rather than a transcript of the course.
 
 Future PyTorch guides follow the same two-page pattern and enter navigation only when both pages contain useful material. OpenCV, YOLO, and other non-PyTorch libraries belong in separate future hubs, not here.
 
@@ -107,6 +109,7 @@ The maintained examples are:
 - `examples/training_comparison.py`
 - `examples/vision_head.py`
 - `examples/text_bags.py`
+- `examples/model_lifecycle.py`
 
 Regression uses seeded synthetic data on CPU and has no CLI flags. EMNIST and Nature use small seeded configurations, download public data through TorchVision and default to `--device auto`, which selects CUDA when available. They accept `--device cpu`, `--smoke-test`, and the optional longer `--full --device cuda` mode. Seeding does not guarantee identical results across environments. Project pages explain the practical question, important excerpts, evidence or clearly labelled conceptual visuals, an interaction, run instructions, expected artifacts, and the complete included source.
 
@@ -122,7 +125,7 @@ From this repository:
 py -3.14 -m mkdocs serve
 ```
 
-The current build and offline tests passed on this PC with Python 3.14.7 and existing dependencies on 2026-10-01. On another machine, follow README to create an environment and install the appropriate requirement files. Before pushing, run the checks listed in `README.md`; the GitHub workflow repeats them and publishes only after success.
+The current build and offline tests passed on this PC with Python 3.14.7 and existing dependencies on 2026-10-10. On another machine, follow README to create an environment and install the appropriate requirement files. Before pushing, run the checks listed in `README.md`; the GitHub workflow repeats them and publishes only after success.
 
 ## Publishing and hosting
 
@@ -145,7 +148,7 @@ DaZu is independent. Update `../site/learn/pytorch/` only when the short guide i
 Confirm the GitHub Actions run succeeded, then check:
 
 - the homepage and both pages of every affected guide;
-- the project chooser, all seven project pages and complete-source inclusions;
+- the project chooser, all eight project pages and complete-source inclusions;
 - direct anchors used by DaZu;
 - search, mobile navigation, images, and code-copy controls;
 - affected keyboard interactions and reduced-motion behavior;

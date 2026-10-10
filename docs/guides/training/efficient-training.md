@@ -1,7 +1,7 @@
 ---
 title: Training — efficient pipelines
 tags: [dataloader, profiling, lightning, mixed-precision]
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # Training — efficient pipelines
@@ -276,6 +276,21 @@ For a forward-only latency measurement:
 CUDA work is asynchronous; synchronization includes completion rather than just dispatch. State input shape, batch size, device, precision, warmup and repetitions. Batch-one latency and large-batch throughput are different. Measure end-to-end latency separately if decoding and transfers matter.
 
 For CUDA peak tensor memory, call `torch.cuda.reset_peak_memory_stats(device)` before the measured run and `torch.cuda.max_memory_allocated(device) / 1024**2` after it. This is allocated tensor memory, not all memory shown by a system monitor. `empty_cache()` releases unused cached blocks; it cannot free live tensors or their graphs.
+
+### Diagnose which memory grows
+
+For one million FP32 trainable values, the parameter tensors occupy about 4 MB (decimal). A simple FP32 Adam run can also need about 4 MB for gradients and 8 MB for its two moment tensors, before activations, buffers and temporary workspaces. This is explanatory arithmetic, not a peak-memory measurement; implementation, precision and frozen tensors change the accounting.
+
+| Symptom | Inspect first | Relevant change |
+| --- | --- | --- |
+| Peak rises with image size or microbatch | saved activations | smaller microbatches; test mixed precision |
+| Large model costs memory even at batch one | parameters, buffers and optimizer state | smaller architecture or fewer trainable layers |
+| Memory grows every iteration | retained tensors, graphs and queued data | log detached values; bound caches/queues |
+| Host RAM grows with workers | prefetched batches and worker state | worker count and prefetch budget |
+
+Store `loss.item()` in a loss history and `prediction.detach().cpu()` for retained examples. Keeping graph-connected tensors can retain intermediate computation. Releasing unused cached CUDA blocks cannot fix live references. Measure a warmed-up representative run rather than extrapolating from checkpoint file size.
+
+Training efficiency and deployment efficiency have different goals: a frozen backbone still occupies memory and runs during inference. Continue with [model lifecycle](../deployment/model-lifecycle.md) for what survives saving, and [optimization and serving](../deployment/optimization-serving.md) for smaller CPU inference artifacts. [AMP recipe](https://docs.pytorch.org/tutorials/recipes/recipes/amp_recipe.html).
 
 ## Remember and apply
 

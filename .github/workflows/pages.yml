@@ -42,6 +42,8 @@ jobs:
           python tests/validate_recall_patterns.py
           python tests/validate_selected_examples.py
           python tests/validate_learning_contracts.py
+          python tests/validate_model_lifecycle.py
+          node tests/validate_course3_visuals.cjs
           node tests/validate_recall_visuals.cjs
           node tests/validate_copy_code.cjs
           python tests/smoke_in_copy.py
@@ -49,6 +51,7 @@ jobs:
           node --check docs/assets/javascripts/interactions.js
           node --check docs/assets/javascripts/recall-visuals.js
           node --check docs/assets/javascripts/copy-code.js
+          node --check docs/assets/javascripts/course3-visuals.js
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

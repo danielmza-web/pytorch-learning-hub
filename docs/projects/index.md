@@ -2,13 +2,27 @@
 title: Complete PyTorch projects
 tags:
   - projects
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # Complete PyTorch projects
 
 Choose the workflow you want to run. Each page explains the important steps before showing the complete maintained script.
 { .page-lead }
+
+## Course 3: preserve and reuse a model
+
+<div class="project-grid" markdown="1">
+<div class="project-choice" markdown="1">
+
+[Model lifecycle on CPU](model-lifecycle.md)
+
+Weights, training checkpoint, independent snapshot, encoder reuse and pruning masks versus dense shapes.
+
+**Run / output:** Tiny synthetic CPU model; no downloads. Saves restorable states and a JSON report of equality, shapes and file bytes. No accuracy or acceleration benchmark is claimed.
+
+</div>
+</div>
 
 ## Selected Course 2 workflows
 

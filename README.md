@@ -18,16 +18,16 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-## Source and publication state — reviewed 2026-10-01
+## Source and publication state — reviewed 2026-10-10
 
-At the start of the earlier documentation-only audit, DaZu was clean at `a45aee7` and the independent Hub was clean at `c470159`, both on `main` with no divergence from their locally cached `origin/main`. No remote fetch or provider check was performed, so this is local tracking evidence.
+This review started with clean local repositories: DaZu `8f5c471` and Hub `d35ee79`. The Course 3 expansion and Course 1/2 improvements are local work; no remote fetch, push or provider check accompanied this review. A future push to Hub `main` publishes Pages and requires explicit authorization.
 
-| Area | Latest publication recorded in CHANGELOG | Current difference |
+| Area | Last application publication recorded | Current difference |
 | --- | --- | --- |
-| DaZu | Source `da71922`, [Netlify deploy 6abe99081f0cca60f9947ad8](https://app.netlify.com/projects/dazu/deploys/6abe99081f0cca60f9947ad8), 2026-10-01 | Lens `a45aee7` and quality improvements are published. |
-| Hub | Source `db4ea63`, [Pages run 36899971094](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36899971094), 2026-10-01 | Application publication passed; later documentation pushes have separate runs. |
+| DaZu | Source `8587005`, Netlify deploy `6ac0eb44de313698ff50e372`, 2026-10-03 | Two new quick guides and connected navigation are local only. |
+| Hub | Source `db4ea63`, [Pages run 36899971094](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/36899971094), 2026-10-01 | Four Course 3 pages, an eighth project and Course 1/2 revisions are local only. |
 
-DaZu application source `da71922` is now published from `site/` in Netlify deploy `6abe99081f0cca60f9947ad8`, including Lens implementation `a45aee7`. Hub application source `db4ea63` is published through successful Pages run `36899971094`. Both authorized GitHub pushes succeeded. See CHANGELOG for live checks, the resolved Netlify CLI error and verification limits; documentation-only follow-ups are synchronized separately.
+Daniel confirmed completion of the whole certificate on 2026-10-10. Preserve that confirmation as private study context; do not invent a credential issue date, change the CV or add public progress/status UI. The archive README was corrected, but its Course 3 materials remain unchanged. [Coverage notes](notes/course-coverage-2026-10-10.md) record the primary sources, syllabus/material mapping, current API caveats and verification limits. Earlier live evidence in CHANGELOG remains historical.
 
 ## Quality improvements implemented locally — 2026-10-01
 
@@ -59,7 +59,7 @@ The rollback snapshot is intentionally detached from `pytorch.dazu.xyz`. Do not 
 
 ## Content structure
 
-The public navigation follows a connected route: Start here → Fundamentals → Improve training → Work with vision → Work with text → projects → Quick reference → About. Each of the four guides has two pages. There are 19 maintained Markdown pages and 20 generated HTML pages including the error page.
+The public navigation follows a connected route: Start here → Fundamentals → Improve training → Work with vision → Work with text → Advanced architectures → Model lifecycle and deployment → projects → Quick reference → About. Each of the six guides has two pages. There are 24 maintained Markdown pages and 25 generated HTML pages including the error page.
 
 The maintained source pages are:
 
@@ -78,13 +78,13 @@ PyTorch Fundamentals currently uses:
 
 Do not create future-guide placeholders. Add a guide to `mkdocs.yml` only after both pages contain useful material.
 
-`examples/recall_patterns.py` contains the original, tested impulse-noise, masked-pooling, EmbeddingBag-collation and gradient-accumulation excerpts included in the guides. It uses the existing project dependencies and performs no downloads. Optional ecosystem excerpts need `optuna`, `lightning`, `torchmetrics` or `transformers`; these are not required to build the website or run the seven maintained projects. On 2026-09-30, Transformers was available locally, while Optuna, Lightning and TorchMetrics were absent. Nothing was installed for this review, and those optional snippets have not been executed end to end.
+`examples/recall_patterns.py` contains the original, tested impulse-noise, masked-pooling, EmbeddingBag-collation and gradient-accumulation excerpts included in the guides. It uses the existing project dependencies and performs no downloads. Optional ecosystem excerpts need `optuna`, `lightning`, `torchmetrics` or `transformers`; these are not required to build the website or run the eight maintained projects. On 2026-09-30, Transformers was available locally, while Optuna, Lightning and TorchMetrics were absent. Nothing was installed for this review, and those optional snippets have not been executed end to end.
 
 ## Update locally
 
 Requirements: Python 3.14 to match `.github/workflows/pages.yml`, Git for source synchronization, and a browser. Node.js is needed for the JavaScript syntax check; the workflow uses the runner's available Node version. Documentation dependencies are pinned to MkDocs `1.6.1` and Material `9.7.7`. Project dependencies have version ranges, not a complete lockfile: Matplotlib `>=3.8,<4`, Pillow `>=12,<13`, Torch `>=2.2,<3`, and TorchVision `>=0.17,<1`.
 
-Python 3.14.7 was rechecked on this PC on 2026-10-01; the current build and offline project checks passed using the existing global dependencies. Use `py -3.14` instead of `python` in the commands below; no installation is needed for the verified environment. The moved, broken `.venv` was removed. To preview from this repository, run `py -3.14 -m mkdocs serve`.
+Python 3.14.7 was rechecked on this PC on 2026-10-10; the current build and offline project checks passed using the existing global dependencies. Use `py -3.14` instead of `python` in the commands below; no installation is needed for the verified environment. The moved, broken `.venv` was removed. To preview from this repository, run `py -3.14 -m mkdocs serve`.
 
 On another PC, clone this repository separately (the parent DaZu clone omits it), then run these commands from this repository root. The Python 3.14 Windows launcher must already be available; elsewhere use a Python 3.14 executable in place of `py -3.14`.
 
@@ -129,6 +129,9 @@ python tests/validate_recall_patterns.py
 python tests/validate_selected_examples.py
 python tests/validate_learning_contracts.py
 node tests/validate_recall_visuals.cjs
+python tests/validate_model_lifecycle.py
+node tests/validate_course3_visuals.cjs
+node --check docs/assets/javascripts/course3-visuals.js
 python tests/smoke_in_copy.py
 python -m py_compile scripts/generate_concept_visuals.py examples/regression_demo.py examples/emnist_model.py examples/robust_dataset.py examples/nature_cnn.py
 node --check docs/assets/javascripts/interactions.js
@@ -139,7 +142,7 @@ The GitHub Pages workflow repeats these checks and publishes only when they all 
 
 For a review that must preserve non-documentation files, use `python -B tests/validate_content.py`, `python -B tests/validate_built_site.py` after a fresh strict build, `python -B tests/validate_recall_patterns.py`, and the JavaScript syntax check. The built-site validator rejects absent output and checks every maintained source page. Run the smoke suite on a disposable source copy to preserve checked-in visuals and retained experiment results.
 
-When nested inside DaZu, build here first, then run `python -B tests/validate_pytorch_hub.py` from the parent root to verify all four quick-guide links against the generated library. Content validation compares navigation with the actual source inventory and retains the two-page-per-guide rule. Update the parent guide list deliberately when adding another guide.
+When nested inside DaZu, build here first, then run `python -B tests/validate_pytorch_hub.py` from the parent root to verify all six quick-guide links against the generated library. Content validation compares navigation with the actual source inventory and retains the two-page-per-guide rule. Update the parent guide list deliberately when adding another guide.
 
 ## Publish with GitHub Pages
 
@@ -170,6 +173,14 @@ After a successful workflow, verify the changed page, direct anchors, search, mo
 6. Validate and commit locally. Push only after an explicit release request.
 
 OpenCV, YOLO, and other non-PyTorch topics do not belong in this repository.
+
+## Course 3 examples and visuals
+
+Run `python -B examples/model_lifecycle.py` for a tiny CPU-only example with original synthetic data. It writes weights, a resumable checkpoint, an encoder-only file, pruning evidence and a JSON report under ignored `artifacts/model-lifecycle/`. No download or optional dependency is required. `tests/validate_model_lifecycle.py` checks exact restore, component reuse, optimizer continuation and pruning serialization; the browser tools illustrate attention visibility and exact weight payload rather than measured runtime memory.
+
+The four new pages under `docs/guides/{architectures,deployment}/` explain modular networks, CNN families, Siamese/triplet learning, saliency/Grad-CAM, diffusion, transformer shapes/masks/generation, RAM versus disk, snapshots/checkpoints, restricted loading, component transfer, memory-efficient loading, MLflow, pruning, quantization, distillation, ONNX and serving contracts. The original ONNX CPU toy passed numerical parity for batches 1, 3 and 16 using locally available optional packages. MLflow end-to-end, torchao quantization and physical-device benchmarks are not claimed. Current PyTorch docs move quantization toward torchao and deprecate TorchScript; legacy course APIs are identified as such.
+
+If Windows temporary-directory permissions prevent disposable-copy tests, set `TMP` and `TEMP` for that shell to an existing ignored `tmp/test-runs/` directory inside this checkout. Do not change machine-wide environment settings or run the underlying smoke suite over maintained images.
 
 ## Selected Course 2 workflows
 

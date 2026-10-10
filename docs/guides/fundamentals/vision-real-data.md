@@ -5,7 +5,7 @@ tags:
   - fundamentals
   - cnn
   - data-quality
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # Fundamentals — vision and real data
@@ -273,6 +273,16 @@ train_set, validation_set = random_split(
 
 Record the split seed and per-class distribution. For multiple images of the same person, object, location, or capture burst, split by entity rather than individual image. `random_split` by itself does not prevent that kind of leakage.
 
+The three splits answer different questions. A conceptual factory example makes the unit of independence explicit:
+
+| Split | Original panels | Allowed use |
+| --- | --- | --- |
+| Train | A, B, C, D, E, F | fit weights/normalization; apply training augmentation |
+| Validation | G, H | choose settings and the best checkpoint |
+| Test | I, J | measure the selected procedure at the end |
+
+All views, crops and near-duplicate captures of panel A stay with A. A random image split can put the same physical scratch on both sides, even with disjoint file paths. If the intended deployment predicts future captures, a chronological split can be more realistic than a shuffled split. Stratification preserves class proportions; it does not ensure independence. Keep a manifest of identities and split membership. The table illustrates a split policy, not a measured dataset. [Group and time-aware evaluation](https://scikit-learn.org/stable/modules/cross_validation.html).
+
 ### Separate transforms for shared split indices
 
 `Subset` and `random_split` retain references to their underlying dataset. Assigning a new transform through a shared parent can accidentally augment validation too. With identical folder contents and ordering, use separate dataset objects:
@@ -428,3 +438,5 @@ Before trusting an image model, confirm:
 Use the [project gallery](../../projects/index.md) to move from these patterns to complete, runnable examples, or open the [reference](../../reference/index.md) when debugging a specific run.
 
 For the next layer of the same workflow, study [noise and augmentation](../vision/augmentation.md) and [pretrained vision models](../vision/pretrained-models.md). Both rely on the shape, split and evaluation checks above.
+
+Then continue to [advanced vision and generative models](../architectures/vision-generative.md): skip connections, segmentation and reconstruction change the architecture or objective while preserving these data and evaluation contracts.

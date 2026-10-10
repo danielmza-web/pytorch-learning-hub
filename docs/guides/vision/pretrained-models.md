@@ -1,7 +1,7 @@
 ---
 title: Vision — pretrained models and transfer learning
 tags: [torchvision, transfer-learning, detection, segmentation]
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # Vision — pretrained models and transfer learning
@@ -87,6 +87,18 @@ target_masks = torch.stack([pixel_classes[0] == i for i in target_ids])
 
 `preprocessed_batch` follows the segmentation weights' contract; `target_ids` are class indices you selected. Masks are boolean `[M,H,W]`, must align with the displayed image, and the drawing utility is only a visualization. Semantic segmentation distinguishes pixel classes; it does not necessarily separate two instances of the same class.
 
+### Evaluate the output that the task needs
+
+A convincing overlay is a debugging aid; quality needs held-out annotations and an appropriate metric.
+
+| Task | Compare against | Useful evidence |
+| --- | --- | --- |
+| Classification | one label per image | macro F1, per-class recall, confusion matrix |
+| Detection | object labels and boxes | precision/recall or average precision with declared IoU/score rules |
+| Segmentation | class mask aligned pixel by pixel | per-class IoU/Dice and representative failures |
+
+Intersection over union is `overlap area / union area`. If a predicted region and a target each cover four pixels but share two, their union is six and IoU is `2/6 = 1/3`. That arithmetic illustrates overlap; it is not a detector benchmark. A large background can dominate pixel accuracy while the small defect is missed. Declare treatment of absent classes and annotation void regions. [TorchVision evaluation tutorial](https://docs.pytorch.org/tutorials/intermediate/torchvision_tutorial.html).
+
 ## Three transfer-learning strategies
 
 <div class="recall-flow" role="group" aria-label="Input to output">
@@ -169,5 +181,7 @@ Save weights, architecture, class order, chosen pretrained weight version, prepr
 **Run the idea:** [Image augmentation and head training](../../projects/vision-head.md) combines impulse noise, a replacement ResNet head, frozen backbone statistics and saved class/preprocessing metadata. Its default is an offline mechanism demo; an optional run uses your images and pretrained weights.
 
 Next, [text transfer learning](../text/text-classifiers.md#fine-tune-a-pretrained-text-model) reuses the same freeze/adapt/evaluate idea with a tokenizer and attention mask.
+
+For architecture choices beyond a classification backbone, continue with [advanced vision and generative models](../architectures/vision-generative.md). For shipping the selected backbone and head, follow [saving and restoring the model contract](../deployment/model-lifecycle.md).
 
 **Sources:** [TorchVision weights and models](https://docs.pytorch.org/vision/stable/models.html), [transfer-learning tutorial](https://docs.pytorch.org/tutorials/beginner/transfer_learning_tutorial.html), [visualization utilities](https://docs.pytorch.org/vision/stable/utils.html).

@@ -4,7 +4,7 @@ tags:
   - reference
   - cheatsheet
   - debugging
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # PyTorch reference and troubleshooting
@@ -19,7 +19,7 @@ Use this page when you know the goal but need the next command or check. For the
 3. A Dataset returns one sample; a DataLoader returns a batch.
 4. A classifier normally returns raw logits.
 5. The update order is clear → predict → measure → differentiate → update.
-6. Evaluation uses both `model.eval()` and disabled gradients.
+6. Ordinary prediction uses `model.eval()` and disabled gradients; saliency needs evaluation behavior with gradients enabled.
 7. Convolution grows useful feature channels; pooling or stride reduces spatial size.
 8. Training behavior matters only when compared with validation and real-use data.
 9. Save weights together with the context needed to interpret them.
@@ -140,6 +140,23 @@ Each row groups related functions by the reason to use them. Follow the link for
     | `synchronize`, `reset_peak_memory_stats`, `max_memory_allocated`, `element_size` | measure completion and tensor bytes | [Measurements](../guides/training/efficient-training.md#measure-latency-and-memory) |
     | `state_dict`, `save`, `load`, `load_state_dict` | retain weights plus their interpretation | [Saving](../guides/fundamentals/vision-real-data.md#saving-and-restoring) |
 
+
+## Course 3: architecture and deployment decisions
+
+| Need to remember | Mechanism / functions | Connected explanation |
+| --- | --- | --- |
+| Compare examples rather than assign fixed classes | shared encoder, `TripletMarginLoss`, normalized embeddings | [Similarity and retrieval](../guides/architectures/vision-generative.md#learn-similarity-instead-of-a-fixed-class-list) |
+| Build deeper or more efficient CNNs | residual addition, dense concatenation, depthwise/pointwise convolution | [Backbone choices](../guides/architectures/vision-generative.md#residual-dense-and-efficient-backbones) |
+| Inspect a chosen score | hooks, `autograd.grad`, saliency, CAM/Grad-CAM | [Interpretability](../guides/architectures/vision-generative.md#saliency-cam-and-grad-cam-answer-different-questions) |
+| Generate images from noise | denoiser, timestep, condition, scheduler, VAE | [Diffusion](../guides/architectures/vision-generative.md#diffusion-connects-noise-prediction-to-image-generation) |
+| Connect token positions | Q/K/V, `MultiheadAttention`, masks, positions | [Attention](../guides/architectures/transformers.md#queries-keys-and-values-form-attention) |
+| Predict the next token or translate | shifted targets, causal self-attention, cross-attention | [Generation and translation](../guides/architectures/transformers.md#train-next-token-prediction-with-shifted-targets) |
+| Preserve or reuse a model | `state_dict`, `save`, `load`, `deepcopy`, component state | [Memory and files](../guides/deployment/model-lifecycle.md) |
+| Record experiments | MLflow runs, params, metrics and artifacts | [Tracking](../guides/deployment/model-lifecycle.md#track-the-experiment-and-the-deployable-artifact) |
+| Run on a smaller target | pruning, calibration, quantization, QAT, supported kernels | [Compression](../guides/deployment/optimization-serving.md) |
+| Use another inference runtime | ONNX export, shape constraints, numerical parity | [Export](../guides/deployment/optimization-serving.md#onnx-export-a-supported-computation) |
+
+**Two easy confusions:** `weights_only=True` restricts deserialization rather than extracting weights; pruning masks do not shrink dense tensor shapes. Training microbatches reduce activation pressure, while inference compression changes a different resource budget. Current quantization development uses torchao; older eager APIs remain course context.
 
 ## Cheatsheet
 

@@ -1,7 +1,7 @@
 ---
 title: Training — metrics and tuning
 tags: [training, metrics, schedulers, optuna]
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-10
 ---
 
 # Training — metrics and tuning
@@ -72,6 +72,19 @@ In multiclass work, **macro** gives every class equal weight; **weighted** weigh
     ```
 
     Use `MulticlassAccuracy`, `MulticlassPrecision`, `MulticlassRecall` and `MulticlassConfusionMatrix` similarly. `update()` accumulates counts; `compute()` summarizes them; `reset()` starts a new measurement. Averaging individual batch F1 values is generally incorrect. Keep separate state for training and validation.
+
+### The decision threshold is part of the experiment
+
+For a binary model with one logit, `sigmoid(logit) >= threshold` decides when to flag an item. For a two-class softmax model, use the probability of the named positive class. The usual threshold `0.5` is a convention, not a requirement of the loss.
+
+Consider positive scores `[0.9, 0.6, 0.4, 0.1]` and truth `[1, 0, 1, 0]`:
+
+| Threshold | TP / FP / FN / TN | Precision | Recall |
+| --- | --- | --- | --- |
+| 0.5 | 1 / 1 / 1 / 1 | 0.5 | 0.5 |
+| 0.3 | 2 / 1 / 0 / 1 | 2/3 | 1.0 |
+
+These are exact toy counts, not model results. Lowering the threshold finds the missed positive while retaining a false alarm. Sweep thresholds on validation, choose according to the cost of misses and alarms, save that threshold, then evaluate the frozen choice on test. Probability calibration is a separate question. [Precision–recall curves](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_recall_curve.html).
 
 ## What each hyperparameter changes
 
@@ -172,6 +185,8 @@ The structure below requires Optuna and your own `fit_and_validate` function. Ea
 `suggest_int` chooses discrete integers; `suggest_float(log=True)` searches orders of magnitude; `suggest_categorical` chooses named options. If the objective is loss, use `direction="minimize"`.
 
 Grid search exhausts listed combinations; random search samples without learning from scores; TPE uses earlier trials to guide later proposals. A short search has noisy evidence. `optuna.visualization.plot_optimization_history(study)`, `plot_param_importances(study)` and `plot_parallel_coordinate(study)` help explore completed trials; their plotting dependencies are optional. Those plots do not establish causation or a global optimum. Recheck promising settings across seeds.
+
+**Search can overfit validation too.** Testing more configurations repeatedly against the same holdout can select a lucky result. Keep the test isolated; use additional folds or a separate selection split when the search budget and data justify them. An Optuna **pruner** ends an unpromising training trial using reported intermediate validation scores; it does not remove neural-network weights. Model pruning belongs to [deployment optimization](../deployment/optimization-serving.md). [Optuna pruning](https://optuna.readthedocs.io/en/stable/tutorial/10_key_features/003_efficient_optimization_algorithms.html).
 
 ### Flexible models must register every layer
 
