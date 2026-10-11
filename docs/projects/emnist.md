@@ -87,8 +87,13 @@ Historical evidence: the images below come from the original CPU configuration, 
 <p class="visual-caption">Illustration: shapes and operations, not measured model performance.</p>
 
 
-## Interactive check
+## Visual check {#interactive-check}
 
+<!-- learning-overview:shape28 -->
+<section class="learning-overview" data-overview="shape28" aria-label="Follow the spatial size"><p><strong>Follow the spatial size</strong></p><figure class="overview-flow"><figcaption>Two 2× pooling stages</figcaption><ol><li><b>Input</b><span>28×28 pixels</span></li><li><b>Pool 1</b><span>14×14 features</span></li><li><b>Pool 2</b><span>7×7 features</span></li></ol></figure><p><small>Spatial arithmetic only; channel count is a separate dimension.</small></p></section>
+<!-- /learning-overview -->
+
+<details class="learning-exploration"><summary>Try another image size</summary>
 <div class="interactive-panel" data-shape-tracer>
   <div class="interactive-heading">EMNIST spatial-size tracer</div>
   <label>Input width and height <input type="number" min="8" value="28" data-spatial-size></label>
@@ -96,6 +101,7 @@ Historical evidence: the images below come from the original CPU configuration, 
   <button type="button" data-trace-shape>Trace shape</button>
   <output data-shape-output aria-live="polite"></output>
 </div>
+</details>
 
 ## Run it yourself
 

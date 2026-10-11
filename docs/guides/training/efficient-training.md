@@ -234,7 +234,13 @@ effective batch = microbatch size × accumulation steps
 32 × 4 = 128 samples per full update
 ```
 
+<!-- learning-overview:accumulation -->
+<section class="learning-overview" data-overview="accumulation" aria-label="Normalize by the samples that actually arrived"><p><strong>Normalize by the samples that actually arrived</strong></p><figure class="overview-flow"><figcaption>133 samples · 16 per microbatch · 3 microbatches per update</figcaption><ol><li><b>Update 1</b><span>16 + 16 + 16 = 48 samples → divide summed gradients by 48 → step.</span></li><li><b>Update 2</b><span>16 + 16 + 16 = 48 samples → divide by 48 → step.</span></li><li><b>Update 3</b><span>16 + 16 + 5 = 37 samples → divide by 37, not 48 → step.</span></li></ol></figure><p>Clear gradients before each group. BatchNorm still sees individual microbatches; a weighted loss needs its own denominator.</p><p><small>Exact unweighted sample-count arithmetic; not a throughput benchmark.</small></p></section>
+<!-- /learning-overview -->
+
+<details class="learning-exploration"><summary>Try other group sizes</summary>
 <div data-learning-lab="accumulation"><p>Compare full and incomplete groups using actual sample counts. Enable JavaScript to adjust this original toy.</p></div>
+</details>
 
 Lightning: `Trainer(accumulate_grad_batches=4)`. In manual PyTorch, gradients must be cleared at **update boundaries**, not every microbatch. The following original helper averages by the actual number of samples in each group, including an incomplete final group:
 

@@ -112,7 +112,9 @@ A symmetric distance says **how different** two embeddings are; swapping before/
 
 The encoder can be custom or pretrained. Its connection pattern changes feature reuse, gradient paths and resource demands.
 
-<div data-learning-lab="connections"><p>Compare addition, concatenation and depthwise filtering by shapes and exact weight counts. Enable JavaScript to adjust this original toy.</p></div>
+<!-- learning-overview:connections -->
+<section class="learning-overview" data-overview="connections" aria-label="Add, concatenate or factor the filters?"><p><strong>Add, concatenate or factor the filters?</strong></p><div class="overview-grid"><div class="overview-card"><b>Residual addition</b><p><code>16 channels + 16 channels → 16</code></p><p>Aligned tensors are added element by element. A different-width path needs a projection.</p></div><div class="overview-card"><b>Dense concatenation</b><p><code>16 channels + 32 new channels → 48</code></p><p>Append feature channels; keep the old ones. This is not elementwise addition.</p></div><div class="overview-card"><b>Depthwise + pointwise</b><p><code>16 depthwise filters → 1×1 mixing → 32 channels</code></p><p>9×16 + 16×32 = <strong>656 weights</strong>, versus 4608 for a dense 3×3 convolution.</p></div></div><p><small>Same illustrative spatial size; bias excluded. Weight count does not predict device latency.</small></p></section>
+<!-- /learning-overview -->
 <p class="visual-caption">Connection-pattern illustration. Smaller parameter counts or operation estimates do not establish faster execution on a particular CPU.</p>
 
 ### Residual addition needs matching shapes

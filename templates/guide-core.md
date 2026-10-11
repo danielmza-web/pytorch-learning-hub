@@ -35,7 +35,7 @@ Link the major sections and the complete projects that make them concrete.
 
 Explain the mental model, then show annotated code, shapes, and a visual or interaction when it materially helps.
 
-Use native HTML/SVG for readable diagrams. An interaction needs an exact small calculation, labeled controls, keyboard access, a reset, invalid-input handling and text output. Label synthetic arithmetic and retained measurements separately. Keep essential explanations visible; put lengthy variants in disclosures.
+Use a complete native HTML/SVG explanation first: one question, all essential steps or alternatives visible, then a short observation. It must work without JavaScript. Use `scripts/render_learning_overviews.cjs` for maintained numeric overview slots. Add an interaction only when changing a variable teaches something; start with one principal variable and put extra settings/calculations in a closed disclosure. Calculators with several inputs are optional tools. Provide labeled controls, keyboard access, reset, invalid-input handling and text output. Label synthetic arithmetic and retained measurements separately.
 
 **Next:** link to the next useful section or project.
 

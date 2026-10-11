@@ -39,6 +39,7 @@ jobs:
           python tests/validate_content.py
           python tests/validate_built_site.py
           python tests/validate_presentation.py
+          python tests/validate_visual_first.py
           python tests/validate_recall_patterns.py
           python tests/validate_selected_examples.py
           python tests/validate_learning_contracts.py

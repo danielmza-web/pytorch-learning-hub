@@ -34,7 +34,7 @@ When does a linear layer stop being expressive enough for the pattern in the dat
 
 Several `Linear` layers still compose into one affine mapping (a linear transformation plus a bias) unless a nonlinear activation sits between them. `Tanh` lets this small network bend its prediction around a curved target.
 
-Read MSE as mean squared error in the target’s units squared. Compare predictions on validation points, not only the training curve. **Common trap:** adding width without an activation still leaves an affine function; the width slider explains capacity and does not train a new network.
+Read MSE as mean squared error in the target’s units squared. Compare predictions on validation points, not only the training curve. **Common trap:** adding width without an activation still leaves an affine function; the retained figure compares fits; it does not retrain a network when viewed.
 
 ## Key code
 
@@ -67,13 +67,9 @@ This is a reproduced result from the retained script, using its synthetic datase
 
 [Open figure at original size](../assets/images/regression-comparison.png){ .figure-original }
 
-## Interactive check
+## Visual check {#interactive-check}
 
-<div class="interactive-panel" data-regression-lab>
-  <div class="interactive-heading">Capacity reminder</div>
-  <label>Hidden width <input type="range" min="1" max="64" value="32" data-regression-width></label>
-  <output data-regression-output aria-live="polite"></output>
-</div>
+
 
 Changing width changes the number of learned hidden features. The important switch is still the activation: width without a nonlinear activation does not make a curved function possible.
 

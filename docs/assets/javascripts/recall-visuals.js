@@ -27,6 +27,9 @@
     };
     inputs.forEach(input => input.addEventListener("input", update));
     root.querySelector("[data-metric-preset]").addEventListener("click", () => { [0, 0, 1, 99].forEach((value, index) => { inputs[index].value = value; }); update(); });
+    const reset = document.createElement("button"); reset.type = "button"; reset.textContent = "Reset counts";
+    reset.addEventListener("click", () => { inputs.forEach(input => { input.value = input.defaultValue; }); update(); });
+    root.querySelector("[data-metric-preset]").after(reset);
     update();
   }
   function initPadding(root) {

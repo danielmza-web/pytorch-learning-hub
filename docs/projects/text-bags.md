@@ -73,13 +73,19 @@ If you reverse the words in a sentence, its mean-pooled vector stays the same. �
 
 A padded `nn.Embedding` alternative needs a mask when computing a manual mean. Compare its padding cost below; the script itself uses offsets and no padding:
 
+<!-- learning-overview:padding -->
+<section class="learning-overview" data-overview="padding" aria-label="Padding reserves slots; truncation removes content"><p><strong>Padding reserves slots; truncation removes content</strong></p><div class="overview-grid"><div class="overview-card"><b>Two original sequences</b><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span></div><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="real-token">3</span></div><p>5 real tokens.</p></div><div class="overview-card"><b>Dynamic · longest = 3</b><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="pad-token">PAD</span></div><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="real-token">3</span></div><p>6 slots · 1 PAD · no content removed.</p></div><div class="overview-card"><b>Fixed maximum = 4</b><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="pad-token">PAD</span><span class="pad-token">PAD</span></div><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="real-token">3</span><span class="pad-token">PAD</span></div><p>8 slots · 3 PAD · no content removed.</p></div><div class="overview-card"><b>Maximum = 2</b><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span></div><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span></div><p>4 slots · 0 PAD · token 3 of sequence 2 is truncated.</p></div></div><p>A mask identifies padding; it cannot restore a truncated token or remove all padded computation.</p><p><small>Tiny illustrative sequences, not tokenizer output or measured memory.</small></p></section>
+<!-- /learning-overview -->
+
+<details class="learning-exploration"><summary>Try other sequence lengths</summary>
 <div class="interactive-panel" data-padding-lab>
   <div class="interactive-heading">Offsets avoid these padding positions</div>
   <label>Sequence lengths <input value="2,3" data-sequence-lengths aria-label="Comma separated positive token counts"></label>
-  <label>Fixed maximum <input type="number" min="1" max="4096" value="8" data-fixed-length></label>
+  <label>Fixed maximum <input type="number" min="1" max="4096" value="4" data-fixed-length></label>
   <output data-padding-output aria-live="polite"></output>
   <small>Synthetic token counts; this compares padded batching, not measured runtime.</small>
 </div>
+</details>
 
 ## Run and inspect
 

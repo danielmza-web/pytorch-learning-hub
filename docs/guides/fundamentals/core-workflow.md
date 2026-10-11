@@ -49,7 +49,6 @@ By the end, you should be able to locate where a batch is created, explain the m
 
 ## Tensors, shapes, dtype, and device
 
-<div data-learning-lab="training"><p>Step through one exact update. Backward computes gradients; only the optimizer changes weights. Enable JavaScript to adjust this original toy.</p></div>
 <p class="visual-caption">Original toy values: a classifier receives two samples and returns two scores per sample. The cross-entropy shown is calculated from these logits, not a training benchmark.</p>
 
 **Runnable toy — reproduce the flow:**
@@ -78,6 +77,8 @@ print(x.device)  # cpu
 
 ### Read the shape before the layer
 
+A resolved example: `[32,3,224,224]` holds 32 RGB images, 4,816,896 FP32 values, or 18.375 MiB of tensor payload. The first axis must survive flattening.
+
 A batch keeps one row per sample; image tensors add channel, height and width axes.
 
 | Data | Typical shape | Meaning |
@@ -102,7 +103,9 @@ A batch keeps one row per sample; image tensors add channel, height and width ax
 
 ### Reshape without changing the data
 
-<div data-learning-lab="tensor-ops"><p>The same [3,2] shape can hold different values after reshape and transpose. Compare joining and stacking too. Enable JavaScript to adjust this original toy.</p></div>
+<!-- learning-overview:tensor-ops -->
+<section class="learning-overview" data-overview="tensor-ops" aria-label="Same shape does not mean the same values"><p><strong>Same shape does not mean the same values</strong></p><div class="overview-grid"><div class="overview-card"><b>Inputs</b><figure class="learning-matrix" tabindex="0" aria-label="A [2,3]. Arrow keys scroll a wide matrix."><figcaption>A [2,3]</figcaption><div class="learning-cells" style="--columns:3"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div></figure><figure class="learning-matrix" tabindex="0" aria-label="B [2,3]. Arrow keys scroll a wide matrix."><figcaption>B [2,3]</figcaption><div class="learning-cells" style="--columns:3"><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div></figure></div><div class="overview-card"><b>Reshape · [3,2]</b><figure class="learning-matrix" tabindex="0" aria-label="Regroup consecutive values. Arrow keys scroll a wide matrix."><figcaption>Regroup consecutive values</figcaption><div class="learning-cells" style="--columns:2"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div></figure><p>Keeps the flattened value order.</p></div><div class="overview-card"><b>Transpose · [3,2]</b><figure class="learning-matrix" tabindex="0" aria-label="Exchange row / column axes. Arrow keys scroll a wide matrix."><figcaption>Exchange row / column axes</figcaption><div class="learning-cells" style="--columns:2"><span>1</span><span>4</span><span>2</span><span>5</span><span>3</span><span>6</span></div></figure><p>Same output shape as reshape; different layout.</p></div><div class="overview-card"><b>Cat · [4,3]</b><figure class="learning-matrix" tabindex="0" aria-label="Join the existing row axis. Arrow keys scroll a wide matrix."><figcaption>Join the existing row axis</figcaption><div class="learning-cells" style="--columns:3"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div></figure></div><div class="overview-card"><b>Stack · [2,2,3]</b><figure class="learning-matrix" tabindex="0" aria-label="New axis, item 0 = A. Arrow keys scroll a wide matrix."><figcaption>New axis, item 0 = A</figcaption><div class="learning-cells" style="--columns:3"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div></figure><figure class="learning-matrix" tabindex="0" aria-label="New axis, item 1 = B. Arrow keys scroll a wide matrix."><figcaption>New axis, item 1 = B</figcaption><div class="learning-cells" style="--columns:3"><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div></figure></div></div><p><small>Original illustration; not measured model performance.</small></p></section>
+<!-- /learning-overview -->
 
 
 Reshape preserves values and their count. Preserve the batch axis when flattening model inputs. `view` shares storage and needs compatible strides; `reshape` may copy when that layout cannot be viewed.
@@ -151,6 +154,11 @@ bias = torch.tensor([0.1, 0.2, 0.3])
 result = batch + bias  # [4, 3]
 ```
 
+<!-- learning-overview:broadcast -->
+<section class="learning-overview" data-overview="broadcast" aria-label="Align dimensions from the right"><p><strong>Align dimensions from the right</strong></p><div class="overview-grid"><div class="overview-card"><b>Compatible</b><p><code>[4,3] + [3] → [4,3]</code></p><p>Read [3] as [1,3]. The size-1 axis can expand.</p></div><div class="overview-card"><b>Incompatible</b><p><code>[4,3] + [4]</code></p><p>The last axes are 3 and 4: neither is 1, so they cannot align.</p></div></div><p><small>Original illustration; not measured model performance.</small></p></section>
+<!-- /learning-overview -->
+
+<details class="learning-exploration"><summary>Try your own tensor shapes</summary>
 <div class="broadcast-lab interactive-panel" data-broadcast-lab>
   <div class="interactive-heading">Broadcasting checker</div>
   <label>Shape A <input value="4,3" data-shape-a aria-label="First tensor shape"></label>
@@ -158,6 +166,7 @@ result = batch + bias  # [4, 3]
   <button type="button" data-check-broadcast>Check shapes</button>
   <output data-broadcast-output aria-live="polite"></output>
 </div>
+</details>
 
 ### Tensor operations worth remembering
 
@@ -292,6 +301,8 @@ Transforms convert individual inputs into the shape and range expected by the mo
     `mean` and `std` above must come from training data (or a documented pretrained model's expected preprocessing). Use the **same** fixed normalization for validation; fitting it on validation would leak information into training decisions. A horizontal flip is safe only when it preserves the label for your task: it can change the meaning of some symbols or medical images.
 
 ### DataLoader: samples become batches
+
+For 2,100 samples and batch size 32: 65 full batches plus one final batch of 20. With `drop_last=True`, those 20 samples are omitted.
 
 A loader groups samples and controls their order, worker processes and final incomplete batch.
 
@@ -446,6 +457,10 @@ Choose the loss from the task, then match its required output and target shapes 
     **Next:** the [EMNIST project](../../projects/emnist.md) compares a dense classifier with a CNN and produces predictions, curves, metrics, and a checkpoint.
 
 ## Loss, autograd, and optimizers
+
+<!-- learning-overview:training -->
+<section class="learning-overview" data-overview="training" aria-label="When do the weights actually change?"><p><strong>When do the weights actually change?</strong></p><figure class="overview-flow"><figcaption>One batch · all five stages</figcaption><ol><li><b>1 · Clear</b><span>zero_grad clears old gradients; weights stay fixed.</span></li><li><b>2 · Forward</b><span>Two samples produce logits [2, 0] and [0, 2].</span></li><li><b>3 · Loss</b><span>Mean cross-entropy = 0.1269. Weights still stay fixed.</span></li><li><b>4 · Backward</b><span>Compute gradients [0.1192, 0.1192] and [-0.1192, -0.1192]; do not update weights yet.</span></li><li><b>5 · Update</b><span>optimizer.step applies weight − learning rate × gradient. Only now do weights change.</span></li></ol></figure><div class="overview-grid"><div class="overview-card"><b>Before step</b><figure class="learning-matrix" tabindex="0" aria-label="Weights before. Arrow keys scroll a wide matrix."><figcaption>Weights before</figcaption><div class="learning-cells" style="--columns:2"><span>-4</span><span>3</span><span>2</span><span>-1</span></div></figure></div><div class="overview-card"><b>After step · LR 0.1</b><figure class="learning-matrix" tabindex="0" aria-label="Weights after. Arrow keys scroll a wide matrix."><figcaption>Weights after</figcaption><div class="learning-cells" style="--columns:2"><span>-4.0119</span><span>2.9881</span><span>2.0119</span><span>-0.9881</span></div></figure></div></div><p><small>Exact arithmetic on two synthetic samples. No training runs in this page.</small></p></section>
+<!-- /learning-overview -->
 
 <figure class="concept-flow"><figcaption>One ordinary training update</figcaption><ol><li><b>Clear</b><span>zero_grad removes earlier accumulated gradients.</span></li><li><b>Forward + loss</b><span>Model computes logits; loss compares targets.</span></li><li><b>Backward</b><span>Compute gradients. Parameters stay unchanged.</span></li><li><b>Optimizer step</b><span>Use gradients to change parameter values.</span></li></ol></figure>
 

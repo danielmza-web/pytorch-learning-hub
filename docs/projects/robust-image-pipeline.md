@@ -69,19 +69,11 @@ The full project downloads public CIFAR-10 images through TorchVision, writes a 
 <p class="visual-caption">Illustration: shapes and operations, not measured model performance.</p>
 
 
-## Interactive check
+## Visual check {#interactive-check}
 
-<div class="interactive-panel" data-pipeline-lab>
-  <div class="interactive-heading">Manifest decision check</div>
-  <label>Candidate file
-    <select data-pipeline-file>
-      <option value="valid">rose/valid.png</option>
-      <option value="corrupt">bee/broken.jpg</option>
-      <option value="unsupported">notes/readme.txt</option>
-    </select>
-  </label>
-  <output data-pipeline-output aria-live="polite"></output>
-</div>
+<!-- learning-overview:pipeline -->
+<section class="learning-overview" data-overview="pipeline" aria-label="See all three manifest decisions"><p><strong>See all three manifest decisions</strong></p><div class="overview-grid"><div class="overview-card"><b>rose/valid.png</b><p><strong>Accept → manifest → batch</strong></p><p>Readable image, declared extension and known class. Retain stable path and class ID.</p></div><div class="overview-card"><b>bee/broken.jpg</b><p><strong>Reject → diagnostics</strong></p><p>Decoding fails. Keep the path and reason in the invalid-file report; do not batch it.</p></div><div class="overview-card"><b>notes/readme.txt</b><p><strong>Skip → extension policy</strong></p><p>Not a declared image type. Do not interpret it as training data.</p></div></div><p><small>Original illustration; not measured model performance.</small></p></section>
+<!-- /learning-overview -->
 
 ## Run it yourself
 

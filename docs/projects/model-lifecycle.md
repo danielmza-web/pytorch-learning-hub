@@ -43,6 +43,10 @@ CPU means central processing unit; RAM is the process’s working memory. The en
 
 ## Choose what to save
 
+<!-- learning-overview:artifacts -->
+<section class="learning-overview" data-overview="artifacts" aria-label="Choose the artifact for the next task"><p><strong>Choose the artifact for the next task</strong></p><div class="overview-grid"><div class="overview-card"><b>Inference artifact</b><p><b>Save:</b> model parameters + persistent buffers, architecture/configuration and input contract.</p><p><b>Restore:</b> construct compatible model → load state → eval + no_grad → predict.</p></div><div class="overview-card"><b>Training checkpoint</b><p><b>Save:</b> model + optimizer + run state, and the input contract. Include scheduler/scaler/random/data state when needed.</p><p><b>Restore:</b> construct model and optimizer → restore their state → resume training deliberately.</p></div><div class="overview-card"><b>Encoder only</b><p><b>Save:</b> encoder state, configuration and feature/input contract.</p><p><b>Restore:</b> construct encoder → restore it → attach a separate new head → train or adapt that head.</p></div></div><p><small>State dictionaries do not contain the forward implementation. Optimizer moments are not restored by model weights alone.</small></p></section>
+<!-- /learning-overview -->
+
 | Artifact | Contents | What it enables |
 | --- | --- | --- |
 | `weights.pt` | Full model state dictionary | Reconstruct compatible architecture and run inference. |

@@ -3,6 +3,14 @@
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
 
+## 2026-10-11 — visual-first simplification (local)
+
+Implemented the approved plan across 31 learning pages: 35 committed HTML/SVG comparisons, optional calculators, fewer primary controls, compact DaZu variants and no lifecycle stepper. Guides show tensor variants, three learning curves, paired geometry/noise, freeze strategies, embeddings/padding/pooling, channel connections, attention masks, artifacts/payload bytes and separate rounding. Projects P1–P8 retain executable code and measured figures while removing text-only selectors or adding visible comparisons. Authoring templates, shared assets and the Pages validation workflow follow the same criterion.
+
+Local validation passed strict build, content/navigation, built resources/anchors, presentation, generated overview drift/visibility, shared-file equality, numerical comparisons against CPU PyTorch and existing JavaScript math/copy checks. Browser review covered all 31 pages at 1440/820/390/320 px and both Hub themes (220 route visits), with additional review after shortening lifecycle text and compacting DaZu. Main flows were also checked in two script-free browser fixtures. Existing section IDs, examples, measured data and images were preserved. Representative optional controls, invalid values, reset, keyboard disclosures, direct anchors, search reveal and mobile navigation were verified. [Evidence and limits](notes/visual-first-review-2026-10-11.md).
+
+No fresh training, dependency installation, personal course-archive change, push or deployment was performed. The publication entry below is for the preceding version.
+
 ## 2026-10-11 — authorized visual learning publication
 
 Daniel explicitly requested GitHub pushes and the Netlify update. Application commits `4a50387` (DaZu) and `31e85f2` (Hub) were pushed separately to `main`, with zero divergence. DaZu published only its `site/` through [Netlify deploy 6acb706cabc97a5f665167d6](https://app.netlify.com/projects/dazu/deploys/6acb706cabc97a5f665167d6); the independent Hub published through successful [Pages run 38135003428](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38135003428). No hosting configuration changed.

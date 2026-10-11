@@ -39,5 +39,5 @@ Retain the run/report behind every measured claim. A synthetic toy or smoke run 
 
 ## Related concepts
 
-Keep PN consistent in navigation and the gallery. State runnable commands and expected artifacts. Reuse guide labs by linking them rather than duplicating long explanations.
+Keep PN consistent in navigation and the gallery. State runnable commands and expected artifacts. Begin with a complete static comparison or resolved example. Reuse maintained overview slots and link the detailed guide; keep project calculators and variants in closed disclosures. A control that only replaces a sentence should become a visible comparison. Preserve measured figures and distinguish them from synthetic visual checks.
 

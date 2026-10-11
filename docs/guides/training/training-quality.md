@@ -33,19 +33,25 @@ Once the [basic training loop](../fundamentals/core-workflow.md#the-complete-tra
 
 ## Metrics that answer the right question
 
+<!-- learning-overview:metrics -->
+<section class="learning-overview" data-overview="metrics" aria-label="Same accuracy, different missed defects"><p><strong>Same accuracy, different missed defects</strong></p><div class="overview-grid"><div class="overview-card"><b>Find the defect · one false alarm</b><div class="overview-table-wrap"><table class="learning-table"><caption>Truth rows, prediction columns</caption><thead><tr><th scope="col">Actual / predicted</th><th scope="col">Defect</th><th scope="col">Good</th></tr></thead><tbody><tr><th scope="row">Defect</th><td>1 TP</td><td>0 FN</td></tr><tr><th scope="row">Good</th><td>1 FP</td><td>98 TN</td></tr></tbody></table></div><p><strong>99% accuracy · 100% defect recall</strong></p></div><div class="overview-card"><b>Always predict good</b><div class="overview-table-wrap"><table class="learning-table"><caption>The same 100 items</caption><thead><tr><th scope="col">Actual / predicted</th><th scope="col">Defect</th><th scope="col">Good</th></tr></thead><tbody><tr><th scope="row">Defect</th><td>0 TP</td><td>1 FN</td></tr><tr><th scope="row">Good</th><td>0 FP</td><td>99 TN</td></tr></tbody></table></div><p><strong>99% accuracy · 0% defect recall</strong></p></div></div><p>Both inspect 99 good items and one defect. Accuracy alone hides the missed defect. Precision is undefined when there are no alarms.</p><p><small>Exact illustrative counts, not a trained inspection system.</small></p></section>
+<!-- /learning-overview -->
+
+<details class="learning-exploration"><summary>Try your own inspection counts</summary>
 <div class="interactive-panel" data-metrics-lab>
   <div class="interactive-heading">Inspection outcomes → metrics</div>
   <p>Positive means “defect”. Rows are truth; columns are predictions.</p>
   <div class="metrics-inputs">
-    <label>True positives <input type="number" min="0" value="8" data-tp></label>
-    <label>False positives <input type="number" min="0" value="2" data-fp></label>
-    <label>False negatives <input type="number" min="0" value="2" data-fn></label>
-    <label>True negatives <input type="number" min="0" value="88" data-tn></label>
+    <label>True positives <input type="number" min="0" value="1" data-tp></label>
+    <label>False positives <input type="number" min="0" value="1" data-fp></label>
+    <label>False negatives <input type="number" min="0" value="0" data-fn></label>
+    <label>True negatives <input type="number" min="0" value="98" data-tn></label>
   </div>
   <button type="button" data-metric-preset>Try always predicting “good”</button>
   <div data-metric-matrix></div><output data-metric-output aria-live="polite"></output>
   <small>Exact arithmetic on editable counts; no trained detector.</small>
 </div>
+</details>
 
 The **loss** is the differentiable quantity used to train. A **metric** describes behavior you care about. Lower cross-entropy and higher accuracy often move together, but they are different measurements.
 
@@ -91,7 +97,11 @@ In multiclass work, **macro** gives every class equal weight; **weighted** weigh
 
 ### The decision threshold is part of the experiment
 
-<div data-learning-lab="threshold"><p>Move the threshold while the four scores and true labels stay fixed. Enable JavaScript to adjust this original toy.</p></div>
+<div data-learning-lab="threshold">
+<!-- learning-overview:threshold -->
+<section class="learning-overview" data-overview="threshold" aria-label="A decision changes; the model score stays fixed"><p><strong>A decision changes; the model score stays fixed</strong></p><div class="overview-table-wrap"><table class="learning-table"><caption>Threshold 0.5 · positive means defect</caption><thead><tr><th scope="col">Sample</th><th scope="col">Score</th><th scope="col">Truth</th><th scope="col">Prediction</th></tr></thead><tbody><tr><th scope="row">1</th><td>0.9</td><td>Defect</td><td>Defect</td></tr><tr><th scope="row">2</th><td>0.6</td><td>Good</td><td>Defect</td></tr><tr><th scope="row">3</th><td>0.4</td><td>Defect</td><td>Good</td></tr><tr><th scope="row">4</th><td>0.1</td><td>Good</td><td>Good</td></tr></tbody></table></div><p>Precision 0.5 · recall 0.5. Move only the threshold to compare false alarms and missed defects.</p><p><small>Exact fixed-score illustration, not measured detector performance.</small></p></section>
+<!-- /learning-overview -->
+</div>
 
 
 For a binary model with one logit, `sigmoid(logit) >= threshold` decides when to flag an item. For a two-class softmax model, use the probability of the named positive class. The usual threshold `0.5` is a convention, not a requirement of the loss.

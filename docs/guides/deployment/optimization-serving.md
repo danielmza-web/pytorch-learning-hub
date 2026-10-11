@@ -52,7 +52,9 @@ Training on a GPU does not oblige you to infer on a GPU. Compatible weights can 
 
 ## Pruning: zeros are not smaller tensor shapes
 
-<div data-learning-lab="compression"><p>Compare stored slots with zeros, smaller shapes and fewer bits; inspect rounding and clipping. Enable JavaScript to adjust this original toy.</p></div>
+<!-- learning-overview:compression -->
+<section class="learning-overview" data-overview="compression" aria-label="Zeros, fewer slots and fewer bits are different"><p><strong>Zeros, fewer slots and fewer bits are different</strong></p><div class="overview-grid"><div class="overview-card"><b>Mask half the entries</b><figure class="learning-matrix" tabindex="0" aria-label="8×4 FP32 · 32 slots. Arrow keys scroll a wide matrix."><figcaption>8×4 FP32 · 32 slots</figcaption><div class="learning-cells" style="--columns:4"><span>0</span><span>1</span><span>0</span><span>1</span><span>1</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span><span>1</span><span>1</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span><span>1</span><span>1</span><span>0</span><span>1</span><span>0</span><span>0</span><span>1</span><span>0</span><span>1</span><span>1</span><span>0</span><span>1</span><span>0</span></div></figure><p><strong>128 bytes</strong> · zeros still occupy dense slots.</p></div><div class="overview-card"><b>Actually smaller layer</b><figure class="learning-matrix" tabindex="0" aria-label="4×4 FP32 · 16 slots. Arrow keys scroll a wide matrix."><figcaption>4×4 FP32 · 16 slots</figcaption><div class="learning-cells" style="--columns:4"><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span></div></figure><p><strong>64 bytes</strong> · connected layers must also adapt.</p></div><div class="overview-card"><b>Hypothetical INT8 storage</b><figure class="learning-matrix" tabindex="0" aria-label="8×4 INT8 · 32 slots. Arrow keys scroll a wide matrix."><figcaption>8×4 INT8 · 32 slots</figcaption><div class="learning-cells" style="--columns:4"><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span><span>1</span></div></figure><p><strong>32 bytes</strong> · lower bit width needs a supported representation and kernels.</p></div></div><p><small>Dense payload illustrations only; quantization metadata is extra. No speed or accuracy prediction.</small></p></section>
+<!-- /learning-overview -->
 
 
 <div class="learning-comparison" role="group" aria-label="Zero values, fewer bits and fewer dense entries">
@@ -81,6 +83,14 @@ assert (layer.weight == 0).sum().item() == 36
 `remove` folds the mask into a normal parameter; it does not remove rows, columns or channels. Actually shrinking a network requires consistent changes to connected layers, normalization and shortcuts, or an explicitly supported sparse representation. Fine-tune after pruning as needed, then re-evaluate quality and measure speed. The [pruning tutorial](https://docs.pytorch.org/tutorials/intermediate/pruning_tutorial.html) explains the mask/state representation. The [offline project](../../projects/model-lifecycle.md) checks it on a tiny CPU model.
 
 ## Quantization: fewer bits with a numerical trade-off
+
+<!-- learning-overview:quantization -->
+<section class="learning-overview" data-overview="quantization" aria-label="Rounding changes the reconstructed number"><p><strong>Rounding changes the reconstructed number</strong></p><figure class="overview-flow"><figcaption>Toy signed 4-bit range −8…7 · scale 0.25</figcaption><ol><li><b>Original</b><span>1.3</span></li><li><b>Divide + round</b><span>1.3 / 0.25 = 5.2 → 5 (ties to even).</span></li><li><b>Clip</b><span>5 is inside −8…7.</span></li><li><b>Reconstruct</b><span>5 × 0.25 = 1.25; error = -0.05.</span></li></ol></figure><p><small>This calculation uses 4 bits for visibility; it is separate from the INT8 payload comparison.</small></p></section>
+<!-- /learning-overview -->
+
+<details class="learning-exploration"><summary>Try a different value</summary>
+<div data-learning-lab="quantization"><p>Fixed scale 0.25; signed 4-bit range −8…7. Enable JavaScript to change only the original value.</p></div>
+</details>
 
 A simple integer representation approximates `real ≈ scale * (integer - zero_point)`. Rounding and clipping introduce error. Weight-only quantization reduces weight storage while activations can remain floating point. Quantizing activations as well requires ranges and kernels that match the hardware. Model payload, actual serialized bytes and process peak memory are different measurements.
 

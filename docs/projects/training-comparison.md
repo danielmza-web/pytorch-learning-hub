@@ -64,6 +64,11 @@ The model has no BatchNorm or Dropout, which makes the accumulation mechanism ea
 
 ## Check the effective batch
 
+<!-- learning-overview:accumulation -->
+<section class="learning-overview" data-overview="accumulation" aria-label="Normalize by the samples that actually arrived"><p><strong>Normalize by the samples that actually arrived</strong></p><figure class="overview-flow"><figcaption>133 samples · 16 per microbatch · 3 microbatches per update</figcaption><ol><li><b>Update 1</b><span>16 + 16 + 16 = 48 samples → divide summed gradients by 48 → step.</span></li><li><b>Update 2</b><span>16 + 16 + 16 = 48 samples → divide by 48 → step.</span></li><li><b>Update 3</b><span>16 + 16 + 5 = 37 samples → divide by 37, not 48 → step.</span></li></ol></figure><p>Clear gradients before each group. BatchNorm still sees individual microbatches; a weighted loss needs its own denominator.</p><p><small>Exact unweighted sample-count arithmetic; not a throughput benchmark.</small></p></section>
+<!-- /learning-overview -->
+
+<details class="learning-exploration"><summary>Try other group sizes</summary>
 <div class="interactive-panel" data-accumulation-lab>
   <div class="interactive-heading">Samples per optimizer update</div>
   <label>Microbatch <input type="number" min="1" value="16" data-microbatch></label>
@@ -72,6 +77,7 @@ The model has no BatchNorm or Dropout, which makes the accumulation mechanism ea
   <output data-accumulation-output aria-live="polite"></output>
   <small>Single-device arithmetic; a final incomplete group is smaller.</small>
 </div>
+</details>
 
 ## Run and inspect
 

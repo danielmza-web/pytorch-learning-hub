@@ -65,7 +65,7 @@ Connect reusable CNN blocks with training/validation curves and checkpoint selec
 
 **Data:** Public CIFAR-100 filtered to 15 nature classes; full runs download missing data. The shape smoke check is offline.
 
-**Inspect:** Inspect the validation-selected checkpoint and final test report in artifacts/nature-cnn/; the slider is an illustration.
+**Inspect:** Inspect the validation-selected checkpoint and final test report in artifacts/nature-cnn/; the three curve diagrams are illustrations.
 
 </div>
 

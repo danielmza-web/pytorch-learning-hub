@@ -12,7 +12,15 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-## Visual understanding review — published 2026-10-11
+## Current PyTorch presentation — local 2026-10-11
+
+Daniel approved visual first: show the important flow or differences before asking the reader to choose options. Each static visual answers a concrete question and identifies what to observe. Keep English public content, original material, stable routes/anchors, numbering, runnable code and measured results. The complete lifecycle replaces the Next-step selector. Main explanations use committed responsive HTML/SVG and selectable text; diagrams remain readable without JavaScript.
+
+DaZu is deliberately compact: only its threshold is a main visible control. The Hub retains exact calculations, generally in disclosures. Convolution starts with one output-cell control, attention with one causal/bidirectional choice and rounding with one value at fixed scale 0.25; extra options/matrices are further details. Multiple-input size calculators remain optional as specified in the plan. Static curve/noise examples are explicitly illustrative, distinct from retained measurements. Never infer accuracy, device speed or complete runtime memory from toy diagrams or payload bytes.
+
+Keep shared assets equal and author diagram definitions in the Hub generator, including the smaller DaZu variants. Verify numeric functions independently, generated source drift, no-JavaScript visibility, strict build, anchors/resources and actual controls. [Local scope and evidence](notes/visual-first-review-2026-10-11.md). No remote publication was performed for this simplification; the release below describes the earlier version.
+
+## Previous visual understanding review — published 2026-10-11
 
 The approved plan is implemented and published: 13 deterministic lab instances across the twelve guides, six focused DaZu counterparts, readable native diagrams, original-size figure links, corrected convolution arithmetic, coherent curve scenarios and strict shape inputs. Routes, numbering and practice connections remain unchanged. Shared learning-labs JS/CSS are copied into each independent site and checked for byte equality. Three guide/project templates now match the learning orientation and evidence rules.
 
@@ -20,7 +28,7 @@ Local strict build, content/navigation, resources/anchors/image dimensions, inde
 
 Live HTTPS verification passed 86 DaZu checks (11 canonical routes, 52 committed route/resource matches and all 34 configured aliases) and 58 Hub checks (24 routes and 34 committed resource matches). All locally generated page IDs and all 19 lab slots matched live HTML. Text comparisons normalize CRLF; generated Hub HTML is not compared byte for byte across build environments. Browser review covered all 35 canonical routes at 1440/390 px (70 visits), with no observed overflow, broken completed images or captured warnings/errors after initialization. All 19 labs initialized; reset and available select changes worked, and the SGD update/reset was checked. This supplements the preceding local arithmetic and exhaustive option/invalid-input checks; physical touch, formal screen-reader certification and full/pretrained/GPU training were not repeated.
 
-This documentation follow-up has its own Pages run; verify its pushed head before reporting final publication.
+That publication included a separately verified documentation follow-up.
 
 ## Previous published state — 2026-10-10
 

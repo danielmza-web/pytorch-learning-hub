@@ -125,7 +125,7 @@ For a first offline run, start with P1. P5–P8 also have small CPU defaults wit
 ## How to use a page
 
 1. Read its learning goal and prerequisites.
-2. Predict a shape, value or decision before checking the explanation or visual.
+2. Read the complete diagram, predict its key shape or decision, then open optional calculations if you want to explore.
 3. Expand code and variants when you need implementation. Excerpts name the objects they require; complete runnable scripts live in Projects.
 4. Run the related project and inspect the stated output. Use **Continue reading** for the next guide or the sidebar to change topics.
 

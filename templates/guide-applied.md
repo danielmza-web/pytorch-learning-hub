@@ -35,7 +35,7 @@ Show how the applied parts connect from input through evidence and saved artifac
 
 Explain the practical decision, include concise annotated code, and link a complete project where appropriate.
 
-Compare alternatives by what changes and what stays fixed. Use readable native figures, original-size links for measured images, and exact small controls where they explain a mechanism. Keep essential decisions visible and expand longer code on demand.
+Compare alternatives side by side: state what changes and what stays fixed before offering controls. Show the full workflow with native HTML/SVG that works without JavaScript; use maintained numeric overview slots where available. Keep measured figures and their original-size links. Place useful numeric exploration in a closed disclosure, beginning with one principal variable; put extra settings/calculations in further details. Keep essential decisions visible and expand longer code on demand.
 
 **Next:** link to the next useful section, project, or reference anchor.
 

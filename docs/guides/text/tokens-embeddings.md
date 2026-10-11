@@ -109,13 +109,19 @@ Default collation cannot stack vectors with different lengths. Choose a represen
 
 For lengths 3, 8 and 16, dynamic padding uses 48 positions, of which 21 are padding. Padding to 64 uses 192 positions. That arithmetic is not a speed benchmark: transformer attention and other operations have additional costs, and an attention mask does not remove all padded computation.
 
+<!-- learning-overview:padding -->
+<section class="learning-overview" data-overview="padding" aria-label="Padding reserves slots; truncation removes content"><p><strong>Padding reserves slots; truncation removes content</strong></p><div class="overview-grid"><div class="overview-card"><b>Two original sequences</b><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span></div><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="real-token">3</span></div><p>5 real tokens.</p></div><div class="overview-card"><b>Dynamic · longest = 3</b><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="pad-token">PAD</span></div><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="real-token">3</span></div><p>6 slots · 1 PAD · no content removed.</p></div><div class="overview-card"><b>Fixed maximum = 4</b><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="pad-token">PAD</span><span class="pad-token">PAD</span></div><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span><span class="real-token">3</span><span class="pad-token">PAD</span></div><p>8 slots · 3 PAD · no content removed.</p></div><div class="overview-card"><b>Maximum = 2</b><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span></div><div class="overview-tokens"><span class="real-token">1</span><span class="real-token">2</span></div><p>4 slots · 0 PAD · token 3 of sequence 2 is truncated.</p></div></div><p>A mask identifies padding; it cannot restore a truncated token or remove all padded computation.</p><p><small>Tiny illustrative sequences, not tokenizer output or measured memory.</small></p></section>
+<!-- /learning-overview -->
+
+<details class="learning-exploration"><summary>Try other sequence lengths</summary>
 <div class="interactive-panel" data-padding-lab>
   <div class="interactive-heading">Count padding before training</div>
-  <label>Sequence lengths <input value="3,8,16" data-sequence-lengths aria-label="Comma separated positive token counts"></label>
-  <label>Fixed maximum <input type="number" min="1" max="4096" value="64" data-fixed-length></label>
-  <output data-padding-output aria-live="polite">Dynamic: 48 positions, 21 padding. Fixed length 64: 192 positions, 165 padding.</output>
+  <label>Sequence lengths <input value="2,3" data-sequence-lengths aria-label="Comma separated positive token counts"></label>
+  <label>Fixed maximum <input type="number" min="1" max="4096" value="4" data-fixed-length></label>
+  <output data-padding-output aria-live="polite">Dynamic: 6 positions, 1 padding. Fixed length 4: 8 positions, 3 padding; no tokens truncated.</output>
   <small>Synthetic token counts, including any special tokens. Shows truncation when the maximum is too small.</small>
 </div>
+</details>
 
 Use `padding=True` for the longest sequence in the current tokenizer call, or `padding="max_length"` for fixed padding. `truncation=True` and an explicit `max_length` bound the input; choose the bound with the model's limit and the text length distribution in mind. A DistilBERT base checkpoint typically supports up to 512 positions, including special tokens.
 
@@ -142,7 +148,9 @@ Each `tokenized_dataset` sample should contain unpadded tokenization fields and 
 
 ## Embeddings are learned lookups
 
-<div data-learning-lab="embedding"><p>Keep the lookup row fixed while changing a separate positional signal. Enable JavaScript to adjust this original toy.</p></div>
+<!-- learning-overview:embedding -->
+<section class="learning-overview" data-overview="embedding" aria-label="Lookup, position and context are different operations"><p><strong>Lookup, position and context are different operations</strong></p><figure class="overview-flow"><figcaption>The same token ID at two positions</figcaption><ol><li><b>Lookup ID 2</b><span>Always selects [2, -2] from the fixed toy table.</span></li><li><b>Position 0</b><span>Add [0,0] → [2, -2].</span></li><li><b>Position 1</b><span>Add [0.1,−0.1] → [2.1,−2.1]. The lookup row did not change.</span></li><li><b>Context</b><span>A mixing model can combine information across tokens; adding position alone does not do that.</span></li></ol></figure><p><small>Illustrative vectors and position signals, not learned word meanings.</small></p></section>
+<!-- /learning-overview -->
 
 
 `nn.Embedding(V,E)` stores a trainable table with `V` rows and `E` values per row. It maps IDs to vectors; it does not create contextual understanding by itself.

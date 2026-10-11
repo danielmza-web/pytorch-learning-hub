@@ -88,7 +88,9 @@ The embedding dimension, dropout and head width are tunable settings; no pooling
 
 ## Manual pooling must ignore padding
 
-<div data-learning-lab="pooling"><p>Compare mean, sum and max; reverse the words and try padding. Enable JavaScript to adjust this original toy.</p></div>
+<!-- learning-overview:pooling -->
+<section class="learning-overview" data-overview="pooling" aria-label="One set of vectors, three different pools"><p><strong>One set of vectors, three different pools</strong></p><p><code>clear = [2,−2] · image = [4,−4] · PAD = [0,0]</code></p><div class="overview-grid"><div class="overview-card"><b>mean</b><p><strong>[3, -3]</strong></p><p>Average the two real rows.</p></div><div class="overview-card"><b>sum</b><p><strong>[6, -6]</strong></p><p>Add the two real rows.</p></div><div class="overview-card"><b>max</b><p><strong>[4, -2]</strong></p><p>Take the largest real value in each coordinate.</p></div></div><div class="overview-table-wrap"><table class="learning-table"><caption>Why exclude PAD?</caption><thead><tr><th scope="col">Rule</th><th scope="col">PAD excluded</th><th scope="col">PAD included</th></tr></thead><tbody><tr><th scope="row">mean</th><td>[3, -3]</td><td>[2, -2]</td></tr><tr><th scope="row">max</th><td>[4, -2]</td><td>[4, 0]</td></tr></tbody></table></div><p>Reversing “clear image” to “image clear” leaves all three pools unchanged: order is lost. All PAD explicitly returns [0,0] in this toy; a real application may reject empty text or use UNK.</p><p><small>Exact fixed-vector arithmetic; not trained text representations.</small></p></section>
+<!-- /learning-overview -->
 
 
 For padded IDs `[N,L]`, `nn.Embedding` gives `[N,L,E]`. A correct masked mean:

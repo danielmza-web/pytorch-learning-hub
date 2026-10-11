@@ -35,7 +35,9 @@ The same lifecycle applies to CNNs, embeddings and transformers. [2.2 · Efficie
 
 Calling `model = MyModel(...)` builds Python modules and initializes parameter tensors, normally in CPU RAM. `model.to("cuda")` moves parameter and buffer tensors to GPU memory; Python orchestration still runs on the host. The forward pass creates activations; training also needs saved values for backward, gradients and optimizer state. A file on disk is a persistent representation of selected state, not a running model.
 
-<div data-learning-lab="lifecycle"><p>Choose an artifact and follow it across RAM, disk and a new process. Enable JavaScript to adjust this original toy.</p></div>
+<!-- learning-overview:lifecycle -->
+<section class="learning-overview" data-overview="lifecycle" aria-label="From live memory to a file and back"><p><strong>From live memory to a file and back</strong></p><div class="overview-lifecycle"><div class="overview-grid"><div class="overview-card"><b>Code → original RAM</b><figure class="overview-flow"><figcaption>Live process</figcaption><ol><li><b>1 · Construct</b><span>Initialize live tensors.</span></li><li><b>2 · Train</b><span>Update live weights.</span></li></ol></figure></div><div class="overview-card"><b>RAM → disk</b><figure class="overview-flow"><figcaption>Persistent file</figcaption><ol><li><b>3 · Save</b><span>Write state to a file.</span></li><li><b>4 · Close process</b><span>RAM ends; file remains.</span></li></ol></figure></div><div class="overview-card"><b>Disk → new RAM</b><figure class="overview-flow"><figcaption>New process</figcaption><ol><li><b>5 · Reconstruct</b><span>Build a compatible model.</span></li><li><b>6 · Restore</b><span>Load saved state.</span></li></ol></figure></div></div></div><div class="overview-grid"><div class="overview-card"><b>Inference artifact</b><p><b>Save:</b> model parameters + persistent buffers, architecture/configuration and input contract.</p><p><b>Restore:</b> construct compatible model → load state → eval + no_grad → predict.</p></div><div class="overview-card"><b>Training checkpoint</b><p><b>Save:</b> model + optimizer + run state, and the input contract. Include scheduler/scaler/random/data state when needed.</p><p><b>Restore:</b> construct model and optimizer → restore their state → resume training deliberately.</p></div><div class="overview-card"><b>Encoder only</b><p><b>Save:</b> encoder state, configuration and feature/input contract.</p><p><b>Restore:</b> construct encoder → restore it → attach a separate new head → train or adapt that head.</p></div></div><p><small>Conceptual lifecycle; this page does not save files or train a model. A file is not a running model. Gradients, activations and optimizer state also need live memory.</small></p></section>
+<!-- /learning-overview -->
 
 `state_dict()` maps names to parameters **and persistent buffers**, such as BatchNorm running statistics. It does not contain the `forward` implementation or all Python attributes. An optimizer has its own state dictionary. Sources: [module state](https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.state_dict), [serialization](https://docs.pytorch.org/docs/stable/notes/serialization.html).
 
@@ -43,6 +45,11 @@ Calling `model = MyModel(...)` builds Python modules and initializes parameter t
 
 For a dense tensor, payload bytes are `numel() * element_size()`. Ten million FP32 parameters need about 40 MB (decimal), or 38.15 MiB, before buffers and runtime overhead. FP16 uses two bytes per stored value and INT8 one, but quantized formats also store scales, zero points and sometimes packing metadata. Converting some layers does not change every tensor.
 
+<!-- learning-overview:budget -->
+<section class="learning-overview" data-overview="budget" aria-label="Same number of weights, different payload"><p><strong>Same number of weights, different payload</strong></p><div class="overview-bars"><div><b>FP32 · 40 MB</b><span class="overview-bar" style="width:100%" aria-hidden="true"></span></div><div><b>FP16 / BF16 · 20 MB</b><span class="overview-bar" style="width:50%" aria-hidden="true"></span></div><div><b>INT8 · 10 MB</b><span class="overview-bar" style="width:25%" aria-hidden="true"></span></div></div><p>10 million dense values: 4, 2 or 1 byte per value. Decimal MB; 40 MB ≈ 38.15 MiB.</p><p><small>Hypothetical weight payload only. Activations, buffers, gradients, optimizer state, quantization metadata and runtime overhead are additional; not a device benchmark.</small></p></section>
+<!-- /learning-overview -->
+
+<details class="learning-exploration"><summary>Calculate your own weight payload</summary>
 <div class="interactive-panel" data-weight-budget>
 <h3>Change the weight-storage budget</h3>
 <label>Parameter count <input data-parameters type="number" min="1" max="1000000000000" step="1" value="10000000"></label>
@@ -50,6 +57,7 @@ For a dense tensor, payload bytes are `numel() * element_size()`. Ten million FP
 <div data-budget-bars></div><output data-budget-output aria-live="polite">Enable JavaScript to compare payload estimates.</output>
 <small>Exact arithmetic for hypothetical dense weight payloads. Excludes activations, buffers, gradients, optimizer state, quantization metadata and runtime overhead; this is not a device benchmark.</small>
 </div>
+</details>
 
 FP32 training with Adam commonly has weights, gradients and two moment tensors: roughly 16 bytes per parameter just for those four components. This is an estimate, not peak memory: activations depend on batch/sequence/image size, optimizer initialization can be lazy, mixed precision can retain additional copies, and allocators reserve extra memory. Inference avoids optimizer state and backward graphs; it still needs weights, activations and temporary workspaces. [Adam state](https://docs.pytorch.org/docs/stable/generated/torch.optim.Adam.html) and [CUDA memory](https://docs.pytorch.org/docs/stable/notes/cuda.html#memory-management) describe the implementation limits.
 
@@ -64,12 +72,7 @@ Activations, buffers, workspaces and allocator overhead are additional. This is 
 
 ## Choose what to save
 
-<div class="learning-comparison" role="group" aria-label="Live memory, an inference artifact and a resume checkpoint">
-<div><b>Live process</b><code>architecture + tensors in RAM</code><small>Training changes the live values; closing the process loses unsaved state.</small></div>
-<div><b>Inference artifact</b><code>model state + input contract</code><small>Reconstruct compatible architecture, restore state and predict.</small></div>
-<div><b>Resume checkpoint</b><code>model + optimizer + run state</code><small>Also restore the update process and any scheduler/scaler/data position needed.</small></div>
-</div>
-<p class="visual-caption">Conceptual storage choices. A model state dictionary includes persistent buffers; file size and peak process memory are different quantities.</p>
+The three restore routes above share the same RAM → disk → new-process lifecycle. Choose the saved state for your next task; an exported graph is a separate inference artifact.
 
 | Artifact | What belongs in it | Use |
 | --- | --- | --- |
