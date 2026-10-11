@@ -1,6 +1,10 @@
 # PyTorch visual review — 2026-10-11
 
-Implementation of the approved understanding/comparison plan. Local work only; this entry does not claim a GitHub push, Pages publication or Netlify deployment.
+Implementation of the approved understanding/comparison plan. The checks below record local implementation evidence. Subsequent authorized publication has separate live evidence:
+
+Daniel explicitly requested GitHub pushes and the Netlify update. Application commits `4a50387` (DaZu) and `31e85f2` (Hub) were pushed separately to `main`, with zero divergence. DaZu published only its `site/` through [Netlify deploy 6acb706cabc97a5f665167d6](https://app.netlify.com/projects/dazu/deploys/6acb706cabc97a5f665167d6); the independent Hub published through successful [Pages run 38135003428](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38135003428). No hosting configuration changed.
+
+Live HTTPS verification passed 86 DaZu checks (11 canonical routes, 52 committed route/resource matches and all 34 configured aliases) and 58 Hub checks (24 routes and 34 committed resource matches). All locally generated page IDs and all 19 lab slots matched live HTML. Text comparisons normalize CRLF; generated Hub HTML is not compared byte for byte across build environments. Browser review covered all 35 canonical routes at 1440/390 px (70 visits), with no observed overflow, broken completed images or captured warnings/errors after initialization. All 19 labs initialized; reset and available select changes worked, and the SGD update/reset was checked. This supplements the preceding local arithmetic and exhaustive option/invalid-input checks; physical touch, formal screen-reader certification and full/pretrained/GPU training were not repeated.
 
 ## Review scope
 
