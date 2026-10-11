@@ -65,6 +65,8 @@ This is a reproduced result from the retained script, using its synthetic datase
 
 ![Reproduced chart of the same curved samples with a poor linear fit on the left and a flexible nonlinear-network fit on the right](../assets/images/regression-comparison.png){ width="1852" height="708" }
 
+[Open figure at original size](../assets/images/regression-comparison.png){ .figure-original }
+
 ## Interactive check
 
 <div class="interactive-panel" data-regression-lab>

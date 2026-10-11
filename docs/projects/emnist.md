@@ -66,9 +66,15 @@ Historical evidence: the images below come from the original CPU configuration, 
 
 ![Letter predictions from the retained CPU-first EMNIST run; green titles are correct and red titles are incorrect](../assets/images/emnist-cpu-predictions.png){ width="1280" height="960" }
 
+[Open figure at original size](../assets/images/emnist-cpu-predictions.png){ .figure-original }
+
 ![Training and test loss plus accuracy curves from the retained CPU-first EMNIST run](../assets/images/emnist-cpu-training-curves.png){ width="1440" height="544" }
 
+[Open figure at original size](../assets/images/emnist-cpu-training-curves.png){ .figure-original }
+
 ![Confusion matrix from the retained CPU-first EMNIST run](../assets/images/emnist-cpu-confusion-matrix.png){ width="1440" height="1120" }
+
+[Open figure at original size](../assets/images/emnist-cpu-confusion-matrix.png){ .figure-original }
 
 <div class="recall-flow" role="group" aria-label="Input to output">
 <div><b>Letter batch</b><code>[8,1,28,28]</code><small>8 grayscale images</small></div>

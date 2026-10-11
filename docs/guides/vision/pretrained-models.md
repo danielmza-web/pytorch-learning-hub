@@ -2,7 +2,7 @@
 title: 3.2 · Pretrained models
 tags: [torchvision, transfer-learning, detection, segmentation]
 guide_id: "3.2"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 3.2 · Vision — pretrained models and transfer learning {#vision-pretrained-models-and-transfer-learning}
@@ -116,6 +116,9 @@ A convincing overlay is a debugging aid; quality needs held-out annotations and 
 Intersection over union is `overlap area / union area`. If a predicted region and a target each cover four pixels but share two, their union is six and IoU is `2/6 = 1/3`. That arithmetic illustrates overlap; it is not a detector benchmark. A large background can dominate pixel accuracy while the small defect is missed. Declare treatment of absent classes and annotation void regions. [TorchVision evaluation tutorial](https://docs.pytorch.org/tutorials/intermediate/torchvision_tutorial.html).
 
 ## Three transfer-learning strategies
+
+<div data-learning-lab="transfer"><p>Compare which blocks store weights, compute gradients and stay in evaluation mode. Enable JavaScript to adjust this original toy.</p></div>
+
 
 <div class="learning-comparison" role="group" aria-label="Feature extraction and task-specific prediction">
 <div><b>Prepared images</b><code>[N,3,H,W]</code><small>Use the selected weights’ input preparation.</small></div>

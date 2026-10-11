@@ -4,7 +4,7 @@ tags:
   - deployment
   - quantization
 guide_id: "6.2"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 6.2 · Compression, export and deployment {#compression-export-and-deployment}
@@ -51,6 +51,9 @@ A model that works on a training computer still needs to fit the target's memory
 Training on a GPU does not oblige you to infer on a GPU. Compatible weights can be loaded on CPU, but a large model may still be too slow or too large. Reducing **training** activation memory with gradient accumulation does not compress the inference model. [PyTorch CPU example](https://docs.pytorch.org/tutorials/intermediate/realtime_rpi.html).
 
 ## Pruning: zeros are not smaller tensor shapes
+
+<div data-learning-lab="compression"><p>Compare stored slots with zeros, smaller shapes and fewer bits; inspect rounding and clipping. Enable JavaScript to adjust this original toy.</p></div>
+
 
 <div class="learning-comparison" role="group" aria-label="Zero values, fewer bits and fewer dense entries">
 <div><b>Masked dense weights</b><code>8 × 4 FP32 → 128 bytes</code><small>32 stored slots remain even if 16 are zero.</small></div>

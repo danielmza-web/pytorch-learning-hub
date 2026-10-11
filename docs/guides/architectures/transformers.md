@@ -2,7 +2,7 @@
 title: 5.2 · Attention and transformers
 tags: [transformers, attention, encoder, decoder, masking, generation]
 guide_id: "5.2"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 5.2 · Transformers — attention, encoders and generation {#transformers-attention-encoders-and-generation}
@@ -143,14 +143,7 @@ panel      ✓      ✓      ✓
 
 Here `✓` means allowed, irrespective of the API's boolean convention. Do not assume `is_causal=True` is a drop-in replacement in every API/version: in higher-level transformer APIs it can be a hint about the supplied mask. The examples here supply an explicit mask. Avoid left-padded/all-padding rows in these small generic toys because some query rows can otherwise have no available keys. [Mask semantics in SDPA](https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html), [tokenizer masks](https://huggingface.co/docs/transformers/en/main_classes/tokenizer).
 
-<div class="interactive-panel" data-attention-mask>
-  <div class="interactive-heading">See which tokens may exchange information</div>
-  <label>Sequence length <input type="number" min="1" max="8" value="4" data-token-count></label>
-  <label>Attention rule <select data-attention-kind><option value="encoder">Encoder: all positions</option><option value="causal">Causal: current and earlier positions</option></select></label>
-  <div data-mask-grid></div>
-  <output data-mask-output aria-live="polite">Encoder: all 16 query/key pairs are allowed at length 4.</output>
-  <small>Semantic illustration of allowed token pairs, not learned attention weights. Boolean values mean different things in different APIs; this illustration uses allowed versus blocked positions.</small>
-</div>
+<div data-learning-lab="attention"><p>Follow fixed query/key scores through masking, softmax and a weighted value sum. Enable JavaScript to adjust this original toy.</p></div>
 
 ## Train next-token prediction with shifted targets
 

@@ -12,6 +12,12 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
+## Visual understanding review — local 2026-10-11
+
+The approved plan is implemented locally: 13 deterministic lab instances across the twelve guides, six focused DaZu counterparts, readable native diagrams, original-size figure links, corrected convolution arithmetic, coherent curve scenarios and strict shape inputs. Routes, numbering and practice connections remain unchanged. Shared learning-labs JS/CSS are copied into each independent site and checked for byte equality. Three guide/project templates now match the learning orientation and evidence rules.
+
+Local strict build, content/navigation, resources/anchors/image dimensions, independent CPU numeric comparisons, existing example/contract/lifecycle/copy/visual tests and disposable smoke passed. Browser review covered all 31 learning routes at four widths, both Hub themes (220 visits), plus 83 control checks across all 19 new lab instances and additional training/curve/shape checks. Retained measured figures and personal course materials were preserved. [Review evidence and limits](notes/visual-review-2026-10-11.md) distinguishes synthetic calculations from measurements. No remote publication was performed; the previous published state remains the release recorded below.
+
 ## Current published state — 2026-10-10
 
 The approved navigation/clarity plan is published in the independent Hub after Daniel requested the GitHub push. Application commit `420c3d5` passed [Pages run 38079506200](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38079506200). Live HTTPS checks confirmed all 24 routes, their generated IDs, home topic order and gallery P1–P8 order. Keep the six topic numbers 1–6, page numbers 1.1–6.2 and project numbers P1–P8 consistent across sidebar, home, headings, gallery and footer. Projects follow regression, EMNIST, robust pipeline, Nature CNN, controlled training, vision head, text bags and model lifecycle. `tests/validate_navigation.py`, also invoked by content validation, rejects numbering/order drift and missing reciprocal guide/project connections.

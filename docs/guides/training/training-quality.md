@@ -2,7 +2,7 @@
 title: 2.1 · Metrics and tuning
 tags: [training, metrics, schedulers, optuna]
 guide_id: "2.1"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 2.1 · Training — metrics and tuning {#training-metrics-and-tuning}
@@ -91,6 +91,9 @@ In multiclass work, **macro** gives every class equal weight; **weighted** weigh
 
 ### The decision threshold is part of the experiment
 
+<div data-learning-lab="threshold"><p>Move the threshold while the four scores and true labels stay fixed. Enable JavaScript to adjust this original toy.</p></div>
+
+
 For a binary model with one logit, `sigmoid(logit) >= threshold` decides when to flag an item. For a two-class softmax model, use the probability of the named positive class. The usual threshold `0.5` is a convention, not a requirement of the loss.
 
 Consider positive scores `[0.9, 0.6, 0.4, 0.1]` and truth `[1, 0, 1, 0]`:
@@ -124,6 +127,8 @@ Try a small logarithmic LR range first, for example `1e-4`, `1e-3`, `1e-2`. Thes
 ## Learning-rate schedulers
 
 ![Learning rates used by step, cosine and plateau schedules in a toy execution](../../assets/images/training-schedules.svg){ width="432" height="288" }
+
+[Open figure at original size](../../assets/images/training-schedules.svg){ .figure-original }
 
 Toy execution: StepLR halves LR every four calls; cosine spans 12 epochs; plateau responds to the declared validation-loss signal `[1, .8, .8, .8, .7, .7, .7, .7, .7, .7, .7, .7]` with patience 1. The chart shows LR used before each end-of-epoch scheduler call. This is a schedule comparison, not measured model training. [Calls and values](../../assets/data/recall-2026-10-01/schedules.json).
 

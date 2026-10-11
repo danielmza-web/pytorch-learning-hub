@@ -18,6 +18,12 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
+## Interactive explanations — local 2026-10-11
+
+All twelve guides now include exact small visual calculations for training, tensor operations, convolution, thresholds, accumulation, paired geometry, transfer learning, embeddings/pooling, connection patterns, attention, persistence and compression. Native diagrams stay readable on mobile; reference rasters can expand and measurement figures link to their original size. The six DaZu summaries use focused counterparts. These changes are local and await an explicitly requested release. [Review evidence and limits](notes/visual-review-2026-10-11.md).
+
+The shared implementation is `docs/assets/javascripts/learning-labs.js` plus `docs/assets/stylesheets/learning-labs.css`. Copy both into DaZu's `site/learn/pytorch/assets/` after changes; the parent asset validator enforces byte equality. Lab slots use `data-learning-lab`, initialize once and retain a brief no-JavaScript explanation. Numeric functions are importable in Node and checked against independent CPU PyTorch calculations. For UI changes, verify options, invalid fields, keyboard controls and reset in a real browser, including the two Hub themes and narrow screens. Large decimal matrices deliberately scroll within their figure.
+
 ## Current published review — 2026-10-10
 
 Daniel authorized the GitHub push of the navigation and explanation review. Application commit `420c3d5` published through successful [Pages run 38079506200](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38079506200). Live HTTPS checks confirmed all 24 routes, their generated IDs, six home topics and the P1–P8 gallery order. All twelve guides now use topic/page numbers 1.1–6.2; eight projects follow P1–P8 in the sidebar, gallery and footer. Home combines six topic cards, a compact reading map and “Practice as you learn”. Goals, prerequisites, notation, snippet requirements and reciprocal practice links connect the route. Six visible comparisons clarify outputs, evaluation splits, transfer learning, context, saved state and compression. The 24 public page routes and existing section IDs remain available.
@@ -140,6 +146,9 @@ python tests/validate_learning_contracts.py
 node tests/validate_recall_visuals.cjs
 python tests/validate_model_lifecycle.py
 node tests/validate_course3_visuals.cjs
+node tests/validate_learning_labs.cjs
+python tests/validate_learning_lab_numerics.py
+node --check docs/assets/javascripts/learning-labs.js
 node --check docs/assets/javascripts/course3-visuals.js
 python tests/smoke_in_copy.py
 python -m py_compile scripts/generate_concept_visuals.py examples/regression_demo.py examples/emnist_model.py examples/robust_dataset.py examples/nature_cnn.py
@@ -177,7 +186,7 @@ After a successful workflow, verify the changed page, direct anchors, search, mo
 1. Create `docs/guides/<guide-slug>/`.
 2. Copy `templates/guide-core.md` and `templates/guide-applied.md` into that folder with meaningful filenames.
 3. Replace the prompts with original explanations, examples, visuals, and relevant project links.
-4. Add both pages as one guide group under `Guides` in `mkdocs.yml`.
+4. Add both pages as a numbered topic group in `mkdocs.yml`; update home, project connections and navigation validation together.
 5. Add a short DaZu page at `/learn/pytorch/<guide-slug>/` and list it on `/learn/pytorch/` only when ready.
 6. Validate and commit locally. Push only after an explicit release request.
 

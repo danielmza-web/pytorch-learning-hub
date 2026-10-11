@@ -110,6 +110,8 @@ The checkpoint saves the head and backbone state together with class names, vali
 
 ![Original scene before and after crop, colour changes and impulse noise](../assets/images/vision-transforms.png){ width="960" height="880" }
 
+[Open figure at original size](../assets/images/vision-transforms.png){ .figure-original }
+
 **Seeded transform execution on an original illustration.** The panels apply actual TorchVision crop and colour transforms, followed by the maintained `ImpulseNoise` code. This scene is for inspecting transforms; the head-training run uses seeded random images. Training-only transformations preserve labels only when the selected change is plausible for your task. [Exact transform order, shape and ranges](../assets/data/recall-2026-10-01/transforms.json).
 
 The retained two-epoch CPU head run uses **random ResNet18 weights**, 24 synthetic training images, 12 validation images and three synthetic labels. Random pixels have no useful class signal; its validation score does not demonstrate transfer learning.

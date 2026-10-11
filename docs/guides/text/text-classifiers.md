@@ -2,7 +2,7 @@
 title: 4.2 · Classifiers and fine-tuning
 tags: [text, embeddingbag, distilbert, fine-tuning]
 guide_id: "4.2"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 4.2 · Text — classifiers and fine-tuning {#text-classifiers-and-fine-tuning}
@@ -87,6 +87,9 @@ Use `import torch`. Pass the function as `DataLoader(..., collate_fn=collate_bag
 The embedding dimension, dropout and head width are tunable settings; no pooling mode wins universally. Compare the same split and training budget.
 
 ## Manual pooling must ignore padding
+
+<div data-learning-lab="pooling"><p>Compare mean, sum and max; reverse the words and try padding. Enable JavaScript to adjust this original toy.</p></div>
+
 
 For padded IDs `[N,L]`, `nn.Embedding` gives `[N,L,E]`. A correct masked mean:
 

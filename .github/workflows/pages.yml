@@ -46,12 +46,15 @@ jobs:
           node tests/validate_course3_visuals.cjs
           node tests/validate_recall_visuals.cjs
           node tests/validate_copy_code.cjs
+          node tests/validate_learning_labs.cjs
+          python tests/validate_learning_lab_numerics.py
           python tests/smoke_in_copy.py
           python -m py_compile scripts/generate_concept_visuals.py examples/regression_demo.py examples/emnist_model.py examples/robust_dataset.py examples/nature_cnn.py
           node --check docs/assets/javascripts/interactions.js
           node --check docs/assets/javascripts/recall-visuals.js
           node --check docs/assets/javascripts/copy-code.js
           node --check docs/assets/javascripts/course3-visuals.js
+          node --check docs/assets/javascripts/learning-labs.js
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

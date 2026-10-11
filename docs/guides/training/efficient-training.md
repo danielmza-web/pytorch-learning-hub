@@ -2,7 +2,7 @@
 title: 2.2 · Efficient pipelines
 tags: [dataloader, profiling, lightning, mixed-precision]
 guide_id: "2.2"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 2.2 · Training — efficient pipelines {#training-efficient-pipelines}
@@ -234,14 +234,7 @@ effective batch = microbatch size × accumulation steps
 32 × 4 = 128 samples per full update
 ```
 
-<div class="interactive-panel" data-accumulation-lab>
-  <div class="interactive-heading">Samples per update</div>
-  <label>Microbatch <input type="number" min="1" value="32" data-microbatch></label>
-  <label>Accumulation steps <input type="number" min="1" value="4" data-accumulation></label>
-  <label>Samples per epoch <input type="number" min="1" value="1000" data-epoch-samples></label>
-  <output data-accumulation-output aria-live="polite">32 × 4 = 128 samples per full update; 8 updates for 1000 samples.</output>
-  <small>One device; no dropped samples. Arithmetic illustration, not a speed prediction.</small>
-</div>
+<div data-learning-lab="accumulation"><p>Compare full and incomplete groups using actual sample counts. Enable JavaScript to adjust this original toy.</p></div>
 
 Lightning: `Trainer(accumulate_grad_batches=4)`. In manual PyTorch, gradients must be cleared at **update boundaries**, not every microbatch. The following original helper averages by the actual number of samples in each group, including an incomplete final group:
 

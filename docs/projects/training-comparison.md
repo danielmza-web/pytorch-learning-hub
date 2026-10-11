@@ -94,9 +94,15 @@ These are measured outputs of the small synthetic run on 2026-10-01: PyTorch 2.1
 
 ![Validation loss for the two controlled learning rates](../assets/images/training-loss.png){ width="720" height="576" }
 
+[Open figure at original size](../assets/images/training-loss.png){ .figure-original }
+
 ![Validation macro F1 for the same trials](../assets/images/training-f1.png){ width="720" height="576" }
 
+[Open figure at original size](../assets/images/training-f1.png){ .figure-original }
+
 ![Actual validation confusion matrix for the selected LR](../assets/images/training-confusion.png){ width="800" height="640" }
+
+[Open figure at original size](../assets/images/training-confusion.png){ .figure-original }
 
 The lower final validation loss selects initial LR **0.1**: loss **0.9382**, accuracy **66.7%**, macro F1 **0.5486**. The matrix includes all 48 validation predictions; rows are truth and columns predictions. Both trials keep their initial LR during this short run: the plateau condition is not reached.
 

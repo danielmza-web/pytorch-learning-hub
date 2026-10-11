@@ -6,7 +6,7 @@ tags:
   - cnn
   - data-quality
 guide_id: "1.2"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 1.2 · Fundamentals — vision and real data {#fundamentals-vision-and-real-data}
@@ -55,30 +55,19 @@ Read [Fundamentals — core workflow](core-workflow.md) first if Dataset, logits
 
 A dense layer sees one long list of pixels. A convolution keeps the spatial layout and applies the same small kernel at many positions. Reusing weights makes it efficient and allows one learned pattern to be recognized in different locations.
 
+The default filter in the explorer is hand-designed to make its response visible. A trained CNN learns its kernel values through backpropagation.
+
+<div data-learning-lab="convolution"><p>Inspect one output cell, its input window, nine products and their sum. Enable JavaScript to adjust this original toy.</p></div>
+
+Move the selected cell to follow the window. Large decimal matrices can be scrolled horizontally on small screens; the calculation below states the selected result in text.
+
+<details markdown="1"><summary>View the original-size convolution diagram</summary>
+
 ![Conceptual example of a vertical-edge kernel sliding over an image and producing a feature map](../../assets/images/convolution-visual.png){ width="1488" height="643" }
 
-The pictured filter is hand-designed to make its response visible. A trained CNN learns its kernel values through backpropagation.
+[Open full-size diagram](../../assets/images/convolution-visual.png)
 
-<div class="kernel-lab interactive-panel" data-kernel-lab>
-  <div class="interactive-heading">3 × 3 kernel explorer</div>
-  <div class="kernel-controls">
-    <label>Kernel
-      <select data-kernel-select>
-        <option value="edge">Vertical edge</option>
-        <option value="horizontal">Horizontal edge</option>
-        <option value="sharpen">Sharpen</option>
-        <option value="blur">Box blur</option>
-      </select>
-    </label>
-    <button type="button" data-randomize-grid>Randomize input</button>
-  </div>
-  <div class="kernel-stage">
-    <div><strong>Input</strong><div class="matrix-grid" data-input-grid></div></div>
-    <div><strong>Kernel</strong><div class="matrix-grid kernel-grid" data-kernel-grid></div></div>
-    <div><strong>Valid output</strong><div class="matrix-grid output-grid" data-output-grid></div></div>
-  </div>
-  <output data-kernel-output aria-live="polite"></output>
-</div>
+</details>
 
 ### Channels
 
@@ -125,7 +114,15 @@ A `3 × 3` convolution with padding `1`, stride `1`, and dilation `1` preserves 
 
 ## CNN architecture and shapes
 
+<figure class="concept-flow"><figcaption>Follow an illustrative image batch</figcaption><ol><li><b>Input</b><span>[N,3,32,32]</span></li><li><b>Conv + ReLU</b><span>[N,32,32,32] with padding 1</span></li><li><b>Pool 2×</b><span>[N,32,16,16]</span></li><li><b>Conv + ReLU</b><span>[N,64,16,16] with padding 1</span></li><li><b>Global pool + head</b><span>[N,64,1,1] → [N,64] → [N,K]</span></li></ol></figure>
+
+<details markdown="1"><summary>View the original-size diagram</summary>
+
 ![Conceptual CNN path showing how image shapes change after convolution, pooling, and classification](../../assets/images/cnn-shape-visual.png){ width="1570" height="534" }
+
+[Open full-size diagram](../../assets/images/cnn-shape-visual.png)
+
+</details>
 
 The values in the diagram are an illustrative shape trace. Always inspect the real input and real model.
 

@@ -41,12 +41,14 @@ extra_css:
   - assets/stylesheets/extra.css
   - assets/stylesheets/recall-visuals.css
   - assets/stylesheets/course3-visuals.css
+  - assets/stylesheets/learning-labs.css
 
 extra_javascript:
   - assets/javascripts/copy-code.js
   - assets/javascripts/interactions.js
   - assets/javascripts/recall-visuals.js
   - assets/javascripts/course3-visuals.js
+  - assets/javascripts/learning-labs.js
 
 plugins:
   - search

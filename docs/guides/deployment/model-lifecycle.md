@@ -4,7 +4,7 @@ tags:
   - deployment
   - serialization
 guide_id: "6.1"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 6.1 · Model memory, checkpoints and tracking {#model-memory-checkpoints-and-tracking}
@@ -35,12 +35,7 @@ The same lifecycle applies to CNNs, embeddings and transformers. [2.2 · Efficie
 
 Calling `model = MyModel(...)` builds Python modules and initializes parameter tensors, normally in CPU RAM. `model.to("cuda")` moves parameter and buffer tensors to GPU memory; Python orchestration still runs on the host. The forward pass creates activations; training also needs saved values for backward, gradients and optimizer state. A file on disk is a persistent representation of selected state, not a running model.
 
-<div class="recall-flow" role="group" aria-label="Model lifecycle">
-<div><b>Construct</b><code>architecture + initial tensors</code><small>Shapes and forward rules come from code.</small></div>
-<div><b>Learn in memory</b><code>inputs → loss → updates</code><small>Weights change; activations and gradients occupy memory.</small></div>
-<div><b>Serialize to disk</b><code>state_dict + metadata</code><small>Persist learned tensors and their input/output contract.</small></div>
-<div><b>Reconstruct and infer</b><code>same architecture + saved state</code><small>Restore, set evaluation mode and supply matching inputs.</small></div>
-</div>
+<div data-learning-lab="lifecycle"><p>Choose an artifact and follow it across RAM, disk and a new process. Enable JavaScript to adjust this original toy.</p></div>
 
 `state_dict()` maps names to parameters **and persistent buffers**, such as BatchNorm running statistics. It does not contain the `forward` implementation or all Python attributes. An optimizer has its own state dictionary. Sources: [module state](https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.state_dict), [serialization](https://docs.pytorch.org/docs/stable/notes/serialization.html).
 
@@ -57,6 +52,15 @@ For a dense tensor, payload bytes are `numel() * element_size()`. Ten million FP
 </div>
 
 FP32 training with Adam commonly has weights, gradients and two moment tensors: roughly 16 bytes per parameter just for those four components. This is an estimate, not peak memory: activations depend on batch/sequence/image size, optimizer initialization can be lazy, mixed precision can retain additional copies, and allocators reserve extra memory. Inference avoids optimizer state and backward graphs; it still needs weights, activations and temporary workspaces. [Adam state](https://docs.pytorch.org/docs/stable/generated/torch.optim.Adam.html) and [CUDA memory](https://docs.pytorch.org/docs/stable/notes/cuda.html#memory-management) describe the implementation limits.
+
+| Hypothetical 1 million FP32 parameters with Adam | Payload |
+| --- | --- |
+| Weights | 4 MB |
+| Gradients | 4 MB |
+| First + second moments | 8 MB |
+| These components together | 16 MB |
+
+Activations, buffers, workspaces and allocator overhead are additional. This is component arithmetic, not peak RAM or VRAM.
 
 ## Choose what to save
 

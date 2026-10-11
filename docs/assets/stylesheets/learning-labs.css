@@ -1,0 +1,46 @@
+/* Readable native diagrams and deterministic labs on both static sites. */
+.learning-lab { --lab-line:var(--hub-border,var(--line,#70839b)); margin:1.4rem 0; padding:1rem; border:1px solid var(--lab-line); border-radius:8px; }
+.learning-controls { display:flex; flex-wrap:wrap; align-items:end; gap:.75rem; margin-bottom:1rem; }
+.learning-controls label { display:flex; flex-direction:column; align-items:start; gap:.4rem; margin:0; font-size:16px; line-height:1.5; max-width:100%; }
+.learning-controls input,.learning-controls select,.learning-controls button { font:inherit; color:inherit; background:var(--md-default-bg-color,var(--bg,#101722)); border:1px solid var(--lab-line); border-radius:5px; min-height:44px; padding:.45rem .6rem; max-width:100%; }
+.learning-controls select option { background:var(--md-default-bg-color,#101722); color:var(--md-default-fg-color,#e4edf7); }
+.learning-controls input[type=number] { width:130px; }
+.learning-controls input[type=range] { width:220px; padding:0; accent-color:#d67629; }
+.learning-controls input[type=checkbox] { width:22px; min-height:22px; accent-color:#d67629; }
+.learning-controls button { cursor:pointer; }
+.learning-controls button:disabled { opacity:.55; cursor:default; }
+.learning-controls :focus-visible { outline:3px solid #d67629; outline-offset:3px; }
+.learning-result { display:flex; flex-wrap:wrap; align-items:start; gap:1rem; min-width:0; }
+.learning-result > * { max-width:100%; min-width:0; }
+.learning-lab output { display:block; margin-top:1rem; font-size:16px; line-height:1.65; overflow-wrap:anywhere; }
+.learning-matrix,.learning-result figure { margin:0; }
+.learning-matrix { overflow-x:auto; padding-bottom:4px; }
+.learning-matrix:focus-visible { outline:3px solid #d67629; outline-offset:3px; }
+.learning-result figcaption { font-size:16px; font-weight:650; line-height:1.5; margin-bottom:.5rem; }
+.learning-cells { display:grid; grid-template-columns:repeat(var(--columns),max-content); gap:3px; }
+.learning-cells span { display:grid; place-items:center; min-width:30px; min-height:36px; padding:3px 5px; font:14px/1.5 ui-monospace,monospace; white-space:nowrap; border:1px solid var(--lab-line); border-radius:3px; }
+.learning-cells .selected-cell { border:2px solid #d67629; background:rgba(214,118,41,.14); font-weight:700; }
+.learning-table,.md-typeset .learning-table { display:table; width:100%; min-width:0; margin:0; font-size:15px; border-collapse:collapse; }
+.learning-table caption { text-align:left; font-weight:650; margin-bottom:.5rem; }
+.learning-table th,.learning-table td,.md-typeset .learning-table th,.md-typeset .learning-table td { min-width:0; padding:8px; text-align:left; border:1px solid var(--lab-line,#70839b); overflow-wrap:anywhere; }
+.concept-flow { width:100%; margin:1.4rem 0; }
+.concept-flow > figcaption { font-weight:650; font-size:16px; margin-bottom:.7rem; }
+.concept-flow ol { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr)); gap:.8rem; margin:0; padding:0; list-style:none; }
+.concept-flow li { min-width:0; padding:1rem; border:1px solid var(--lab-line,var(--hub-border,var(--line,#70839b))); border-radius:6px; }
+.concept-flow b,.concept-flow span { display:block; font-size:16px; line-height:1.6; overflow-wrap:anywhere; }
+.concept-flow b { margin-bottom:.4rem; }
+.concept-flow li:not(:last-child)::after { content:'→'; display:block; margin-top:.5rem; color:inherit; font-size:20px; }
+.concept-parallel li::after { content:none !important; }
+.learning-result svg { display:block; width:220px; max-width:100%; height:auto; border:1px solid var(--lab-line); }
+.figure-original { display:inline-block; font-size:14px; margin:.4rem 0 1rem; }
+@media(max-width:600px) {
+  .concept-flow ol { grid-template-columns:1fr; }
+  .concept-flow li:not(:last-child)::after { content:'↓'; }
+  .learning-result { flex-direction:column; }
+  .learning-lab { padding:.8rem; }
+  .learning-controls { align-items:start; }
+  .learning-controls label { width:100%; }
+  .learning-controls input[type=range] { width:100%; }
+  .learning-table,.md-typeset .learning-table { font-size:14px; }
+  .learning-table th,.learning-table td,.md-typeset .learning-table th,.md-typeset .learning-table td { padding:5px; }
+}

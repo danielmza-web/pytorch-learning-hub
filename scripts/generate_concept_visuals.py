@@ -33,7 +33,7 @@ def box(axis, xy, width, height, title, subtitle, color=BLUE):
                            linewidth=1.8, edgecolor=color, facecolor="#f7fbfd")
     axis.add_patch(patch)
     axis.text(xy[0] + width / 2, xy[1] + height * .62, title, ha="center", va="center",
-              fontsize=11, weight="bold", color=NAVY)
+              fontsize=9.5, weight="bold", color=NAVY)
     axis.text(xy[0] + width / 2, xy[1] + height * .32, subtitle, ha="center", va="center",
               fontsize=8.5, color=MUTED)
 
@@ -50,14 +50,11 @@ def data_pipeline() -> None:
     figure, axis = plt.subplots(figsize=(11, 3.6))
     axis.set(xlim=(0, 12), ylim=(0, 4.1)); axis.axis("off")
     box(axis, (.25, 1.25), 2.05, 1.55, "Image file", "H × W × C pixels")
-    for x in np.linspace(.48, 1.7, 5):
-        for y in np.linspace(1.55, 2.25, 4):
-            axis.add_patch(Rectangle((x, y), .2, .16, facecolor=BLUE, alpha=.2 + (x + y) % .4, edgecolor="none"))
-    box(axis, (3.25, 1.25), 2.05, 1.55, "Transform", "resize · tensor · normalize")
-    box(axis, (6.25, 1.25), 2.05, 1.55, "Dataset", "one tensor + one label")
+    box(axis, (3.25, 1.25), 2.05, 1.55, "Dataset access", "select file + label")
+    box(axis, (6.25, 1.25), 2.05, 1.55, "Decode +\ntransform", "inside __getitem__\nreturn tensor + target")
     box(axis, (9.25, 1.25), 2.35, 1.55, "DataLoader", "batch: [B, C, H, W]", ORANGE)
-    arrow(axis, (2.35, 2.02), (3.18, 2.02), "prepare")
-    arrow(axis, (5.35, 2.02), (6.18, 2.02), "return")
+    arrow(axis, (2.35, 2.02), (3.18, 2.02), "select")
+    arrow(axis, (5.35, 2.02), (6.18, 2.02), "prepare")
     arrow(axis, (8.35, 2.02), (9.18, 2.02), "batch")
     axis.text(6, .38, "Illustrative data path: the model sees the final batch tensor, not the original file.",
               ha="center", fontsize=9, color=INK)
@@ -68,7 +65,9 @@ def convolution() -> None:
     values = np.array([[0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1], [0, 0, .1, .9, 1, 1],
                        [0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1]])
     kernel = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])
-    response = np.array([[0, 1, 3, 2], [0.1, 1.8, 2.8, 2], [0.1, 1.8, 2.8, 2], [0, 1, 3, 2]])
+    response = np.array([[np.sum(values[r:r+3, c:c+3] * kernel)
+                          for c in range(values.shape[1] - 2)]
+                         for r in range(values.shape[0] - 2)])
     figure, axes = plt.subplots(1, 3, figsize=(10.5, 3.7), gridspec_kw={"width_ratios": [1.35, .9, 1]})
     for axis, matrix, title, cmap in zip(axes, (values, kernel, response),
                                           ("Input image", "3 × 3 edge kernel", "Feature map"),
@@ -80,6 +79,9 @@ def convolution() -> None:
         axis.set_yticks(np.arange(-.5, matrix.shape[0], 1), minor=True)
         axis.grid(which="minor", color="white", linewidth=1.4)
         axis.tick_params(which="both", bottom=False, left=False, labelbottom=False, labelleft=False)
+        for (row, col), value in np.ndenumerate(matrix):
+            axis.text(col, row, f"{value:g}", ha="center", va="center", fontsize=9,
+                      color="white" if abs(value) > .65 * np.max(np.abs(matrix)) else INK)
     axes[0].add_patch(Rectangle((1.5, 1.5), 3, 3, fill=False, linewidth=2.4, edgecolor=ORANGE))
     figure.text(.5, .03, "Illustrative: one hand-designed vertical-edge filter slides across an image. A CNN learns its filters from data.",
                 ha="center", fontsize=9, color=INK)
@@ -94,7 +96,7 @@ def cnn_shape_path() -> None:
         (3.0, "Conv + ReLU", "[B, 32, 32, 32]", BLUE),
         (5.7, "MaxPool", "[B, 32, 16, 16]", ORANGE),
         (8.4, "Conv + ReLU", "[B, 64, 16, 16]", BLUE),
-        (11.1, "Pool + classifier", "[B, classes]", ORANGE),
+        (11.1, "Global pool + head", "[B, 64] → [B, K]", ORANGE),
     ]
     for index, (x, title, shape, color) in enumerate(items):
         box(axis, (x, 1.3), 2.1, 1.55, title, shape, color)

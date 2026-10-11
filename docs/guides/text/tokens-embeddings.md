@@ -2,7 +2,7 @@
 title: 4.1 · Tokens and embeddings
 tags: [text, tokenizer, embeddings, padding]
 guide_id: "4.1"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 4.1 · Text — tokens, embeddings and batches {#text-tokens-embeddings-and-batches}
@@ -141,6 +141,9 @@ loader = DataLoader(tokenized_dataset, batch_size=16, shuffle=True,
 Each `tokenized_dataset` sample should contain unpadded tokenization fields and an integer `labels` value. The collator builds `[N,L]` tensors at batch time. Keep collation on CPU; move the finished batch to the model device in the training loop. This also supports DataLoader workers.
 
 ## Embeddings are learned lookups
+
+<div data-learning-lab="embedding"><p>Keep the lookup row fixed while changing a separate positional signal. Enable JavaScript to adjust this original toy.</p></div>
+
 
 `nn.Embedding(V,E)` stores a trainable table with `V` rows and `E` values per row. It maps IDs to vectors; it does not create contextual understanding by itself.
 

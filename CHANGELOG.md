@@ -3,6 +3,13 @@
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
 
+## 2026-10-11 — visual explanations and exact interactive comparisons (local)
+
+- Implemented 13 original lab instances in all twelve guide pages and six compact DaZu counterparts: exact SGD stages, tensor operation differences, sliding convolution, thresholds, incomplete accumulation, paired targets, transfer policy, lookup/position, masked pooling, connection mechanisms, attention arithmetic, RAM/disk lifecycle and compression/rounding.
+- Corrected the computed convolution matrix and image labels, Dataset transform ownership, curve scenario consistency and invalid shape handling. Added native mobile diagrams, separate diffusion training/sampling, a shared-encoder triplet and Grad-CAM flow, original-size figure links and current authoring templates. Retained measured figures were preserved.
+- Strict build/content/navigation/resource/anchor/image checks, independent CPU arithmetic, existing example/contract/lifecycle/visual/copy tests and disposable-copy smoke passed. Shared JS/CSS copies match. Browser review: 31 routes, four widths and both Hub themes (220 visits); 19 labs, 83 option/blank/keyboard/reset checks plus training/curve/shape boundaries; no observed page overflow or captured warnings/errors.
+- Local only: no push, Pages release or Netlify deployment. Limits and scope: [visual review](notes/visual-review-2026-10-11.md). No full/pretrained/GPU training, physical device benchmark or formal screen-reader audit.
+
 ## 2026-10-10 — authorized navigation review publication
 
 Daniel requested the GitHub push. Application commit `420c3d5` was pushed to `main` and published by successful [Pages run 38079506200](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38079506200). The complete workflow passed its content/build/resource/presentation, numeric/example/lifecycle, JavaScript and disposable smoke checks. Live HTTPS verification confirmed all 24 canonical routes, every locally generated ID, the six home topics and the gallery's P1–P8 order. This release uses the existing GitHub Pages configuration; DaZu and Netlify were untouched.

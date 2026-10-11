@@ -2,7 +2,7 @@
 title: 5.1 · Vision, similarity and generation
 tags: [architectures, siamese, resnet, densenet, interpretability, diffusion]
 guide_id: "5.1"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 5.1 · Advanced vision — architectures, similarity and generation {#advanced-vision-architectures-similarity-and-generation}
@@ -72,13 +72,7 @@ A Python condition in `forward()` builds the eager graph for the path actually e
 
 Suppose an inspection system retrieves panels with similar surface defects. A classifier returns class logits `[N,K]`; an encoder returns feature vectors `[N,D]`. Here `N` is batch size, `K` is the number of classes and `D` is feature width. Image feature maps instead use `[N,C,H,W]`: batch, channels, height and width. Feature vectors let a query be compared with a gallery without changing the output head whenever a new gallery item arrives. Useful similarity for unseen items must still be demonstrated on held-out identities or acquisition groups.
 
-<div class="recall-flow" role="group" aria-label="Shared encoder and similarity learning">
-<div><b>Anchor</b><code>panel A, view 1</code><small>reference image</small></div>
-<div><b>Positive</b><code>panel A, view 2</code><small>different capture, same intended identity</small></div>
-<div><b>Negative</b><code>panel B</code><small>different identity under the task definition</small></div>
-<div><b>One encoder</b><code>f(A), f(P), f(N)</code><small>all three use the same parameters</small></div>
-<div><b>Compare</b><code>d(A,P) + margin ≤ d(A,N)</code><small>desired relative ordering</small></div>
-</div>
+<figure class="concept-flow concept-parallel"><figcaption>Three inputs, one shared encoder f</figcaption><ol><li><b>Anchor → f(A)</b><span>Panel A, capture 1.</span></li><li><b>Positive → f(P)</b><span>Panel A, capture 2; the same weights.</span></li><li><b>Negative → f(N)</b><span>Panel B; the same weights.</span></li></ol><p>Compare their outputs: d(A,P)=0.2; d(A,N)=0.3; margin=0.5 → max(0.2−0.3+0.5,0)=0.4. A farther negative at distance 1.2 gives zero. Euclidean toy distances.</p></figure>
 <p class="visual-caption">Conceptual triplet. Identity, similarity and negative sampling must be defined for the actual application.</p>
 
 ### Contrastive pairs and triplet margins
@@ -118,11 +112,7 @@ A symmetric distance says **how different** two embeddings are; swapping before/
 
 The encoder can be custom or pretrained. Its connection pattern changes feature reuse, gradient paths and resource demands.
 
-<div class="recall-flow" role="group" aria-label="Three architectural strategies">
-<div><b>Residual block</b><code>x + F(x)</code><small>add a correction to an aligned shortcut</small></div>
-<div><b>Dense block</b><code>cat(x, new features)</code><small>keep old channels and append new ones</small></div>
-<div><b>Mobile convolution</b><code>depthwise → pointwise</code><small>separate spatial filtering and channel mixing</small></div>
-</div>
+<div data-learning-lab="connections"><p>Compare addition, concatenation and depthwise filtering by shapes and exact weight counts. Enable JavaScript to adjust this original toy.</p></div>
 <p class="visual-caption">Connection-pattern illustration. Smaller parameter counts or operation estimates do not establish faster execution on a particular CPU.</p>
 
 ### Residual addition needs matching shapes
@@ -175,6 +165,8 @@ finally:
 | Original CAM | convolutional maps plus linear classifier weights after global average pooling | weighted spatial evidence under this architecture |
 | Grad-CAM | convolutional maps plus gradients of the chosen score with respect to those maps | coarse class-specific localization without CAM's exact head restriction |
 
+<figure class="concept-flow"><figcaption>Grad-CAM follows one selected class score</figcaption><ol><li><b>Feature grid</b><span>Example [1,4,8,8] contains four low-resolution feature maps.</span></li><li><b>Differentiate the score</b><span>Average each channel’s score gradients over 8×8 positions.</span></li><li><b>Weighted sum + ReLU</b><span>Four coefficients mix four maps → [1,8,8].</span></li><li><b>Display overlay</b><span>Resizing to 224×224 enlarges the display, not the evidence.</span></li></ol></figure>
+
 Original CAM combines maps with the selected class's classifier coefficients. Grad-CAM computes channel coefficients by spatially averaging feature gradients, forms their weighted activation sum and commonly applies ReLU. Interpolating a small map to image size makes an overlay easier to see; it does not add spatial evidence. [CAM paper](https://arxiv.org/abs/1512.04150), [Grad-CAM paper](https://arxiv.org/abs/1610.02391).
 
 **Runnable toy — capture features and differentiate the actual score:**
@@ -220,13 +212,7 @@ An embedding compresses an image for comparison. A diffusion model instead learn
 
 Here `alpha_bar_t` comes from the noise schedule and `epsilon` is sampled noise. A common objective trains a network to predict `epsilon` from `x_t`, the timestep and optional conditioning. Other checkpoints predict velocity or another parameterization, so match the scheduler's configuration. The learned reverse process is probabilistic; it does not recover a uniquely determined original image from arbitrary noise. [DDPM paper](https://arxiv.org/abs/2006.11239).
 
-<div class="recall-flow" role="group" aria-label="Training and sampling of latent diffusion">
-<div><b>Training example</b><code>clean latent + known noise</code><small>choose a timestep and target</small></div>
-<div><b>Denoiser learns</b><code>noisy latent, t, condition</code><small>predict the configured target</small></div>
-<div><b>Sampling begins</b><code>random latent</code><small>there is no original image to recover</small></div>
-<div><b>Scheduler repeats</b><code>prediction → next latent</code><small>controlled reverse updates</small></div>
-<div><b>Decode</b><code>latent → visible image</code><small>VAE decoder in latent pipelines</small></div>
-</div>
+<figure class="concept-flow"><figcaption>Training: one sampled noise level</figcaption><ol><li><b>Clean latent + known noise</b><span>Choose timestep t and sample ε.</span></li><li><b>Create xₜ</b><span>Mix clean signal with that noise at t.</span></li><li><b>Predict target + loss</b><span>Denoiser learns the configured target; update weights.</span></li></ol></figure><figure class="concept-flow"><figcaption>Sampling: repeated reverse updates</figcaption><ol><li><b>Random latent</b><span>No original clean image is supplied.</span></li><li><b>Denoiser + scheduler</b><span>Predict, update the latent, then repeat at the next timestep.</span></li><li><b>Decode</b><span>Convert the final latent into an image.</span></li></ol></figure>
 <p class="visual-caption">Conceptual latent-diffusion pipeline. It shows separate training and sampling processes, without claiming generated outputs or quality measurements.</p>
 
 Stable Diffusion commonly combines a text encoder, denoiser, scheduler and variational autoencoder. Operating in a smaller latent grid reduces denoising costs; model weights and intermediate activations still require substantial memory. `DiffusionPipeline.from_pretrained(...)` selects a pipeline from its checkpoint configuration. The correct pipeline class, dtype, access and supported arguments depend on the model, so an older `StableDiffusionPipeline` example should not be assumed to work for every newer checkpoint. [Diffusers text-to-image documentation](https://huggingface.co/docs/diffusers/using-diffusers/conditional_image_generation).

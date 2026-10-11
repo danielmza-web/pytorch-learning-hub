@@ -2,7 +2,7 @@
 title: 3.1 · Data, transforms and noise
 tags: [torchvision, augmentation, noise, datasets]
 guide_id: "3.1"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 3.1 · Vision — data, transforms and noise {#vision-data-transforms-and-noise}
@@ -60,6 +60,8 @@ save_image(grid, "inspection.png")
 Use your own image path. `Resize(256)` preserves aspect ratio and makes the shorter side 256; `Resize((256,256))` forces a square and can distort it. `CenterCrop(224)` gives a consistent shape but can remove an off-centre object. `ToTensor()` scaling depends on input type; it is not a generic “divide every array by 255” rule.
 
 ## Choose a dataset interface
+
+
 
 | Tool | Use | Important detail |
 | --- | --- | --- |
@@ -128,6 +130,8 @@ validation_transform = transforms.Compose([
 The crop size and noise amount are illustrative choices. A pretrained model should instead use its weight-specific [preprocessing contract](pretrained-models.md#weights-preprocessing-and-class-names). Start mildly, display repeated versions of the same sample, and compare validation with a no-augmentation baseline.
 
 ### Current transforms and paired targets
+
+<div data-learning-lab="paired-transform"><p>Apply the same geometric change to pixels, a bounding box and a class mask. Enable JavaScript to adjust this original toy.</p></div>
 
 The course-style examples above use the familiar `torchvision.transforms` API. For new pipelines, TorchVision recommends `torchvision.transforms.v2`, including joint support for images, boxes and masks. A conversion excerpt for a PIL image or byte tensor is:
 

@@ -6,7 +6,7 @@ tags:
   - tensors
   - training
 guide_id: "1.1"
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-11
 ---
 
 # 1.1 · Fundamentals — core workflow {#fundamentals-core-workflow}
@@ -49,14 +49,8 @@ By the end, you should be able to locate where a batch is created, explain the m
 
 ## Tensors, shapes, dtype, and device
 
-<div class="recall-flow" role="group" aria-label="Input to output">
-<div><b>Two samples</b><code>x = [[1,2],[3,4]]</code><small>shape [2,2]</small></div>
-<div><b>Model</b><code>logits [[2,0],[0,2]]</code><small>w = [[−4,3],[2,−1]]; x @ w.T; targets [0,1]</small></div>
-<div><b>Loss</b><code>CE ≈ 0.1269</code><small>one differentiable scalar</small></div>
-<div><b>Gradients</b><code>grad = [[.119,.119],[−.119,−.119]]</code><small>backward computes these; weights stay fixed</small></div>
-<div><b>Update</b><code>w ← w − 0.1 × grad</code><small>first row becomes [−4.0119, 2.9881]</small></div>
-</div>
-<p class="visual-caption">Illustrative values: a classifier receives two samples and returns two scores per sample. The cross-entropy shown is calculated from these logits, not a training benchmark.</p>
+<div data-learning-lab="training"><p>Step through one exact update. Backward computes gradients; only the optimizer changes weights. Enable JavaScript to adjust this original toy.</p></div>
+<p class="visual-caption">Original toy values: a classifier receives two samples and returns two scores per sample. The cross-entropy shown is calculated from these logits, not a training benchmark.</p>
 
 **Runnable toy — reproduce the flow:**
 
@@ -107,6 +101,9 @@ A batch keeps one row per sample; image tensors add channel, height and width ax
     </div>
 
 ### Reshape without changing the data
+
+<div data-learning-lab="tensor-ops"><p>The same [3,2] shape can hold different values after reshape and transpose. Compare joining and stacking too. Enable JavaScript to adjust this original toy.</p></div>
+
 
 Reshape preserves values and their count. Preserve the batch axis when flattening model inputs. `view` shares storage and needs compatible strides; `reshape` may copy when that layout cannot be viewed.
 
@@ -225,7 +222,15 @@ Neural-network inputs are normally floating point; single-label class targets fo
 
 ## Dataset, transforms, and DataLoader
 
+<figure class="concept-flow"><figcaption>A sample is prepared inside Dataset access</figcaption><ol><li><b>File / index</b><span>Dataset.__getitem__ selects one source and label.</span></li><li><b>Decode + transform</b><span>Inside that access: decode pixels, resize, convert and normalize.</span></li><li><b>Return sample</b><span>One tensor [C,H,W] and its target.</span></li><li><b>Collate in DataLoader</b><span>Group samples into [N,C,H,W] and batch targets.</span></li></ol></figure>
+
+<details markdown="1"><summary>View the original-size diagram</summary>
+
 ![Conceptual path from image file through transforms and Dataset to a DataLoader batch tensor](../../assets/images/data-pipeline-visual.png){ width="1570" height="534" }
+
+[Open full-size diagram](../../assets/images/data-pipeline-visual.png)
+
+</details>
 
 The diagram is structural, not a measured experiment. It shows where a file becomes a tensor and where samples become a batch.
 
@@ -398,6 +403,8 @@ Nonlinear activations let stacked layers represent curves and more complex decis
 
     ![Measured comparison from the retained regression script: a line misses a curved pattern while the nonlinear network follows it](../../assets/images/regression-comparison.png){ width="1852" height="708" }
 
+[Open figure at original size](../../assets/images/regression-comparison.png){ .figure-original }
+
     This chart is reproduced by the retained regression script with a fixed seed. It demonstrates model capacity, not a general benchmark.
 
 ### Logits, probabilities, and predictions
@@ -440,7 +447,15 @@ Choose the loss from the task, then match its required output and target shapes 
 
 ## Loss, autograd, and optimizers
 
+<figure class="concept-flow"><figcaption>One ordinary training update</figcaption><ol><li><b>Clear</b><span>zero_grad removes earlier accumulated gradients.</span></li><li><b>Forward + loss</b><span>Model computes logits; loss compares targets.</span></li><li><b>Backward</b><span>Compute gradients. Parameters stay unchanged.</span></li><li><b>Optimizer step</b><span>Use gradients to change parameter values.</span></li></ol></figure>
+
+<details markdown="1"><summary>View the original-size diagram</summary>
+
 ![Conceptual update cycle from batch to model, logits, loss, gradients, and optimizer step](../../assets/images/training-cycle-visual.png){ width="1500" height="604" }
+
+[Open full-size diagram](../../assets/images/training-cycle-visual.png)
+
+</details>
 
 Loss turns model behavior into one differentiable scalar. Autograd follows the operations that produced it, and the optimizer uses the resulting gradients to update parameters.
 
@@ -465,21 +480,6 @@ PyTorch builds the autograd graph from the operations actually executed during a
 Clear gradients, predict, calculate loss, accumulate gradients, then update the parameters.
 
 ??? note "Code and details"
-    <div class="training-stepper interactive-panel" data-training-stepper>
-      <div class="interactive-heading">Training-loop stepper</div>
-      <ol>
-        <li data-train-step="0">Clear old gradients</li>
-        <li data-train-step="1">Run the forward pass</li>
-        <li data-train-step="2">Measure the loss</li>
-        <li data-train-step="3">Backpropagate gradients</li>
-        <li data-train-step="4">Update parameters</li>
-      </ol>
-      <div class="stepper-actions">
-        <button type="button" data-step-prev>Previous</button>
-        <button type="button" data-step-next>Next</button>
-      </div>
-      <output data-step-output aria-live="polite"></output>
-    </div>
 
     ```python
     def train_epoch(model, loader, loss_fn, optimizer, device):
