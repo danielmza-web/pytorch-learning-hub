@@ -1,6 +1,6 @@
-# Visual-first review — 2026-10-11 (local)
+# Visual-first review — 2026-10-11
 
-Daniel approved simplifying the existing visuals: the complete flow or the important differences should be visible before any controls. Public content remains English. This implementation has not been pushed or published; the preceding deployment is recorded separately in CHANGELOG.
+Daniel approved simplifying the existing visuals: the complete flow or the important differences should be visible before any controls. Public content remains English. The initial implementation was local; Daniel subsequently authorized the GitHub/Netlify release recorded below.
 
 ## Presentation decisions
 
@@ -47,4 +47,12 @@ Home, project chooser, reference and About retain their organization. Reading cu
 
 ## Limits and preservation
 
-These are local checks, not live-provider evidence. No GitHub push, Pages run or Netlify deployment was performed for this version. No dependency installation, fresh training, GPU/pretrained benchmark, personal course-archive edit, CV change or frozen-reference change was needed. Existing runnable examples, measured images and retained reports were preserved, so the full training/smoke suites were not repeated. Browser route checks do not exhaust every lazy image or every combination of optional calculator fields. Physical touch, native zoom, formal screen-reader certification and whole-page performance measurements were not performed. Temporary browser captures remain under ignored parent `tmp/visual-first/` and are optional evidence, not build inputs.
+The implementation checks above were local; live-provider evidence is recorded separately below. No dependency installation, fresh training, GPU/pretrained benchmark, personal course-archive edit, CV change or frozen-reference change was needed. Existing runnable examples, measured images and retained reports were preserved, so the full training/smoke suites were not repeated during the local implementation. The authorized Pages workflow subsequently passed its existing disposable smoke/example checks. Browser route checks do not exhaust every lazy image or every combination of optional calculator fields. Physical touch, native zoom, formal screen-reader certification and whole-page performance measurements were not performed. Temporary browser captures remain under ignored parent `tmp/visual-first/` and are optional evidence, not build inputs.
+
+## Authorized production release
+
+Daniel explicitly authorized GitHub pushes and Netlify publication. Application commits `359a659` (DaZu) and `8ed6514` (Hub) were pushed separately to `main`, with zero divergence afterward. DaZu published only `site/` through [Netlify deploy 6acb7f0d22b00e3e8fbe265e](https://app.netlify.com/projects/dazu/deploys/6acb7f0d22b00e3e8fbe265e), confirmed ready; the Hub passed its complete validation workflow and published through successful [Pages run 38138866427](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38138866427). No hosting configuration changed.
+
+Live HTTPS verification passed 86 DaZu checks (11 canonical routes, 52 committed route/resource matches and all 34 aliases) and 58 Hub checks (24 routes and 34 committed resources). All generated IDs, six remaining lab slots and 35 static overview slots matched live HTML. Text comparisons normalize CRLF; generated Hub HTML is checked for routes, IDs and visual/control markers rather than exact build-byte equality. Browser review covered all 31 learning routes at 1440/390 px (62 visits), with no observed overflow, broken completed images, uninitialized labs or captured warnings/errors. Representative threshold, convolution, attention, accumulation, quantization and reset checks passed in production. Physical touch and a formal accessibility audit were not repeated.
+
+Documentation follow-ups retain the application publication references and are pushed separately. Their Hub head needs its own successful Pages run; no additional DaZu deployment is needed when only these non-published documentation files change.

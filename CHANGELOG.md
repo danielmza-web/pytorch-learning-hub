@@ -3,13 +3,19 @@
 Selected changes supported by local checks or this repository's Git history. Local review dates are not publication dates. DaZu has a separate history and deployment process.
 
 
-## 2026-10-11 — visual-first simplification (local)
+## 2026-10-11 — authorized visual-first publication
+
+Daniel explicitly authorized GitHub pushes and Netlify publication. Application commits `359a659` (DaZu) and `8ed6514` (Hub) were pushed separately to `main`, with zero divergence afterward. DaZu published only `site/` through [Netlify deploy 6acb7f0d22b00e3e8fbe265e](https://app.netlify.com/projects/dazu/deploys/6acb7f0d22b00e3e8fbe265e), confirmed ready; the Hub passed its complete validation workflow and published through successful [Pages run 38138866427](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38138866427). No hosting configuration changed.
+
+Live HTTPS verification passed 86 DaZu checks (11 canonical routes, 52 committed route/resource matches and all 34 aliases) and 58 Hub checks (24 routes and 34 committed resources). All generated IDs, six remaining lab slots and 35 static overview slots matched live HTML. Text comparisons normalize CRLF; generated Hub HTML is checked for routes, IDs and visual/control markers rather than exact build-byte equality. Browser review covered all 31 learning routes at 1440/390 px (62 visits), with no observed overflow, broken completed images, uninitialized labs or captured warnings/errors. Representative threshold, convolution, attention, accumulation, quantization and reset checks passed in production. Physical touch and a formal accessibility audit were not repeated.
+
+## 2026-10-11 — visual-first simplification (local implementation)
 
 Implemented the approved plan across 31 learning pages: 35 committed HTML/SVG comparisons, optional calculators, fewer primary controls, compact DaZu variants and no lifecycle stepper. Guides show tensor variants, three learning curves, paired geometry/noise, freeze strategies, embeddings/padding/pooling, channel connections, attention masks, artifacts/payload bytes and separate rounding. Projects P1–P8 retain executable code and measured figures while removing text-only selectors or adding visible comparisons. Authoring templates, shared assets and the Pages validation workflow follow the same criterion.
 
 Local validation passed strict build, content/navigation, built resources/anchors, presentation, generated overview drift/visibility, shared-file equality, numerical comparisons against CPU PyTorch and existing JavaScript math/copy checks. Browser review covered all 31 pages at 1440/820/390/320 px and both Hub themes (220 route visits), with additional review after shortening lifecycle text and compacting DaZu. Main flows were also checked in two script-free browser fixtures. Existing section IDs, examples, measured data and images were preserved. Representative optional controls, invalid values, reset, keyboard disclosures, direct anchors, search reveal and mobile navigation were verified. [Evidence and limits](notes/visual-first-review-2026-10-11.md).
 
-No fresh training, dependency installation, personal course-archive change, push or deployment was performed. The publication entry below is for the preceding version.
+No fresh training, dependency installation or personal course-archive change was performed during the local implementation. The separately authorized publication is recorded above; its existing Pages workflow also passed the disposable smoke/example checks.
 
 ## 2026-10-11 — authorized visual learning publication
 

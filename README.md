@@ -18,13 +18,13 @@ Daniel's instruction on 2026-10-01 separates local version control from external
 - The Hub's existing push-to-`main` workflow publishes GitHub Pages, including documentation-only commits. Treat such a push as publication and perform it only with explicit authorization covering that release. Never deploy the Hub to Netlify.
 - Do not enable or change provider auto-deploy settings, hooks, DNS or the Pages trigger as part of ordinary maintenance. No hosting setting was changed by this review.
 
-## Visual first — local implementation 2026-10-11
+## Visual first — published 2026-10-11
 
 The twelve guides now start with complete flows or simultaneous comparisons, with short reading cues. Eight projects reuse those visuals while preserving code, measured figures and results. There are 35 committed static HTML/SVG overview instances across 24 Hub and seven DaZu pages. The Hub keeps convolution's output-cell selector and the threshold as main controls; attention, accumulation, rounding and the existing calculators are optional disclosures. DaZu has simpler counterparts and only the main threshold control.
 
 Author static diagrams in `scripts/render_learning_overviews.cjs`; run `node scripts/render_learning_overviews.cjs` to update existing marked slots in both repositories when nested together. It emits detailed Hub and compact DaZu variants from the same numerical functions. `node scripts/render_learning_overviews.cjs --check` is read-only. Rebuild strictly and run `python tests/validate_visual_first.py` to check visible no-JavaScript diagrams and optional control placement. Do not hand-edit generated slot bodies. New slots use `<!-- learning-overview:KEY -->` and `<!-- /learning-overview -->` around their generated body. Standalone Hub checkouts work without DaZu.
 
-Shared `learning-labs.js/.css` and `recall-visuals.js/.css` must match DaZu copies byte for byte. Numerical exports remain intact; discarded UI renderers and step selectors are removed. [Review evidence and limitations](notes/visual-first-review-2026-10-11.md). This version is local and has not been pushed or published; the previous verified release remains below.
+Shared `learning-labs.js/.css` and `recall-visuals.js/.css` must match DaZu copies byte for byte. Numerical exports remain intact; discarded UI renderers and step selectors are removed. [Review evidence and limitations](notes/visual-first-review-2026-10-11.md). Application source `8ed6514` published through successful [Pages run 38138866427](https://github.com/danielmza-web/pytorch-learning-hub/actions/runs/38138866427). All 24 live routes, generated IDs, five remaining labs and 27 static overview slots were verified. Documentation follow-up pushes activate a separate Pages run and require their own verification.
 
 ## Previous interactive explanations — published 2026-10-11
 
